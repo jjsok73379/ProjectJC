@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum SkillType
@@ -7,10 +8,11 @@ public enum SkillType
     Targeting, nonTargeting, Follow, Rotate, Material
 }
 
-[CreateAssetMenu(fileName = "SkillData", menuName = "ScriptableObjects/SkillDate", order = 1)]
+[CreateAssetMenu(fileName = "SkillData", menuName = "ScriptableObjects/SkillData", order = 1)]
 public class SkillData : ScriptableObject
 {
-    public Sprite myImage;
+    public Sprite myImage = null;
+    public string itemName;
     [SerializeField] string myInfo;
     public SkillType mySkillType;
     [SerializeField] float AttackRange;

@@ -1,6 +1,6 @@
 ﻿Cartoon FX Remaster FREE, version R 1.0
-2022/11/30
-© 2012-2022 - Jean Moreno
+2023/01/25
+© 2012-2023 - Jean Moreno
 =======================================
 
 ! NOTE ABOUT URP !
@@ -98,6 +98,12 @@ I'd be happy to see any effects used in your project, so feel free to drop me a 
 
 RELEASE NOTES
 -------------
+
+R 1.0.4
+- Disabled mesh GPU instancing in the shaders because it was causing too many issues (even when using Unity's default particle shader)
+
+R 1.0.3
+- Improved CFXR_ParticleText usability when toggling the "is Dynamic" flag on an existing text effect
 
 R 1.0.2
 - Removed GPU instancing support on the "CFXR Procedural Ring" shader, because it visually breaks it

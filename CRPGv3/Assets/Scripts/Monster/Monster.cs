@@ -109,10 +109,15 @@ public class Monster : BattleSystem
 
     public override void OnDamage(float dmg)
     {
+        Vector3 pos = Vector3.zero;
+        pos.x = Random.Range(-3.0f, 3.0f);
+        pos.z = Random.Range(-3.0f, 3.0f);
         myStat.HP -= dmg;
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {
             ChangeState(STATE.Dead);
+            ObjectManager.Inst.DropItemToPosition(transform.position - pos, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books);
+            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions);
         }
         else
         {

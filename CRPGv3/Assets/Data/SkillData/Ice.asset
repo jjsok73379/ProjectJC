@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Ice
   m_EditorClassIdentifier: 
   myImage: {fileID: 21300000, guid: 2bccd332882fcd14b9e4c377e432c587, type: 3}
+  itemName: Ice
   myInfo: "\uC5BC\uC74C"
   mySkillType: 4
   AttackRange: 0

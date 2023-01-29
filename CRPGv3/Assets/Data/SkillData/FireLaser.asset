@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: FireLaser
   m_EditorClassIdentifier: 
   myImage: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
+  itemName: FireLaser
   myInfo: "\uBD88\uB85C \uC774\uB8E8\uC5B4\uC9C4 \uB808\uC774\uC838"
   mySkillType: 0
   AttackRange: 20

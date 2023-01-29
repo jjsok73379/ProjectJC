@@ -5,25 +5,24 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class SkillMenu : MonoBehaviour
+public class SkillMenu : Singleton<SkillMenu>
 {
     public List<SkillData> mySkills = new List<SkillData>(); //스킬데이터 리스트4
-    public SkillData[] buySkills = new SkillData[3];
-    public SkillData[] BasicSKills = new SkillData[3];
+    public SkillData[] BasicSKills = new SkillData[6];
     public GameObject Content;
     // Start is called before the first frame update
     void Start()
     {
-        BasicSkill();
-        BuySkill();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void CloseMenu()
@@ -32,43 +31,38 @@ public class SkillMenu : MonoBehaviour
         SkillManager.Inst.SkillMenu.SetActive(false);
     }
 
-    public void BasicSkill()
+    public void ClickBuy()
     {
-        GameObject BasicLaser = Instantiate(Resources.Load("Prefabs/SkillM"), Content.transform) as GameObject;
-        BasicLaser.GetComponent<Image>().sprite = mySkills[0].myImage;
-        BasicLaser.GetComponentInChildren<TMP_Text>().text = mySkills[0].MyInfo;
-        BasicLaser.GetComponent<SkillM>().orgData = mySkills[0];
-        BasicLaser.name = $"SkillM0";
-    }
 
-    public void BuySkill()
-    {
-        for (int i = 0; i < buySkills.Length; ++i)
-        {
-            GameObject Material = Instantiate(Resources.Load("Prefabs/SkillM"), Content.transform) as GameObject;
-            Material.GetComponent<Image>().sprite = buySkills[i].myImage;
-            Material.GetComponentInChildren<TMP_Text>().text = buySkills[i].MyInfo;
-            Material.GetComponent<SkillM>().orgData = buySkills[i];
-            Material.name = $"SkillM{i}";
-        }
     }
 
     public void SkillBook()
     {
-        for (int i = 4; i < BasicSKills.Length; ++i)
+        for (int i = 0; i < BasicSKills.Length; ++i)
         {
             GameObject BasicSkill = Instantiate(Resources.Load("Prefabs/SkillM"), Content.transform) as GameObject;
-            
+            BasicSkill.GetComponent<Image>().sprite = BasicSKills[i].myImage;
+            BasicSkill.GetComponentInChildren<TMP_Text>().text = BasicSKills[i].MyInfo;
+            BasicSkill.GetComponent<SkillM>().orgData = BasicSKills[i];
+            mySkills.Add(BasicSKills[i]);
         }
     }
 
-    IEnumerator Combine(SkillData skill01, SkillData skill02)
+    public void MySkill()
     {
-        yield return null;
+        for (int i = 0; i < mySkills.Count; ++i)
+        {
+
+        }
     }
 
-    IEnumerator CreateSkill(SkillData skill01, SkillData skill02)
+    public void Combine(SkillData skill01, SkillData skill02)
     {
-        yield return StartCoroutine(Combine(skill01, skill02));
+        
+    }
+
+    public void CreateSkill(SkillData skill01, SkillData skill02)
+    {
+        
     }
 }

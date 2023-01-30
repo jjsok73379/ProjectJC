@@ -15,3 +15,11 @@ MonoBehaviour:
   itemType: 2
   itemName: Potion
   itemImage: {fileID: 21300000, guid: a20d322c5e65a6746808e67a31dfe555, type: 3}
+  itemEffects:
+  - {fileID: 11400000, guid: 9c61a79b5c3410843a6f8daef59d2df2, type: 2}
+  - {fileID: 11400000, guid: 43b2e0f99b737514d8da4c2d420c7371, type: 2}
+  - {fileID: 11400000, guid: 41ba580547ca84646bdf835bd8ee619b, type: 2}
+  - {fileID: 11400000, guid: 06d9d6d02f992764998db604bc6ab8c4, type: 2}
+  myEffect: {fileID: 0}
+  ItemEff: "\uD574\uB2F9 \uC22B\uC790\uB9CC\uD07C \uCCB4\uB825\uACFC \uB9C8\uB098\uB97C
+    \uD68C\uBCF5\uD569\uB2C8\uB2E4."

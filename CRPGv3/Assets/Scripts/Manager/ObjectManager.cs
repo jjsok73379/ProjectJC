@@ -20,18 +20,20 @@ public class ObjectManager : Singleton<ObjectManager>
     {
         for(int i=0;i< initialItems; i++)
         {
-            GameObject tempItem = Instantiate(ItemPrefab) as GameObject;
+            GameObject tempItem = Instantiate(ItemPrefab);
             tempItem.transform.parent = transform;
             tempItem.SetActive(false);
             Items.Add(tempItem);
         }
     }
 
-    public void DropItemToPosition(Vector3 pos, GameObject ItemPrefab, List<GameObject> Items)
+    public void DropItemToPosition(Vector3 pos, GameObject ItemPrefab, List<GameObject> Items, int ranmin, int ranmax)
     {
-        Debug.Log(ItemPrefab.name);
+        int RandomDrop;
+        RandomDrop = Random.Range(ranmin, ranmax);
+        if (RandomDrop < 20 || RandomDrop > 90) return;
         GameObject reusedItem = null;
-        for(int i=0;i< Items.Count; i++)
+        for (int i = 0; i < Items.Count; i++)
         {
             if (Items[i].activeSelf == false)
             {
@@ -41,9 +43,9 @@ public class ObjectManager : Singleton<ObjectManager>
         }
         if (reusedItem == null)
         {
-            GameObject newBook = Instantiate(ItemPrefab) as GameObject;
-            Items.Add(newBook);
-            reusedItem = newBook;
+            GameObject newItem = Instantiate(ItemPrefab);
+            Items.Add(newItem);
+            reusedItem = newItem;
         }
         reusedItem.SetActive(true);
         reusedItem.transform.position = new Vector3(pos.x, reusedItem.transform.position.y + 2.0f, pos.z);

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,16 +12,6 @@ public class ItemObject : MonoBehaviour
     void Start()
     {
 
-    }
-
-    public void SetItem(ItemData _itemdata)
-    {
-        itemdata.itemName = _itemdata.itemName;
-        itemdata.itemImage = _itemdata.itemImage;
-        itemdata.itemType = _itemdata.itemType;
-        itemdata.itemEffects = _itemdata.itemEffects;
-
-        image = itemdata.itemImage;
     }
 
     public ItemData GetItem()
@@ -41,6 +30,7 @@ public class ItemObject : MonoBehaviour
     public void RemoveFromWorld()
     {
         InventoryManager.Inst.itemDB.Add(GetItem());
+        InventoryManager.Inst.DataBase();
         gameObject.SetActive(false);
     }
 

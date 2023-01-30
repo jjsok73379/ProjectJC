@@ -15,3 +15,6 @@ MonoBehaviour:
   itemType: 0
   itemName: NormalSword
   itemImage: {fileID: 21300000, guid: 4ad16adfdf2d1a441879a598de742eb6, type: 3}
+  itemEffects: []
+  myEffect: {fileID: 0}
+  ItemEff: "\uC9C0\uAE09\uC6A9 \uAC80"

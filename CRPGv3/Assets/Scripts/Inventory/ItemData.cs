@@ -13,7 +13,8 @@ public class ItemData : ScriptableObject
     public ItemType itemType;
     public string itemName;
     public Sprite itemImage;
-    public ItemEffect itemEffects;
+    public List<ItemEffect> itemEffects;
+    public string ItemEff;
 
     public bool Use()
     {

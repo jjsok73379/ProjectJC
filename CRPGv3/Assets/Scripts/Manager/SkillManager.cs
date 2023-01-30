@@ -9,7 +9,12 @@ using UnityEngine.EventSystems;
 
 public class SkillManager : Singleton<SkillManager>
 {
+    public SkillData mySkill;
+    public List<SkillData> mySkills = new List<SkillData>();
+    public SkillData[] BasicSKills = new SkillData[6];
+    public GameObject Content;
     public GameObject SkillMenu;
+    public GameObject SkillPrefab;
     public bool IsOpen = false;
     // Start is called before the first frame update
     void Start()
@@ -22,18 +27,15 @@ public class SkillManager : Singleton<SkillManager>
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            if (!IsOpen)
+            IsOpen = !IsOpen;
+            SkillMenu.SetActive(IsOpen);
+        }
+        if (IsOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                IsOpen = true;
-                SkillMenu.SetActive(true);
-            }
-            else
-            {
-                if (Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.Escape))
-                {
-                    IsOpen = false;
-                    SkillMenu.SetActive(false);
-                }
+                IsOpen = false;
+                SkillMenu.SetActive(false);
             }
         }
     }
@@ -50,5 +52,24 @@ public class SkillManager : Singleton<SkillManager>
             IsOpen = false;
             SkillMenu.SetActive(false);
         }
+    }
+
+    public void AddSkill()
+    {
+        GameObject Addedskill = Instantiate(SkillPrefab, Content.transform);
+        Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
+        Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
+        Addedskill.GetComponent<SkillM>().orgData = mySkill;
+        mySkills.Add(mySkill);
+    }
+
+    public void Combine(SkillData skill01, SkillData skill02)
+    {
+
+    }
+
+    public void CreateSkill(SkillData skill01, SkillData skill02)
+    {
+
     }
 }

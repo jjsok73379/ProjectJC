@@ -116,8 +116,8 @@ public class Monster : BattleSystem
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {
             ChangeState(STATE.Dead);
-            ObjectManager.Inst.DropItemToPosition(transform.position - pos, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books);
-            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions);
+            ObjectManager.Inst.DropItemToPosition(transform.position - pos, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books, 0, 31);
+            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions, 28, 100);
         }
         else
         {

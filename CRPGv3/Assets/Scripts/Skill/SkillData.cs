@@ -12,8 +12,7 @@ public enum SkillType
 public class SkillData : ScriptableObject
 {
     public Sprite myImage = null;
-    public string itemName;
-    [SerializeField] string myInfo;
+    public string myInfo;
     public SkillType mySkillType;
     [SerializeField] float AttackRange;
     public float CoolTime;

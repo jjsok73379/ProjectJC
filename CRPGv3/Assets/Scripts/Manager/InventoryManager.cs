@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -51,11 +52,39 @@ public class InventoryManager : Singleton<InventoryManager>
         }
     }
 
+    public void RedrawSlotUI()
+    {
+        for (int i = 0; i < invenSlots.Length; i++)
+        {
+            invenSlots[i].RemoveSlot();
+        }
+        for (int i = 0; i < itemDB.Count; i++)
+        {
+            invenSlots[i].itemData = itemDB[i];
+            invenSlots[i].UpdateSlotUI();
+        }
+    }
+
+    /*public void AlreadyHave()
+    {
+        for(int i = 0; i < invenSlots.Length; i++)
+        {
+            if (itemDB.Contains(invenSlots[i].itemData))
+            {
+                invenSlots[i].CountImage.SetActive(true);
+            }
+            else
+            {
+                invenSlots[i].CountImage.SetActive(false);
+            }
+        }
+    }*/
+
     public void DataBase()
     {
         for (int i = 0; i < itemDB.Count; i++)
         {
-            invenSlots[i].myEff = itemDB[i].itemEffects[Random.Range(0, itemDB[i].itemEffects.Count - 1)];
+            invenSlots[i].myEff = itemDB[i].itemEffects[UnityEngine.Random.Range(0, itemDB[i].itemEffects.Count - 1)];
         }
     }
 

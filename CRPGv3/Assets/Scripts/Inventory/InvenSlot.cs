@@ -14,6 +14,7 @@ public class InvenSlot : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler
     public ItemData itemData;
     public Image myitemImage;
     public GameObject myInfo;
+    public GameObject CountImage;
     public ItemEffect myEff;
     Color color;
 
@@ -28,9 +29,10 @@ public class InvenSlot : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler
     // Update is called once per frame
     void Update()
     {
-        RedrawSlotUI();
+        inven.RedrawSlotUI();
         SlotChange();
     }
+
     public void UpdateSlotUI()
     {
         myitemImage.sprite = itemData.itemImage;
@@ -42,19 +44,6 @@ public class InvenSlot : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler
     {
         itemData = null;
         myitemImage.gameObject.SetActive(false);
-    }
-
-    void RedrawSlotUI()
-    {
-        for (int i = 0; i < inven.invenSlots.Length; i++)
-        {
-            inven.invenSlots[i].RemoveSlot();
-        }
-        for (int i = 0; i < inven.itemDB.Count; i++)
-        {
-            inven.invenSlots[i].itemData = inven.itemDB[i];
-            inven.invenSlots[i].UpdateSlotUI();
-        }
     }
 
     public void UseItem()

@@ -13,13 +13,21 @@ public class SkillManager : Singleton<SkillManager>
     public List<SkillData> mySkills = new List<SkillData>();
     public SkillData[] BasicSKills = new SkillData[6];
     public GameObject Content;
+    public GameObject CombineMenuContent;
     public GameObject SkillMenu;
+    public GameObject CombineWindow;
+    public GameObject myCombineMenu;
     public GameObject SkillPrefab;
-    public bool IsOpen = false;
+    public CombineSkill[] CombineSlots;
+    public bool SkillOpen = false;
+    public bool CombineOpen = false;
+    public bool CombineMenuOpen = false;
     // Start is called before the first frame update
     void Start()
     {
         SkillMenu.SetActive(false);
+        CombineWindow.SetActive(false);
+        myCombineMenu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -27,31 +35,82 @@ public class SkillManager : Singleton<SkillManager>
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            IsOpen = !IsOpen;
-            SkillMenu.SetActive(IsOpen);
+            SkillOpen = !SkillOpen;
+            SkillMenu.SetActive(SkillOpen);
         }
-        if (IsOpen)
+        if (SkillOpen)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                IsOpen = false;
+                SkillOpen = false;
                 SkillMenu.SetActive(false);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            CombineOpen = !CombineOpen;
+            CombineWindow.SetActive(CombineOpen);
+            if (CombineMenuOpen)
+            {
+                myCombineMenu.SetActive(false);
+                CombineMenuOpen = false;
+            }
+        }
+        if (CombineOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CombineOpen = false;
+                CombineWindow.SetActive(false);
             }
         }
     }
 
     public void OpenSkill()
     {
-        if (!IsOpen)
+        SkillOpen = !SkillOpen;
+        SkillMenu.SetActive(SkillOpen);
+    }
+
+    public void SelectSkill()
+    {
+        CombineMenuOpen = !CombineMenuOpen;
+        myCombineMenu.SetActive(CombineMenuOpen);
+    }
+
+    public void CloseMenu()
+    {
+        if (CombineOpen)
         {
-            IsOpen = true;
-            SkillMenu.SetActive(true);
+            CombineOpen = false;
+            CombineWindow.SetActive(false);
         }
         else
         {
-            IsOpen = false;
-            SkillMenu.SetActive(false);
+            return;
         }
+    }
+
+    public void AddToList()
+    {
+        mySkill = EventSystem.current.currentSelectedGameObject.GetComponent<SkillM>().orgData;
+        if (mySkills.Contains(mySkill))
+        {
+            mySkill = null;
+        }
+        GameObject SelectedSkill = Instantiate(SkillPrefab, Content.transform);
+        SelectedSkill.GetComponent<Image>().sprite = mySkill.myImage;
+        SelectedSkill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
+        SelectedSkill.GetComponent<SkillM>().orgData = mySkill;
+        mySkills.Add(mySkill);
+    }
+    public void CloneSkill(SkillData Data)
+    {
+        GameObject CloneSlot = Instantiate(SkillPrefab, CombineMenuContent.transform);
+        mySkill = Data;
+        CloneSlot.GetComponent<Image>().sprite = mySkill.myImage;
+        CloneSlot.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
+        CloneSlot.GetComponent<SkillM>().orgData = mySkill;
     }
 
     public void AddSkill()
@@ -61,15 +120,14 @@ public class SkillManager : Singleton<SkillManager>
         Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
         Addedskill.GetComponent<SkillM>().orgData = mySkill;
         mySkills.Add(mySkill);
+        CloneSkill(mySkill);
     }
 
-    public void Combine(SkillData skill01, SkillData skill02)
+    public void CombineSkill()
     {
-
-    }
-
-    public void CreateSkill(SkillData skill01, SkillData skill02)
-    {
-
+        for (int i = 0; i < CombineSlots.Length; i++)
+        {
+            //if(CombineSlots[i].mySkillData ==
+        }
     }
 }

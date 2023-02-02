@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum SkillType
-{
-    Targeting, nonTargeting, Follow, Rotate, Material
-}
-
 [CreateAssetMenu(fileName = "SkillData", menuName = "ScriptableObjects/SkillData", order = 1)]
 public class SkillData : ScriptableObject
 {
+    public enum SkillType
+    {
+        Targeting, nonTargeting, Follow, Rotate, Material
+    }
     public Sprite myImage = null;
     public string myInfo;
     public SkillType mySkillType;

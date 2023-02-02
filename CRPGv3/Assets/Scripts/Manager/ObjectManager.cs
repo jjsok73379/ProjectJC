@@ -31,7 +31,7 @@ public class ObjectManager : Singleton<ObjectManager>
     {
         int RandomDrop;
         RandomDrop = Random.Range(ranmin, ranmax);
-        if (RandomDrop < 20 || RandomDrop > 90) return;
+        //if (RandomDrop < 20 || RandomDrop > 95) return;
         GameObject reusedItem = null;
         for (int i = 0; i < Items.Count; i++)
         {
@@ -48,7 +48,7 @@ public class ObjectManager : Singleton<ObjectManager>
             reusedItem = newItem;
         }
         reusedItem.SetActive(true);
-        reusedItem.transform.position = new Vector3(pos.x, reusedItem.transform.position.y + 2.0f, pos.z);
+        reusedItem.transform.position = new Vector3(pos.x, reusedItem.transform.position.y, pos.z);
     }
 
     // Start is called before the first frame update

@@ -15,7 +15,7 @@ public class CombineSkill : MonoBehaviour,IDropHandler
     // Start is called before the first frame update
     void Start()
     {
-        myText.SetActive(true);
+        
     }
 
     // Update is called once per frame

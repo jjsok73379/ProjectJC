@@ -80,6 +80,7 @@ public class Monster : BattleSystem
     void Start()
     {
         startPos = transform.position;
+        startPos.y = 1.63f;
         ChangeState(STATE.Idle);
     }
 
@@ -109,15 +110,15 @@ public class Monster : BattleSystem
 
     public override void OnDamage(float dmg)
     {
-        Vector3 pos = Vector3.zero;
-        pos.x = Random.Range(-3.0f, 3.0f);
-        pos.z = Random.Range(-3.0f, 3.0f);
+        Vector3 DropPos = Vector3.zero;
+        DropPos.x = Random.Range(-3.0f, 3.0f);
+        DropPos.z = Random.Range(-3.0f, 3.0f);
         myStat.HP -= dmg;
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {
             ChangeState(STATE.Dead);
-            ObjectManager.Inst.DropItemToPosition(transform.position - pos, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books, 0, 31);
-            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions, 28, 100);
+            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books, 0, 31);
+            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos, ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions, 28, 100);
         }
         else
         {

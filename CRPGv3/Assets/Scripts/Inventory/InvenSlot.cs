@@ -16,28 +16,26 @@ public class InvenSlot : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler
     public GameObject myInfo;
     public GameObject CountImage;
     public ItemEffect myEff;
-    Color color;
+    public bool IsChange = false;
 
     // Start is called before the first frame update
     void Start()
     {
         skill = SkillManager.Inst;
         inven = InventoryManager.Inst;
-        color = myitemImage.color;
+        myitemImage.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
         inven.RedrawSlotUI();
-        SlotChange();
+        inven.SlotChange();
     }
 
     public void UpdateSlotUI()
     {
         myitemImage.sprite = itemData.itemImage;
-        color.a = 1.0f;
-        myitemImage.color = color;
         myitemImage.gameObject.SetActive(true);
     }
     public void RemoveSlot()
@@ -51,32 +49,38 @@ public class InvenSlot : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler
         bool isUse = itemData.Use();
         if (isUse)
         {
+            IsChange = true;
             for (int i = 0; i < skill.BasicSKills.Length; i++)
             {
-                if (itemData.itemType != ItemType.SkillBook || skill.mySkills.Contains(skill.mySkill)) return;
+                if (itemData.itemType != ItemType.SkillBook ) return;
                 if (myEff.effectName == skill.BasicSKills[i].name)
                 {
                     skill.mySkill = skill.BasicSKills[i];
+                    if (!skill.mySkills.Contains(skill.mySkill))
+                    {
+                        skill.mySkill = skill.BasicSKills[i];
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
             skill.AddSkill();
+            for(int i = 0; i < inven.invenSlots.Length; i++)
+            {
+                if (inven.invenSlots[i].myEff != null)
+                {
+                    if (inven.invenSlots[i + 1] == null)
+                    {
+                        return;
+                    }
+                    inven.invenSlots[i].myEff = inven.invenSlots[i + 1].myEff;
+                }
+            }
             inven.RemoveItem(slotnum);
-        }
-    }
-
-    public void SlotChange()
-    {
-        for (int i = 0; i < inven.invenSlots.Length; i++)
-        {
-            inven.invenSlots[i].slotnum = i;
-            if (i < inven.itemDB.Count)
-            {
-                inven.invenSlots[i].GetComponent<Button>().interactable = true;
-            }
-            else
-            {
-                inven.invenSlots[i].GetComponent<Button>().interactable = false;
-            }
+            skill.mySkill = null;
+            IsChange = false;
         }
     }
 

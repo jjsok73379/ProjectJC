@@ -1294,7 +1294,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7331585632769928008}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 196.96379, y: 1.6300001, z: 181.88391}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1305,7 +1305,7 @@ Transform:
   - {fileID: 9071603519361450019}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7331585632769928009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1324,9 +1324,10 @@ MonoBehaviour:
     moveSpeed: 3
     rotSpeed: 360
     ap: 1
-    attackRange: 3
     attackDelay: 3
+    attackRange: 3
   AIPer: {fileID: 2242638336274800440}
+  DropPos: []
   <AttackPoint>k__BackingField: {fileID: 9071603519361450019}
   myState: 0
 --- !u!95 &7331585632760404104
@@ -1376,12 +1377,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  Skill:
-    m_PersistentCalls:
-      m_Calls: []
-  ComboCheck:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!54 &7331585632769928013
 Rigidbody:
   m_ObjectHideFlags: 0

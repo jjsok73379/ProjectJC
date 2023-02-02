@@ -52,6 +52,35 @@ public class InventoryManager : Singleton<InventoryManager>
         }
     }
 
+    public void SlotChange()
+    {
+        for (int i = 0; i < invenSlots.Length; i++)
+        {
+            invenSlots[i].slotnum = i;
+            if (i < itemDB.Count)
+            {
+                invenSlots[i].GetComponent<Button>().interactable = true;
+                if (invenSlots[i].IsChange)
+                {
+                    if (invenSlots[i + 1].myEff == null)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        invenSlots[i + 1].myEff = invenSlots[i + 2].myEff;
+                    }
+                }
+            }
+            else
+            {
+                invenSlots[i].GetComponent<Button>().interactable = false;
+                invenSlots[i].itemData = null;
+                invenSlots[i].myEff = null;
+            }
+        }
+    }
+
     public void RedrawSlotUI()
     {
         for (int i = 0; i < invenSlots.Length; i++)
@@ -84,7 +113,14 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         for (int i = 0; i < itemDB.Count; i++)
         {
-            invenSlots[i].myEff = itemDB[i].itemEffects[UnityEngine.Random.Range(0, itemDB[i].itemEffects.Count - 1)];
+            if (invenSlots[i].myEff == null)
+            {
+                invenSlots[i].myEff = itemDB[i].itemEffects[UnityEngine.Random.Range(0, itemDB[i].itemEffects.Count)];
+            }
+            if (invenSlots[i + 1] == null)
+            {
+                return;
+            }
         }
     }
 

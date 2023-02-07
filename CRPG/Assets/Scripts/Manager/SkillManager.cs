@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 
 public class SkillManager : Singleton<SkillManager>
 {
@@ -12,14 +13,14 @@ public class SkillManager : Singleton<SkillManager>
     public List<SkillData> mySkills = new List<SkillData>();
     public SkillData[] BasicSKills = new SkillData[6];
     public List<CombinedSkillData> CombinedSkills;
-    public GameObject Content;
-    public GameObject CombineMenuContent;
+    public GameObject[] Contents = new GameObject[2];
     public GameObject SkillMenu;
     public GameObject CombineWindow;
     public GameObject myCombineMenu;
     public GameObject SkillPrefab;
     public GameObject myCombinedSkill;
     public GameObject myCombinedSkillText;
+    public GameObject Addedskill;
     public Sprite CombineSlotsImage;
     public Sprite CombinedSlotImage;
     public List<CombineSkill> CombineSlots;
@@ -110,13 +111,16 @@ public class SkillManager : Singleton<SkillManager>
         }
     }
 
-    public void CloneSkill(SkillData Data)
+    public void AddSkill()
     {
-        GameObject CloneSlot = Instantiate(SkillPrefab, CombineMenuContent.transform);
-        mySkill = Data;
-        CloneSlot.GetComponent<Image>().sprite = mySkill.myImage;
-        CloneSlot.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
-        CloneSlot.GetComponent<SkillM>().orgData = mySkill;
+        for (int i = 0; i < Contents.Length; i++)
+        {
+            Addedskill = Instantiate(SkillPrefab, Contents[i].transform);
+            Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
+            Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
+            Addedskill.GetComponent<SkillM>().orgData = mySkill;
+        }
+        mySkills.Add(mySkill);
     }
 
     public void CombineSkill()
@@ -129,19 +133,11 @@ public class SkillManager : Singleton<SkillManager>
                 {
                     myCombinedSkill.GetComponent<CombinedSkill>().mySkillData = CombinedSkills[j];
                     myCombinedSkill.GetComponent<Image>().sprite = CombinedSkills[j].myImage;
+                    CombineSlots[i].myImage.sprite = CombineSlots[i].orgImage;
+                    CombineSlots[i].myText.SetActive(true);
                     myCombinedSkillText.SetActive(false);
                 }
             }
         }
-    }
-
-    public void AddSkill()
-    {
-        GameObject Addedskill = Instantiate(SkillPrefab, Content.transform);
-        Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
-        Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
-        Addedskill.GetComponent<SkillM>().orgData = mySkill;
-        mySkills.Add(mySkill);
-        CloneSkill(mySkill);
     }
 }

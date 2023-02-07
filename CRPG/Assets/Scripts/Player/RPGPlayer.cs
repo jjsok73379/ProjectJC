@@ -7,6 +7,9 @@ namespace CombineRPG
 {
     public class RPGPlayer : BattleSystem
     {
+        public int curExp { get; set; }
+        public int expToNextLevel { get; set; }
+        public int money { get; set; }
         //public PlayerUI myUI;
         public enum STATE
         {
@@ -130,6 +133,11 @@ namespace CombineRPG
                     MoveToPosition(hit.point);
                 }
             }
+        }
+
+        public void AddMoney(int money)
+        {
+            this.money += money;
         }
     }
 }

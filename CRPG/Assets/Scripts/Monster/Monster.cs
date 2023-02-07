@@ -119,6 +119,8 @@ public class Monster : BattleSystem
             ChangeState(STATE.Dead);
             ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books, 0, 31);
             ObjectManager.Inst.DropItemToPosition(transform.position + DropPos, ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions, 28, 100);
+            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos, ObjectManager.Inst.WeaponPrefab, ObjectManager.Inst.potions, 0, 24);
+            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.CoinPrefab, ObjectManager.Inst.Coins, 21, 95);
         }
         else
         {

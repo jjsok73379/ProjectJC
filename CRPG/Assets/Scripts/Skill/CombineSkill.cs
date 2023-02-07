@@ -11,11 +11,13 @@ public class CombineSkill : MonoBehaviour,IDropHandler
     public GameObject mySlot;
     public GameObject myText;
     public Image myImage;
+    public GameObject RemoveSKill;
+    public Sprite orgImage;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        orgImage = GetComponent<Image>().sprite;
     }
 
     // Update is called once per frame
@@ -26,10 +28,12 @@ public class CombineSkill : MonoBehaviour,IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        GameObject icon = eventData.pointerDrag.GetComponent<SkillM>().selectedSkill;
-        SkillData Data = icon.GetComponent<SelectedSkill>().myData;
-        mySkillData = Data;
-        myImage.sprite = mySkillData.myImage;
-        myText.SetActive(false);
+        if (eventData.pointerDrag != null)
+        {
+            GameObject icon = eventData.pointerDrag.GetComponent<SkillM>().selectedSkill;
+            mySkillData = icon.GetComponent<SelectedSkill>().myData;
+            myImage.sprite = mySkillData.myImage;
+            myText.SetActive(false);
+        }
     }
 }

@@ -6,10 +6,15 @@ public class SwordController : MonoBehaviour
 {
     [SerializeField]
     Sword currentSword; // 현재 들고 있는 검
-    
+
+    private void Start()
+    {
+        WeaponManager.currentWeapon = currentSword.GetComponent<Transform>();
+    }
+
     public void SwordChange(Sword _sword)
     {
-        if(WeaponManager.currentWeapon!= null)
+        if(WeaponManager.currentWeapon != null)
         {
             WeaponManager.currentWeapon.gameObject.SetActive(false);
         }

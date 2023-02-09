@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5667780539660661491}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3674441786987214993}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: SlashParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8839990712103235416}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: SkillPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1644974632735281165}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: SlashParticle_inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6797081552103357307}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Sword_Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5279685250424315551}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Armature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,9 +202,9 @@ GameObject:
   - component: {fileID: -5034956862933045885}
   - component: {fileID: 4857277455157060097}
   - component: {fileID: 7245292712129631947}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: SilverSword
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

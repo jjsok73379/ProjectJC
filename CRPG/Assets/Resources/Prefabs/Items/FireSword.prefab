@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 465913499891837058}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8445515741761398587}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: SkillPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3165546620092722581}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Armature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 804338633576566044}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: SlashParticle_inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5297339261732199050}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: SlashParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7456106205926495682}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Sword_Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,9 +202,9 @@ GameObject:
   - component: {fileID: -3378303965725258662}
   - component: {fileID: 4669778101875308864}
   - component: {fileID: 7433918205971402122}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: FireSword
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

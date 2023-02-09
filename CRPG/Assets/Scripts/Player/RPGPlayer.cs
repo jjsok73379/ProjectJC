@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +13,9 @@ namespace CombineRPG
         {
             Create, Play, Death
         }
+        int Level = 98;
+        int MaxLevel = 99;
+        float remainExp;
         public STATE myState = STATE.Create;
         public Animator _myanim = null;
         public Transform _mytarget = null;
@@ -19,7 +23,7 @@ namespace CombineRPG
         public LayerMask enemyMask = default;
         public Transform mySkillPoint = null;
 
-        //MinimapIcon myIcon = null;
+        MinimapIcon myIcon = null;
 
         void ChangeState(STATE s)
         {
@@ -49,13 +53,9 @@ namespace CombineRPG
                     break;
                 case STATE.Play:
                     _mytarget = myTarget;
+                    UIText();
+                    LevelUp();
                     PlayerMove();
-                    /*
-                    if(Input.GetMouseButtonDown(1) && !myAnim.GetBool("IsAttacking"))
-                    {
-                        myAnim.SetTrigger("Attack");
-                    }
-                    */
                     break;
                 case STATE.Death:
                     break;
@@ -65,16 +65,9 @@ namespace CombineRPG
         void Start()
         {
             _myanim = myAnim;
-            /*
-            Vector3 testDir = new Vector3(1, 1, 1);
-            Debug.Log(testDir.magnitude);
-            Vector3 temp = testDir.normalized;
-            Debug.Log(testDir.magnitude);
-            Debug.Log(temp.magnitude);
-            */
-            /*GameObject obj = Instantiate(Resources.Load("Prefabs/MinimapIcon"), SceneData.Inst.Minimap) as GameObject;
+            GameObject obj = Instantiate(Resources.Load("Prefabs/MinimapIcon"), GameManager.Inst.Minimap) as GameObject;
             myIcon = obj.GetComponent<MinimapIcon>();
-            myIcon.Initialize(transform, Color.green);*/
+            myIcon.Initialize(transform, Color.green);
 
             myStat.changeHp = (float v) => myUI.myHpBar.value = v;
             myStat.changeMp = (float v) => myUI.myMpBar.value = v;
@@ -82,10 +75,41 @@ namespace CombineRPG
             ChangeState(STATE.Play);
         }
 
+        void UIText()
+        {
+            myUI.myLevelText.text = "·¹º§ " + Level.ToString();
+            myUI.HP_Text.text = myStat.HP.ToString() + " / " + myStat.maxHp.ToString();
+            myUI.MP_Text.text = myStat.MP.ToString() + " / " + myStat.maxMp.ToString();
+            myUI.EXP_Text.text = (myStat.EXP/myStat.maxExp * 100).ToString() + " %";
+        }
+
         // Update is called once per frame
         void Update()
         {
-            StateProcess();
+            StateProcess(); 
+        }
+
+        void LevelUp()
+        {
+            if (myStat.EXP >= myStat.maxExp)
+            {
+                if (Level == MaxLevel)
+                {
+                    return;
+                }
+                else
+                {
+                    Level++;
+                    remainExp = myStat.EXP - myStat.maxExp;
+                    myStat.maxHp += 100;
+                    myStat.maxMp += 100;
+                    myStat.maxExp += 500;
+                    myStat.HP = myStat.maxHp;
+                    myStat.MP = myStat.maxMp;
+                    myStat.EXP = remainExp;
+                    myStat.AP += 5;
+                }
+            }
         }
 
         public override void OnDamage(float dmg)
@@ -111,6 +135,14 @@ namespace CombineRPG
             if (tr == myTarget)
             {
                 StopAllCoroutines();
+                if (Level == MaxLevel)
+                {
+                    Mathf.Clamp(myStat.EXP, 0, myStat.maxExp - 1);
+                }
+                else
+                {
+                    myStat.EXP += myTarget.GetComponent<Monster>().GiveExp;
+                }
             }
         }
 

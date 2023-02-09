@@ -77,7 +77,7 @@ public class ActionController : MonoBehaviour
             {
                 Debug.Log(hitInfo.transform.GetComponent<PickupItem>().item.itemName + " 획득했습니다. "); // 인벤토리 넣기
                 theInventory.AcquireItem(hitInfo.transform.GetComponent<PickupItem>().item);
-                Destroy(hitInfo.transform.gameObject);
+                hitInfo.transform.gameObject.SetActive(false);
                 ItemInfoDisappear();
             }
         }

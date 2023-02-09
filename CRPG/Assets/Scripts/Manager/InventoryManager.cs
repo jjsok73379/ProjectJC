@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -9,6 +11,7 @@ public class InventoryManager : MonoBehaviour
     {
         Inst = this;
     }
+
 
     public static bool inventoryActivated = false; // 인벤토리 활성화 여부. true가 되면 카메라 움직임과 다른 입력을 막을 것이다.
 
@@ -20,6 +23,8 @@ public class InventoryManager : MonoBehaviour
     Item FirstItem;
 
     InvenSlot[] invenSlots;
+
+
     // Start is called before the first frame update
     void Start()
     {

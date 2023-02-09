@@ -450,7 +450,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7331585632769963828}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: TopBodyCTRL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1324,11 +1324,16 @@ MonoBehaviour:
     mp: 0
     maxMp: 0
     exp: 0
+    maxExp: 0
     moveSpeed: 3
     rotSpeed: 360
     ap: 1
     attackDelay: 3
     attackRange: 3
+  MinMoney: 10
+  MaxMoney: 50
+  SwordPrefab: {fileID: 8750428140314534140, guid: 304e95966345eb744a5951d09481c81a, type: 3}
+  GiveExp: 360
   myHeadTop: {fileID: 7331585632769963828}
   AIPer: {fileID: 2242638336274800440}
   <AttackPoint>k__BackingField: {fileID: 9071603519361450019}

@@ -6,20 +6,17 @@ public class ObjectManager : Singleton<ObjectManager>
 {
     public GameObject BookPrefab;
     public GameObject PotionPrefab;
-    public GameObject WeaponPrefab;
-    public GameObject CoinPrefab;
+    public GameObject SwordPrefab;
     public int initialItems = 10;
     public List<GameObject> books = new List<GameObject>();
     public List<GameObject> potions = new List<GameObject>();
-    public List<GameObject> Weapons = new List<GameObject>();
-    public List<GameObject> Coins = new List<GameObject>();
+    public List<GameObject> swords = new List<GameObject>();
 
     private void Awake()
     {
         MakeItems(BookPrefab, books);
         MakeItems(PotionPrefab, potions);
-        MakeItems(WeaponPrefab, Weapons);
-        MakeItems(CoinPrefab, Coins);
+        MakeItems(SwordPrefab, swords);
     }
 
     void MakeItems(GameObject ItemPrefab, List<GameObject> Items)
@@ -55,5 +52,17 @@ public class ObjectManager : Singleton<ObjectManager>
         }
         reusedItem.SetActive(true);
         reusedItem.transform.position = new Vector3(pos.x, reusedItem.transform.position.y, pos.z);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

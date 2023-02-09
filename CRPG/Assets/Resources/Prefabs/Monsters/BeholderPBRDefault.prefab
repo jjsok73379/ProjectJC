@@ -465,7 +465,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7331585632769927956}
   m_LocalRotation: {x: -0.0042943484, y: 0.7070938, z: 0.0042943484, w: 0.7070938}
-  m_LocalPosition: {x: 0.3229402, y: 0.008136197, z: 1.03283505e-16}
+  m_LocalPosition: {x: 0.681, y: 0.012, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1321,13 +1321,16 @@ MonoBehaviour:
   myStat:
     hp: 10
     maxHp: 10
+    mp: 0
+    maxMp: 0
+    exp: 0
     moveSpeed: 3
     rotSpeed: 360
     ap: 1
     attackDelay: 3
     attackRange: 3
+  myHeadTop: {fileID: 7331585632769963828}
   AIPer: {fileID: 2242638336274800440}
-  DropPos: []
   <AttackPoint>k__BackingField: {fileID: 9071603519361450019}
   myState: 0
 --- !u!95 &7331585632760404104

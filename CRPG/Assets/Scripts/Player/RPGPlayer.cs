@@ -7,10 +7,7 @@ namespace CombineRPG
 {
     public class RPGPlayer : BattleSystem
     {
-        public int curExp { get; set; }
-        public int expToNextLevel { get; set; }
-        public int money { get; set; }
-        //public PlayerUI myUI;
+        public PlayerUI myUI;
         public enum STATE
         {
             Create, Play, Death
@@ -79,7 +76,9 @@ namespace CombineRPG
             myIcon = obj.GetComponent<MinimapIcon>();
             myIcon.Initialize(transform, Color.green);*/
 
-            //myStat.changeHp = (float v) => myUI.myHpBar.value = v;
+            myStat.changeHp = (float v) => myUI.myHpBar.value = v;
+            myStat.changeMp = (float v) => myUI.myMpBar.value = v;
+            myStat.changeExp = (float v) => myUI.myExpBar.value = v;
             ChangeState(STATE.Play);
         }
 
@@ -133,11 +132,6 @@ namespace CombineRPG
                     MoveToPosition(hit.point);
                 }
             }
-        }
-
-        public void AddMoney(int money)
-        {
-            this.money += money;
         }
     }
 }

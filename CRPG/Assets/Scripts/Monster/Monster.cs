@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Monster : BattleSystem
 {
+    public Transform myHeadTop;
+    HpBar myUI = null;
+
     public GameObject AIPer = null;
     [field:SerializeField]
     public Transform AttackPoint
@@ -79,6 +82,11 @@ public class Monster : BattleSystem
     // Start is called before the first frame update
     void Start()
     {
+        GameObject obj = Instantiate(Resources.Load("Prefabs/HpBar"), SceneData.Inst.HpBars) as GameObject;
+        myUI = obj.GetComponent<HpBar>();
+        myUI.myTarget = myHeadTop;
+        myStat.changeHp = (float v) => myUI.myBar.value = v;
+
         startPos = transform.position;
         startPos.y = 1.63f;
         ChangeState(STATE.Idle);
@@ -119,8 +127,7 @@ public class Monster : BattleSystem
             ChangeState(STATE.Dead);
             ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books, 0, 31);
             ObjectManager.Inst.DropItemToPosition(transform.position + DropPos, ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions, 28, 100);
-            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos, ObjectManager.Inst.WeaponPrefab, ObjectManager.Inst.potions, 0, 24);
-            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.CoinPrefab, ObjectManager.Inst.Coins, 21, 95);
+            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos, ObjectManager.Inst.SwordPrefab, ObjectManager.Inst.swords, 0, 22);
         }
         else
         {
@@ -142,6 +149,7 @@ public class Monster : BattleSystem
     IEnumerator DisApearing(float d, float t)
     {
         yield return new WaitForSeconds(t);
+        Destroy(myUI.gameObject);
         float dist = d;
         while (dist > 0.0f)
         {

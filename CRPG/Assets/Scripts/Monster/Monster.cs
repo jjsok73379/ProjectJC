@@ -11,7 +11,10 @@ public class Monster : BattleSystem
     [SerializeField]
     int MaxMoney; 
     [SerializeField]
-    GameObject SwordPrefab;
+    GameObject SwordPrefab; 
+    [SerializeField]
+    GameObject myMinimapIcon;
+
     public int GiveExp;
     public Transform myHeadTop;
     HpBar myUI = null;
@@ -25,8 +28,6 @@ public class Monster : BattleSystem
     }
     Vector3 startPos = Vector3.zero;
     Vector3[] DropPos = new Vector3[3];
-
-    MinimapIcon myIcon = null;
     public enum STATE
     {
         Create, Idle, Roaming, Battle, Dead
@@ -99,10 +100,6 @@ public class Monster : BattleSystem
         myUI = obj.GetComponent<HpBar>();
         myUI.myTarget = myHeadTop;
         myStat.changeHp = (float v) => myUI.myBar.value = v;
-
-        obj = Instantiate(Resources.Load("Prefabs/MinimapIcon"), GameManager.Inst.Minimap) as GameObject;
-        myIcon = obj.GetComponent<MinimapIcon>();
-        myIcon.Initialize(transform, Color.red);
 
         startPos = transform.position;
         startPos.y = 1.63f;
@@ -182,7 +179,7 @@ public class Monster : BattleSystem
     {
         yield return new WaitForSeconds(t);
         Destroy(myUI.gameObject);
-        Destroy(myIcon.gameObject);
+        Destroy(myMinimapIcon);
         float dist = d;
         while (dist > 0.0f)
         {

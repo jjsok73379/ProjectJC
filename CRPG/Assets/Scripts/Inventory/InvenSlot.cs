@@ -1,107 +1,245 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InvenSlot : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler
+public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public int slotnum;
-    InventoryManager inven;
-    SkillManager skill;
-    public ItemData itemData;
-    public Image myitemImage;
-    public GameObject myInfo;
-    public GameObject CountImage;
-    public ItemEffect myEff;
-    public bool IsChange = false;
+    public Item item; // 획득한 아이템
+    public int itemCount; // 획득한 아이템의 개수
+    public Image itemImage; // 아이템의 이미지
+
+    [SerializeField]
+    TMP_Text text_Count;
+    [SerializeField]
+    GameObject go_CountImage;
+    [SerializeField]
+    Image _highlightImage;
+
+    GameObject _highlightGo;
+
+    float _highlightAlpha = 0.5f;
+    float _highlightFadeDuration = 0.2f;
+    float _currentHLAlpha = 0f;
+
+    Rect baseRect; // Inventory 이미지의 Rect 정보 받아 옴.
+    WeaponManager theWeaponManager;
+    InputNumber theInputNumber;
+
+    // 아이템 이미지의 투명도 조절
+    void SetColor(float _alpha)
+    {
+        Color color = itemImage.color;
+        color.a = _alpha;
+        itemImage.color = color;
+    }
+
+    public void AddItem(Item _item, int _count = 1)
+    {
+        item = _item;
+        itemCount = _count;
+        itemImage.sprite = item.itemImage;
+
+        if (item.itemType != Item.ItemType.Equipment)
+        {
+            go_CountImage.SetActive(true);
+            text_Count.text = itemCount.ToString();
+        }
+        else
+        {
+            text_Count.text = "0";
+            go_CountImage.SetActive(false);
+        }
+        SetColor(1);
+    }
+
+    public void SetSlotCount(int _count)
+    {
+        itemCount += _count;
+        text_Count.text = itemCount.ToString();
+
+        if (itemCount <= 0)
+        {
+            ClearSlot();
+        }
+    }
+
+    void ClearSlot()
+    {
+        item = null;
+        itemCount = 0;
+        itemImage.sprite = null;
+        SetColor(0);
+
+        text_Count.text = "0";
+        go_CountImage.SetActive(false);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        skill = SkillManager.Inst;
-        inven = InventoryManager.Inst;
-        myitemImage.gameObject.SetActive(false);
+        theWeaponManager = WeaponManager.Inst;
+        theInputNumber = InputNumber.Inst;
+        baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
+        _highlightGo = _highlightImage.gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        inven.RedrawSlotUI();
-        inven.SlotChange();
+        
     }
 
-    public void UpdateSlotUI()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        myitemImage.sprite = itemData.itemImage;
-        myitemImage.gameObject.SetActive(true);
-    }
-    public void RemoveSlot()
-    {
-        itemData = null;
-        myitemImage.gameObject.SetActive(false);
-    }
-
-    public void UseItem()
-    {
-        bool isUse = itemData.Use();
-        if (isUse)
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
-            IsChange = true;
-            for (int i = 0; i < skill.BasicSKills.Length; i++)
+            if (item != null)
             {
-                if (itemData.itemType != ItemType.SkillBook ) return;
-                if (myEff.effectName == skill.BasicSKills[i].name)
+                if(item.itemType == Item.ItemType.Equipment)
                 {
-                    skill.mySkill = skill.BasicSKills[i];
-                    if (!skill.mySkills.Contains(skill.mySkill))
-                    {
-                        skill.mySkill = skill.BasicSKills[i];
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    //장착
+                    StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(item.itemName));
+                }
+                else
+                {
+                    //소비
+                    Debug.Log(item.itemName + " 을 사용했습니다. ");
+                    SetSlotCount(-1);
                 }
             }
-            skill.AddSkill();
-            for(int i = 0; i < inven.invenSlots.Length; i++)
-            {
-                if (inven.invenSlots[i].myEff != null)
-                {
-                    if (inven.invenSlots[i + 1] == null)
-                    {
-                        return;
-                    }
-                    inven.invenSlots[i].myEff = inven.invenSlots[i + 1].myEff;
-                }
-            }
-            inven.RemoveItem(slotnum);
-            skill.mySkill = null;
-            IsChange = false;
         }
     }
 
-    public void WriteInfo()
+    public void Highlight(bool show)
     {
-        Vector3 pos = transform.position;
-        pos.y = pos.y + 200.0f;
-        myInfo = Instantiate(Resources.Load("Prefabs/ItemInfo"), pos, Quaternion.identity, inven.InventoryPanel.transform) as GameObject;
-        myInfo.GetComponentInChildren<TMP_Text>().text = itemData.itemName + " : " + myEff.effectName + "\n" + itemData.ItemEff;
+        if (show)
+        {
+            StartCoroutine(nameof(HighlightFadeInRoutine));
+        }
+        else
+        { 
+            StartCoroutine(nameof(HighlightFadeOutRoutine));
+        }
+    }
+
+    IEnumerator HighlightFadeInRoutine()
+    {
+        StopCoroutine(nameof(HighlightFadeOutRoutine));
+        _highlightGo.SetActive(true);
+
+        float unit = _highlightAlpha / _highlightFadeDuration;
+
+        for (; _currentHLAlpha <= _highlightAlpha; _currentHLAlpha += unit * Time.deltaTime)
+        {
+            _highlightImage.color = new Color(
+                    _highlightImage.color.r,
+                    _highlightImage.color.g,
+                    _highlightImage.color.b,
+                    _currentHLAlpha
+                );
+
+            yield return null;
+        }
+    }
+
+    IEnumerator HighlightFadeOutRoutine()
+    {
+        StopCoroutine(nameof(HighlightFadeInRoutine));
+
+        float unit = _highlightAlpha / _highlightFadeDuration;
+
+        for (; _currentHLAlpha >= 0f; _currentHLAlpha -= unit * Time.deltaTime)
+        {
+            _highlightImage.color = new Color(
+                _highlightImage.color.r,
+                _highlightImage.color.g,
+                _highlightImage.color.b,
+                _currentHLAlpha
+            );
+
+            yield return null;
+        }
+
+        _highlightGo.SetActive(false);
+    }
+
+    void ChangeSlot()
+    {
+        Item _tempItem = item;
+        int _tempItemCount = itemCount;
+
+        AddItem(DragSlot.Inst.dragSlot.item, DragSlot.Inst.dragSlot.itemCount);
+
+        if (_tempItem == DragSlot.Inst.dragSlot.item)
+        {
+            _tempItemCount += DragSlot.Inst.dragSlot.itemCount;
+        }
+
+        if (_tempItem != null)
+        {
+            DragSlot.Inst.dragSlot.AddItem(_tempItem, _tempItemCount);
+        }
+        else
+        {
+            DragSlot.Inst.dragSlot.ClearSlot();
+        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (item != null)
+        {
+            DragSlot.Inst.dragSlot = this;
+            DragSlot.Inst.DragSetImage(itemImage);
+            DragSlot.Inst.transform.position = eventData.position;
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if(item!= null)
+        {
+            DragSlot.Inst.transform.position = eventData.position;
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if(DragSlot.Inst.transform.localPosition.x<baseRect.xMin
+            ||DragSlot.Inst.transform.localPosition.x>baseRect.xMax
+            ||DragSlot.Inst.transform.localPosition.y<baseRect.yMin
+            || DragSlot.Inst.transform.localPosition.y > baseRect.yMax)
+        {
+            if(DragSlot.Inst.dragSlot!= null)
+            {
+                theInputNumber.Call();
+            }
+        }
+        else
+        {
+            DragSlot.Inst.SetColor(0);
+            DragSlot.Inst.dragSlot = null;
+        }
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (DragSlot.Inst.dragSlot != null)
+        {
+            ChangeSlot();
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (itemData != null)
-        {
-            WriteInfo();
-        }
+        Highlight(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Destroy(myInfo);
+        Highlight(false);
     }
 }

@@ -9,18 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5801b91efa82c9a49b9ddbf88a026a32, type: 3}
+  m_Script: {fileID: 11500000, guid: d734f1267bcfb7e43b7a82ef973943e1, type: 3}
   m_Name: SkillBook
   m_EditorClassIdentifier: 
-  itemType: 1
   itemName: SkillBook
+  itemType: 2
   itemImage: {fileID: 21300000, guid: 0f182fb2863faa7449e020de33b77e68, type: 3}
-  itemEffects:
-  - {fileID: 11400000, guid: 87a861c170419134da780f0f39749793, type: 2}
-  - {fileID: 11400000, guid: 488d0f6b9c293524fa806b8c734a6b11, type: 2}
-  - {fileID: 11400000, guid: 51ceec1b968d2cc4699e5f7e87046e1b, type: 2}
-  - {fileID: 11400000, guid: 46191316f39fb144f96204e1c2d68e97, type: 2}
-  - {fileID: 11400000, guid: 38f59aa025c8ed246b67f027d16f6fd2, type: 2}
-  - {fileID: 11400000, guid: 4bd6e899f503f4e4baee0a7f40a72906, type: 2}
-  myEffect: {fileID: 11400000, guid: 1b08b070a558c5a41b66966cfd183116, type: 2}
-  ItemEff: "\uD574\uB2F9 \uC2A4\uD0AC\uC744 \uCD94\uAC00\uD569\uB2C8\uB2E4."
+  itemPrefab: {fileID: 4433255413829591616, guid: 625339b1226c02c4eb6a8cae4a3e9f18, type: 3}
+  weaponType: 

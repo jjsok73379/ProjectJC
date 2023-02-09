@@ -1,30 +1,17 @@
-using CombineRPG;
-using Rito.InventorySystem;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+[CreateAssetMenu(fileName = "New Item", menuName = "New Item/item")]
+public class Item : ScriptableObject // 게임 오브젝트에 붙일 필요 X 
 {
-    public float rotateSpeed = 180.0f;
-
-    private void OnTriggerEnter(Collider other)
+    public enum ItemType // 아이템 유형
     {
-        if (other.gameObject.tag == "Player")
-        {
-            RemoveFromWorld();
-        }
+        Equipment, Potion, SkillBook
     }
 
-    public void RemoveFromWorld()
-    {
-        gameObject.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Rotate(0.0f, rotateSpeed * Time.deltaTime, 0.0f);
-    }
+    public string itemName; // 아이템의 이름
+    public ItemType itemType; // 아이템 유형
+    public Sprite itemImage; // 아이템의 이미지(인벤토리 안에서 띄울)
+    public GameObject itemPrefab; // 아이템의 프리팹 (아이템 생성시 프리팹으로 찍어냄)
 }

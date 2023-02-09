@@ -13,7 +13,6 @@ public class SkillSlot : MonoBehaviour,IDropHandler
     public SkillData mySkillData;
     public float orgCool;
     public GameObject myText = null;
-    public GameObject RemoveSkill;
 
     void Start()
     {
@@ -62,18 +61,16 @@ public class SkillSlot : MonoBehaviour,IDropHandler
     }
     public void OnDrop(PointerEventData eventData)
     {
-        if (eventData.pointerDrag != null)
+        GameObject icon = eventData.pointerDrag.GetComponent<SkillM>().selectedSkill;
+        SkillData Data = icon.GetComponent<SelectedSkill>().myData;
+        mySkillData = Data;
+        Image[] skillchild = mySlot.GetComponentsInChildren<Image>();//mySlot의 자식들의 이미지를 가져옴
+        for (int j = 0; j < skillchild.Length; j++)
         {
-            GameObject icon = eventData.pointerDrag.GetComponent<SkillM>().selectedSkill;
-            mySkillData = icon.GetComponent<SelectedSkill>().myData;
-            Image[] skillchild = mySlot.GetComponentsInChildren<Image>();//mySlot의 자식들의 이미지를 가져옴
-            for (int j = 0; j < skillchild.Length; j++)
+            if (mySkillData != null)
             {
-                if (mySkillData != null)
-                {
-                    orgCool = mySkillData.CoolTime;
-                    skillchild[j].sprite = icon.GetComponent<SelectedSkill>().myData.myImage;//자식들 이미지에 mySkillData의 이미지를 넣음
-                }
+                orgCool = mySkillData.CoolTime;
+                skillchild[j].sprite = mySkillData.myImage;//자식들 이미지에 mySkillData의 이미지를 넣음
             }
         }
         /*for (int i = 0; i < skillDatas.Length; ++i)//skillDatas의 포문

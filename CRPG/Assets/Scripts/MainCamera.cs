@@ -31,7 +31,7 @@ public class MainCamera : MonoBehaviour
         }
         transform.rotation = Quaternion.Euler(ymove, xmove, 0); // 이동량에 따라 카메라의 바라보는 방향을 조정합니다. 
         distance -= Input.GetAxis("Mouse ScrollWheel") * wheelspeed;
-        if (distance < 1f) distance = 1f;
+        if (distance < 4f) distance = 4.0f;
         if (distance > 20.0f) distance = 20.0f;
         Vector3 Eye = player.transform.position
             + transform.rotation * Player_Side + Player_Height;

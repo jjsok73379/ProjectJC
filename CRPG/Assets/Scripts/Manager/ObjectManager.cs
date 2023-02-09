@@ -6,17 +6,17 @@ public class ObjectManager : Singleton<ObjectManager>
 {
     public GameObject BookPrefab;
     public GameObject PotionPrefab;
-    public GameObject SwordPrefab;
+    public GameObject CoinPrefab;
     public int initialItems = 10;
     public List<GameObject> books = new List<GameObject>();
     public List<GameObject> potions = new List<GameObject>();
-    public List<GameObject> swords = new List<GameObject>();
+    public List<GameObject> coins = new List<GameObject>();
 
     private void Awake()
     {
         MakeItems(BookPrefab, books);
         MakeItems(PotionPrefab, potions);
-        MakeItems(SwordPrefab, swords);
+        MakeItems(CoinPrefab, coins);
     }
 
     void MakeItems(GameObject ItemPrefab, List<GameObject> Items)
@@ -30,7 +30,7 @@ public class ObjectManager : Singleton<ObjectManager>
         }
     }
 
-    public void DropItemToPosition(Vector3 pos, GameObject ItemPrefab, List<GameObject> Items, int ranmin, int ranmax)
+    public void DropItemToPosition(Vector3 pos, GameObject ItemPrefab, List<GameObject> Items, int ranmin, int ranmax, int coinValue)
     {
         int RandomDrop;
         RandomDrop = Random.Range(ranmin, ranmax);
@@ -51,6 +51,10 @@ public class ObjectManager : Singleton<ObjectManager>
             reusedItem = newItem;
         }
         reusedItem.SetActive(true);
+        if (ItemPrefab == CoinPrefab)
+        {
+            reusedItem.GetComponent<Coin>().SetCoinValue(coinValue);
+        }
         reusedItem.transform.position = new Vector3(pos.x, reusedItem.transform.position.y, pos.z);
     }
 

@@ -1,9 +1,18 @@
+using CombineRPG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster : BattleSystem
 {
+    int rewardMoney; 
+    [SerializeField]
+    int MinMoney; 
+    [SerializeField]
+    int MaxMoney; 
+    [SerializeField]
+    GameObject SwordPrefab;
+    public int GiveExp;
     public Transform myHeadTop;
     HpBar myUI = null;
 
@@ -15,6 +24,9 @@ public class Monster : BattleSystem
         private set;
     }
     Vector3 startPos = Vector3.zero;
+    Vector3[] DropPos = new Vector3[3];
+
+    MinimapIcon myIcon = null;
     public enum STATE
     {
         Create, Idle, Roaming, Battle, Dead
@@ -82,13 +94,24 @@ public class Monster : BattleSystem
     // Start is called before the first frame update
     void Start()
     {
-        GameObject obj = Instantiate(Resources.Load("Prefabs/HpBar"), SceneData.Inst.HpBars) as GameObject;
+        rewardMoney = Random.Range(MinMoney, MaxMoney);
+        GameObject obj = Instantiate(Resources.Load("Prefabs/HpBar"), GameManager.Inst.HpBars) as GameObject;
         myUI = obj.GetComponent<HpBar>();
         myUI.myTarget = myHeadTop;
         myStat.changeHp = (float v) => myUI.myBar.value = v;
 
+        obj = Instantiate(Resources.Load("Prefabs/MinimapIcon"), GameManager.Inst.Minimap) as GameObject;
+        myIcon = obj.GetComponent<MinimapIcon>();
+        myIcon.Initialize(transform, Color.red);
+
         startPos = transform.position;
         startPos.y = 1.63f;
+        
+        for (int i = 0; i < DropPos.Length; i++)
+        {
+            DropPos[i].x = Random.Range(-3.0f, 3.0f);
+            DropPos[i].z = Random.Range(-3.0f, 3.0f);
+        }
         ChangeState(STATE.Idle);
     }
 
@@ -118,22 +141,31 @@ public class Monster : BattleSystem
 
     public override void OnDamage(float dmg)
     {
-        Vector3 DropPos = Vector3.zero;
-        DropPos.x = Random.Range(-3.0f, 3.0f);
-        DropPos.z = Random.Range(-3.0f, 3.0f);
         myStat.HP -= dmg;
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {
             ChangeState(STATE.Dead);
-            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books, 0, 31);
-            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos, ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions, 28, 100);
-            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos, ObjectManager.Inst.SwordPrefab, ObjectManager.Inst.swords, 0, 22);
+            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books, 0, 31, 0);
+            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos[0], ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions, 28, 100, 0);
+            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos[1], ObjectManager.Inst.CoinPrefab, ObjectManager.Inst.coins, 21, 90, rewardMoney);
+            DropWeapon(transform.position + DropPos[2]);
         }
         else
         {
             myAnim.SetTrigger("Damage");
         }
     }
+
+    void DropWeapon(Vector3 pos)
+    {
+        int RandomDrop;
+        RandomDrop = Random.Range(0, 22);
+        if (RandomDrop > 20)
+        {
+            Instantiate(SwordPrefab, pos, Quaternion.identity);
+        }
+    }
+
     public override bool IsLive()
     {
         return myState != STATE.Dead;
@@ -150,6 +182,7 @@ public class Monster : BattleSystem
     {
         yield return new WaitForSeconds(t);
         Destroy(myUI.gameObject);
+        Destroy(myIcon.gameObject);
         float dist = d;
         while (dist > 0.0f)
         {

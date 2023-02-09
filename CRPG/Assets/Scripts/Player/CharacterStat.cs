@@ -7,17 +7,25 @@ using System;
 [Serializable]
 public struct CharacterStat
 {
-    [SerializeField] float hp;
-    [SerializeField] float maxHp;
-    [SerializeField] float mp;
-    [SerializeField] float maxMp;
-    [SerializeField] float exp;
-    [SerializeField] float maxExp;
-    [SerializeField] float moveSpeed;
-    [SerializeField] float rotSpeed;
-    [SerializeField] float ap;
-    [SerializeField] float attackDelay;
-    [SerializeField] float attackRange;
+    [SerializeField] 
+    float hp;
+    public float maxHp;
+    [SerializeField] 
+    float mp;
+    public float maxMp;
+    [SerializeField] 
+    float exp;
+    public float maxExp;
+    [SerializeField] 
+    float moveSpeed;
+    [SerializeField] 
+    float rotSpeed;
+    [SerializeField]
+    float ap;
+    [SerializeField] 
+    float attackDelay;
+    [SerializeField] 
+    float attackRange;
 
     public UnityAction<float> changeHp;
     public UnityAction<float> changeMp;
@@ -40,15 +48,17 @@ public struct CharacterStat
             changeMp?.Invoke(mp / maxMp);
         }
     }
+
     public float EXP
     {
         get => exp;
         set
         {
-            exp = Mathf.Clamp(value, 0.0f, maxExp);
+            exp = value;
             changeExp?.Invoke(exp / maxExp);
         }
     }
+
     public float MoveSpeed
     {
         get => moveSpeed;
@@ -60,13 +70,16 @@ public struct CharacterStat
     public float AP
     {
         get => ap;
+        set => ap = value;
     }
     public float AttackDelay
     {
         get => attackDelay;
+        set => attackDelay = value;
     }
     public float AttackRange
     {
         get => attackRange;
+        set => attackRange = value;
     }
 }

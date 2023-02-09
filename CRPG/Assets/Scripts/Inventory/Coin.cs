@@ -1,13 +1,17 @@
 using CombineRPG;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : Item
+public class Coin : MonoBehaviour
 {
-    [NonSerialized]
-    public int money = 100;
+    [System.NonSerialized]
+    public int money;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
 
     public void SetCoinValue(int money)
     {
@@ -18,7 +22,14 @@ public class Coin : Item
     {
         if (other.gameObject.tag == "Player")
         {
-            other.gameObject.GetComponent<RPGPlayer>().AddMoney(money);
+            GameManager.Inst.AddGold(money);
+
+            RemoveFromWorld();
         }
+    }
+
+    public void RemoveFromWorld()
+    {
+        gameObject.SetActive(false);
     }
 }

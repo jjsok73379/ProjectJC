@@ -23,8 +23,6 @@ namespace CombineRPG
         public LayerMask enemyMask = default;
         public Transform mySkillPoint = null;
 
-        MinimapIcon myIcon = null;
-
         void ChangeState(STATE s)
         {
             if (myState == s) return;
@@ -65,9 +63,6 @@ namespace CombineRPG
         void Start()
         {
             _myanim = myAnim;
-            GameObject obj = Instantiate(Resources.Load("Prefabs/MinimapIcon"), GameManager.Inst.Minimap) as GameObject;
-            myIcon = obj.GetComponent<MinimapIcon>();
-            myIcon.Initialize(transform, Color.green);
 
             myStat.changeHp = (float v) => myUI.myHpBar.value = v;
             myStat.changeMp = (float v) => myUI.myMpBar.value = v;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -6881180043275529680}
   - component: {fileID: 7813540628660766537}
   - component: {fileID: 4563215863035182000}
-  - component: {fileID: 686132167084127226}
+  - component: {fileID: -8711022891774260248}
   m_Layer: 10
   m_Name: Potion
   m_TagString: Item
@@ -98,7 +98,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &686132167084127226
+--- !u!65 &-8711022891774260248
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

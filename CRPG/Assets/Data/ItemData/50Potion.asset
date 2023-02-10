@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d734f1267bcfb7e43b7a82ef973943e1, type: 3}
-  m_Name: SkillBook
+  m_Name: 50Potion
   m_EditorClassIdentifier: 
-  itemName: SkillBook
-  itemType: 2
-  itemImage: {fileID: 21300000, guid: 0f182fb2863faa7449e020de33b77e68, type: 3}
-  itemPrefab: {fileID: 4433255413829591616, guid: 625339b1226c02c4eb6a8cae4a3e9f18, type: 3}
-  weaponType: 
+  itemName: 50Potion
+  itemType: 1
+  itemImage: {fileID: 21300000, guid: a20d322c5e65a6746808e67a31dfe555, type: 3}
+  itemPrefab: {fileID: 2841519208149389164, guid: 9cf6d57574988f04da07ec31c6a3a317, type: 3}

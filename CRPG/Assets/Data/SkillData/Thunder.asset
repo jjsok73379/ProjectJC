@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1caf35a9e92419e49bf46865471c2755, type: 3}
   m_Name: Thunder
   m_EditorClassIdentifier: 
+  SkillName: Thunder
   myImage: {fileID: 21300000, guid: 2456dd2824f5ec540830760922f5bac6, type: 3}
-  itemName: Thunder
   myInfo: "\uBC88\uAC1C"
-  mySkillType: 4
+  mySkillType: 2
   AttackRange: 0
   CoolTime: 0
   SkillDamage: 0

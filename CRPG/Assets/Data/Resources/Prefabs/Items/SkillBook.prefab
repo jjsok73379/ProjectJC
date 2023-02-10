@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -3005157641783142179}
   - component: {fileID: 8540594181695482469}
   - component: {fileID: 2718696722530424476}
-  - component: {fileID: 3475687127314601654}
+  - component: {fileID: -5643327837799473859}
   m_Layer: 10
   m_Name: SkillBook
   m_TagString: Item
@@ -98,7 +98,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3475687127314601654
+--- !u!65 &-5643327837799473859
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

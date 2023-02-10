@@ -15,18 +15,10 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     TMP_Text text_Count;
     [SerializeField]
     GameObject go_CountImage;
-    [SerializeField]
-    Image _highlightImage;
-
-    GameObject _highlightGo;
-
-    float _highlightAlpha = 0.5f;
-    float _highlightFadeDuration = 0.2f;
-    float _currentHLAlpha = 0f;
 
     Rect baseRect; // Inventory 이미지의 Rect 정보 받아 옴.
-    WeaponManager theWeaponManager;
     InputNumber theInputNumber;
+    ItemEffectDatabase theItemEffectDatabase;
 
     // 아이템 이미지의 투명도 조절
     void SetColor(float _alpha)
@@ -80,16 +72,15 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     // Start is called before the first frame update
     void Start()
     {
-        theWeaponManager = WeaponManager.Inst;
         theInputNumber = InputNumber.Inst;
         baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
-        _highlightGo = _highlightImage.gameObject;
+        theItemEffectDatabase = ItemEffectDatabase.Inst;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -98,73 +89,17 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         {
             if (item != null)
             {
-                if(item.itemType == Item.ItemType.Equipment)
+                theItemEffectDatabase.UseItem(item);
+
+                if (item.itemType != Item.ItemType.Equipment)
                 {
-                    //장착
-                    StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(item.itemName));
-                }
-                else
-                {
-                    //소비
-                    Debug.Log(item.itemName + " 을 사용했습니다. ");
                     SetSlotCount(-1);
                 }
             }
         }
     }
 
-    public void Highlight(bool show)
-    {
-        if (show)
-        {
-            StartCoroutine(nameof(HighlightFadeInRoutine));
-        }
-        else
-        { 
-            StartCoroutine(nameof(HighlightFadeOutRoutine));
-        }
-    }
-
-    IEnumerator HighlightFadeInRoutine()
-    {
-        StopCoroutine(nameof(HighlightFadeOutRoutine));
-        _highlightGo.SetActive(true);
-
-        float unit = _highlightAlpha / _highlightFadeDuration;
-
-        for (; _currentHLAlpha <= _highlightAlpha; _currentHLAlpha += unit * Time.deltaTime)
-        {
-            _highlightImage.color = new Color(
-                    _highlightImage.color.r,
-                    _highlightImage.color.g,
-                    _highlightImage.color.b,
-                    _currentHLAlpha
-                );
-
-            yield return null;
-        }
-    }
-
-    IEnumerator HighlightFadeOutRoutine()
-    {
-        StopCoroutine(nameof(HighlightFadeInRoutine));
-
-        float unit = _highlightAlpha / _highlightFadeDuration;
-
-        for (; _currentHLAlpha >= 0f; _currentHLAlpha -= unit * Time.deltaTime)
-        {
-            _highlightImage.color = new Color(
-                _highlightImage.color.r,
-                _highlightImage.color.g,
-                _highlightImage.color.b,
-                _currentHLAlpha
-            );
-
-            yield return null;
-        }
-
-        _highlightGo.SetActive(false);
-    }
+    
 
     void ChangeSlot()
     {
@@ -235,11 +170,11 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Highlight(true);
+        
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Highlight(false);
+        
     }
 }

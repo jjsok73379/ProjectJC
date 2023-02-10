@@ -199,9 +199,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8414799470984261028}
+  - component: {fileID: 7960009372923193724}
   - component: {fileID: -5034956862933045885}
   - component: {fileID: 4857277455157060097}
   - component: {fileID: 7245292712129631947}
+  - component: {fileID: 3125487471634334172}
   m_Layer: 10
   m_Name: SilverSword
   m_TagString: Item
@@ -226,6 +228,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90.258, y: -36.25299, z: 216.048}
+--- !u!114 &7960009372923193724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190878331159525150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
 --- !u!114 &-5034956862933045885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,9 +253,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfcb727f8c6fd4445854976b05e0ac1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySkillPoint: {fileID: 8839990712103235416}
   SwordName: SilverSword
-  range: 4
-  AttackSpeed: 3
+  range: 2
+  AttackSpeed: 2
   damage: 9
 --- !u!33 &4857277455157060097
 MeshFilter:
@@ -292,3 +308,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3125487471634334172
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190878331159525150}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.447372, y: 1.8952266, z: 0.1160609}
+  m_Center: {x: -0.00000012665991, y: 0.5263276, z: -0.00000013577944}

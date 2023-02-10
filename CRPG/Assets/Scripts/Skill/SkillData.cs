@@ -8,8 +8,9 @@ public class SkillData : ScriptableObject
 {
     public enum SkillType
     {
-        Targeting, nonTargeting, Follow, Rotate, Material
+        Targeting, nonTargeting, Material
     }
+    public string SkillName;
     public Sprite myImage = null;
     public string myInfo;
     public SkillType mySkillType;

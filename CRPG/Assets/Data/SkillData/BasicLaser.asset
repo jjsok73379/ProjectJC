@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1caf35a9e92419e49bf46865471c2755, type: 3}
   m_Name: BasicLaser
   m_EditorClassIdentifier: 
+  SkillName: BasicLaser
   myImage: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
-  itemName: BasicLaser
   myInfo: "\uAE30\uBCF8\uC801\uC778 \uB808\uC774\uC838"
   mySkillType: 0
   AttackRange: 20

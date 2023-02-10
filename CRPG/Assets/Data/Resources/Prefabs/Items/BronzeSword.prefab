@@ -63,6 +63,37 @@ Transform:
   m_Father: {fileID: 3994496842597438546}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3832074353151280111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3034451794511474000}
+  m_Layer: 10
+  m_Name: SkillPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3034451794511474000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3832074353151280111}
+  m_LocalRotation: {x: 0.7071068, y: 1.1641531e-10, z: 3.201421e-10, w: 0.70710677}
+  m_LocalPosition: {x: 0, y: 1.4000005, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9082412130131180784}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &5061766747610240011
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +124,7 @@ Transform:
   m_Children:
   - {fileID: 3994496842597438546}
   m_Father: {fileID: 9082412130131180784}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6545676231194607495
 GameObject:
@@ -168,9 +199,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9082412130131180784}
+  - component: {fileID: 6059918338453629735}
   - component: {fileID: 6640336104251563158}
   - component: {fileID: 5306628097022751573}
   - component: {fileID: 7944377688359503775}
+  - component: {fileID: -6442282414772100867}
   m_Layer: 10
   m_Name: BronzeSword
   m_TagString: Item
@@ -190,10 +223,24 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3034451794511474000}
   - {fileID: 4228984116693405713}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90.258, y: -36.25299, z: 216.048}
+--- !u!114 &6059918338453629735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449004803641222730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
 --- !u!114 &6640336104251563158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,9 +253,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfcb727f8c6fd4445854976b05e0ac1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySkillPoint: {fileID: 3034451794511474000}
   SwordName: BronzeSword
-  range: 4
-  AttackSpeed: 2
+  range: 2
+  AttackSpeed: 1.5
   damage: 7
 --- !u!33 &5306628097022751573
 MeshFilter:
@@ -260,3 +308,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-6442282414772100867
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449004803641222730}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.36276862, y: 2.3628886, z: 0.11519364}
+  m_Center: {x: -0.000000007450581, y: 0.4795643, z: -0.00000009825838}

@@ -199,9 +199,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8753600534574749932}
+  - component: {fileID: 8231939160832048554}
   - component: {fileID: 5426187244266591345}
   - component: {fileID: 8727270537955701942}
   - component: {fileID: 8735690379209090492}
+  - component: {fileID: -7972388481947168067}
   m_Layer: 10
   m_Name: Sword
   m_TagString: Item
@@ -217,7 +219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8750428140314534140}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -226,6 +228,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8231939160832048554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8750428140314534140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: b77326d408d865c4bbed2341c1dee2eb, type: 2}
 --- !u!114 &5426187244266591345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,8 +253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfcb727f8c6fd4445854976b05e0ac1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySkillPoint: {fileID: 8748987454684853617}
   SwordName: BasicSword
-  range: 3
+  range: 1
   AttackSpeed: 1
   damage: 5
 --- !u!33 &8727270537955701942
@@ -292,3 +308,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-7972388481947168067
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8750428140314534140}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.34595168, y: 1.4528017, z: 0.06556244}
+  m_Center: {x: -0.000000074505806, y: -0.51638997, z: -0.000000035390258}

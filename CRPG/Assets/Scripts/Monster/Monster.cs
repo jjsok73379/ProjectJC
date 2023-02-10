@@ -155,9 +155,10 @@ public class Monster : BattleSystem
 
     void DropWeapon(Vector3 pos)
     {
+        pos = new Vector3(pos.x, 2.5f, pos.z);
         int RandomDrop;
         RandomDrop = Random.Range(0, 22);
-        if (RandomDrop > 20)
+        //if (RandomDrop > 20)
         {
             Instantiate(SwordPrefab, pos, Quaternion.identity);
         }

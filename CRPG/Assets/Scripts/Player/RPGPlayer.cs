@@ -8,12 +8,19 @@ namespace CombineRPG
 {
     public class RPGPlayer : BattleSystem
     {
+        [SerializeField]
+        GameObject Holder;
+        [SerializeField]
+        Sword mySword;
+        [SerializeField]
+        Transform mySkillPoint = null;
+
         public PlayerUI myUI;
         public enum STATE
         {
             Create, Play, Death
         }
-        int Level = 98;
+        int Level = 1;
         int MaxLevel = 99;
         float remainExp;
         public STATE myState = STATE.Create;
@@ -21,7 +28,6 @@ namespace CombineRPG
         public Transform _mytarget = null;
         public LayerMask pickMask = default;
         public LayerMask enemyMask = default;
-        public Transform mySkillPoint = null;
 
         void ChangeState(STATE s)
         {
@@ -32,6 +38,7 @@ namespace CombineRPG
                 case STATE.Create:
                     break;
                 case STATE.Play:
+                    WeaponStat();
                     break;
                 case STATE.Death:
                     StopAllCoroutines();
@@ -67,6 +74,8 @@ namespace CombineRPG
             myStat.changeHp = (float v) => myUI.myHpBar.value = v;
             myStat.changeMp = (float v) => myUI.myMpBar.value = v;
             myStat.changeExp = (float v) => myUI.myExpBar.value = v;
+
+            mySword = Holder.GetComponentInChildren<Sword>();
             ChangeState(STATE.Play);
         }
 
@@ -82,6 +91,23 @@ namespace CombineRPG
         void Update()
         {
             StateProcess(); 
+        }
+
+        public void WeaponStat()
+        {
+            if (mySword != null)
+            {
+                mySkillPoint = mySword.mySkillPoint;
+                myStat.AttackRange = myStat.AttackRange + mySword.range;
+                myStat.AttackDelay = myStat.AttackDelay - mySword.AttackSpeed;
+                myStat.AP = myStat.AP + mySword.damage;
+            }
+            else
+            {
+                myStat.AttackRange = 1;
+                myStat.AttackDelay = 1;
+                myStat.AP = 5;
+            }
         }
 
         void LevelUp()
@@ -158,6 +184,26 @@ namespace CombineRPG
                 {
                     MoveToPosition(hit.point);
                 }
+            }
+        }
+
+        public void IncreaseHPMP(int _count)
+        {
+            if (myStat.HP + _count < myStat.maxHp)
+            {
+                myStat.HP += _count;
+            }
+            else
+            {
+                myStat.HP = myStat.maxHp;
+            }
+            if (myStat.MP + _count < myStat.maxMp)
+            {
+                myStat.MP += _count;
+            }
+            else
+            {
+                myStat.MP = myStat.maxMp;
             }
         }
     }

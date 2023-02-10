@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1caf35a9e92419e49bf46865471c2755, type: 3}
   m_Name: BasicRain
   m_EditorClassIdentifier: 
+  SkillName: BasicRain
   myImage: {fileID: 21300000, guid: 03e6f50b7a998ed46a4c3f9f8cb0855e, type: 3}
-  itemName: BasicRain
   myInfo: "\uAE30\uBCF8\uC801\uC778 \uBE44"
   mySkillType: 1
   AttackRange: 30

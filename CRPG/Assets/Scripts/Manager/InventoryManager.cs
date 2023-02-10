@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -19,8 +18,7 @@ public class InventoryManager : MonoBehaviour
     GameObject go_Inventory; // Inventory의 이미지
     [SerializeField]
     GameObject go_SlotsParent; // Slot들의 부모인 Grid Setting
-    [SerializeField]
-    Item FirstItem;
+    public Item FirstItem;
 
     InvenSlot[] invenSlots;
 
@@ -30,6 +28,7 @@ public class InventoryManager : MonoBehaviour
     {
         invenSlots = go_SlotsParent.GetComponentsInChildren<InvenSlot>();
         go_Inventory.SetActive(false);
+        FirstItem.itemName = "BasicLaser";
         invenSlots[0].AddItem(FirstItem);
     }
 

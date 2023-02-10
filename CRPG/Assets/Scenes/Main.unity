@@ -3610,7 +3610,7 @@ GameObject:
   - component: {fileID: 409578798}
   - component: {fileID: 409578797}
   - component: {fileID: 409578800}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -7146,11 +7146,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2170264943138649450, guid: 79c1e4ff914707a4ebd7117851a28e20, type: 3}
   m_PrefabInstance: {fileID: 903785582}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &925240488 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8748987454684853617, guid: 304e95966345eb744a5951d09481c81a, type: 3}
-  m_PrefabInstance: {fileID: 8748987454401346009}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &930200182
 GameObject:
   m_ObjectHideFlags: 0
@@ -7725,7 +7720,7 @@ GameObject:
   - component: {fileID: 986807965}
   - component: {fileID: 986807966}
   - component: {fileID: 986807967}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7739,9 +7734,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 986807964}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.00000008940696, y: -0.000000009313225, z: -0.00000007275957, w: 1}
+  m_LocalPosition: {x: 0.0000021217268, y: 0.00000030837612, z: -0.0000010111348}
+  m_LocalScale: {x: 1, y: 0.9999999, z: 0.9999996}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2078112718}
@@ -11385,20 +11380,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9ab8c531c2441489a4e3f1f27a7417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemEffects: []
-  thePlayerStat:
-    hp: 0
-    maxHp: 0
-    mp: 0
-    maxMp: 0
-    exp: 0
-    maxExp: 0
-    moveSpeed: 0
-    rotSpeed: 0
-    ap: 0
-    attackDelay: 0
-    attackRange: 0
-  theWeaponManager: {fileID: 0}
+  PotionitemEffects:
+  - itemName: 30Potion
+    num: 30
+  - itemName: 50Potion
+    num: 50
+  - itemName: 100Potion
+    num: 100
+  - itemName: 300Potion
+    num: 300
+  - itemName: 500Potion
+    num: 500
+  - itemName: 1000Potion
+    num: 1000
+  - itemName: 3000Potion
+    num: 3000
+  - itemName: 5000Potion
+    num: 5000
+  SkillBookitemEffects:
+  - itemName: 'SkillBook : BasicBall'
+    Eff: {fileID: 11400000, guid: cc2eec7fcda490d488c3d774ff33c1cb, type: 2}
+  - itemName: 'SkillBook : BasicLaser'
+    Eff: {fileID: 11400000, guid: d447ec6033e67f644a0469913fa597cc, type: 2}
+  - itemName: 'SkillBook : BasicRain'
+    Eff: {fileID: 11400000, guid: 6df88fb40d044c2459e7c80e041b75af, type: 2}
+  - itemName: 'SkillBook : Fire'
+    Eff: {fileID: 11400000, guid: 5c8f0d978da865c4ba32173a0c8228c6, type: 2}
+  - itemName: 'SkillBook : Ice'
+    Eff: {fileID: 11400000, guid: ac6bfbf5e01d7a64d93e5f7a115a69d0, type: 2}
+  - itemName: 'SkillBook : Thunder'
+    Eff: {fileID: 11400000, guid: 1a77b772eb354f4449ec2941ccb46054, type: 2}
+  thePlayer: {fileID: 95658022362309907}
+  theWeaponManager: {fileID: 986807966}
+  theSkillManager: {fileID: 1173148369}
 --- !u!1 &1496215254
 GameObject:
   m_ObjectHideFlags: 0
@@ -16324,7 +16338,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2078112718}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: SwordHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19092,8 +19106,11 @@ MonoBehaviour:
     moveSpeed: 5
     rotSpeed: 360
     ap: 5
-    attackDelay: 1
+    attackDelay: 4
     attackRange: 1
+  Holder: {fileID: 2078112717}
+  mySword: {fileID: 0}
+  mySkillPoint: {fileID: 0}
   myUI: {fileID: 222932394}
   myState: 0
   _myanim: {fileID: 0}
@@ -19104,7 +19121,6 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 128
-  mySkillPoint: {fileID: 925240488}
 --- !u!114 &95658022362309908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19321,37 +19337,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2078112718}
     m_Modifications:
-    - target: {fileID: 1677391607982225495, guid: 304e95966345eb744a5951d09481c81a, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3476888075783982334, guid: 304e95966345eb744a5951d09481c81a, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4196031588932900027, guid: 304e95966345eb744a5951d09481c81a, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4939687836260667503, guid: 304e95966345eb744a5951d09481c81a, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5015478551962922022, guid: 304e95966345eb744a5951d09481c81a, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8748987454684853630, guid: 304e95966345eb744a5951d09481c81a, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 8750428140314534140, guid: 304e95966345eb744a5951d09481c81a, type: 3}
       propertyPath: m_Name
       value: Sword
-      objectReference: {fileID: 0}
-    - target: {fileID: 8750428140314534140, guid: 304e95966345eb744a5951d09481c81a, type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8753600534574749932, guid: 304e95966345eb744a5951d09481c81a, type: 3}
       propertyPath: m_RootOrder

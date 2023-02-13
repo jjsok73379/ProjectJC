@@ -182,7 +182,7 @@ namespace CombineRPG
                 }
                 else if (Physics.Raycast(ray, out hit, 1000.0f, pickMask))
                 {
-                    MoveToPosition(hit.point);
+                    MoveToPositionByNav(hit.point);
                 }
             }
         }

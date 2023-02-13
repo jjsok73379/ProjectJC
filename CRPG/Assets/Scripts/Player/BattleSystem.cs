@@ -11,7 +11,7 @@ public interface IBattle
     void DeadMessage(Transform tr);
 }
 
-public class BattleSystem : CharacterMovement, IBattle
+public class BattleSystem : AIMovement, IBattle
 {
     protected List<IBattle> myAttackers = new List<IBattle>();
     Transform _target = null;

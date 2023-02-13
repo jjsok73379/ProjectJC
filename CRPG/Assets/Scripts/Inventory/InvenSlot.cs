@@ -22,6 +22,7 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     RectTransform quickSlotBaseRect;
     InputNumber theInputNumber;
     ItemEffectDatabase theItemEffectDatabase;
+    int SellPrice;
 
     [SerializeField]
     bool isQuickSlot; // «ÿ¥Á ΩΩ∑‘¿Ã ƒ¸ΩΩ∑‘¿Œ¡ˆ ø©∫Œ ∆«¥‹
@@ -105,7 +106,14 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     // Update is called once per frame
     void Update()
     {
-
+        if(item != null)
+        {
+            SellPrice = item.SellPrice;
+        }
+        else
+        {
+            SellPrice = 0;
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -228,12 +236,12 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         {
             if (!isQuickSlot)
             {
-                theItemEffectDatabase.ShowToolTip(item, transform.position);
+                theItemEffectDatabase.ShowToolTip(item, transform.position, SellPrice);
             }
             else
             {
                 Vector3 quickslotPos = new Vector3(transform.position.x, transform.position.y + 500.0f, transform.position.z);
-                theItemEffectDatabase.ShowToolTip(item, quickslotPos);
+                theItemEffectDatabase.ShowToolTip(item, quickslotPos, SellPrice);
             }
         }
     }

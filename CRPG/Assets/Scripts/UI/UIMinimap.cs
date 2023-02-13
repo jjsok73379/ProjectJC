@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIMinimap : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class UIMinimap : MonoBehaviour
 
     private void Awake()
     {
-        textMapName.text = "½£";
+        textMapName.text = SceneManager.GetActiveScene().name;
     }
 
     public void ZoomIn()

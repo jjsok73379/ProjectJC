@@ -1,9 +1,5 @@
 using CombineRPG;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
 using UnityEngine;
 
 [Serializable]
@@ -41,6 +37,8 @@ public class ItemEffectDatabase : MonoBehaviour
     QuickSlotController theQuickSlotController;
     [SerializeField]
     InventoryManager theInventoryManager;
+    [SerializeField]
+    StoreToolTip theStoreToolTip;
 
     private void Awake()
     {
@@ -154,14 +152,22 @@ public class ItemEffectDatabase : MonoBehaviour
         }
     }
 
-    public void ShowToolTip(Item _item, Vector3 _pos)
+    public void ShowToolTip(Item _item, Vector3 _pos, int Pricenum)
     {
-        theSlotToolTip.ShowToolTip(_item, _pos);
+        theSlotToolTip.ShowToolTip(_item, _pos, Pricenum);
     }
 
     public void HideToolTip()
     {
         theSlotToolTip.HideToolTip();
+    }
+    public void ShowStoreToolTip(Item _item, Vector3 _pos, int Pricenum)
+    {
+        theStoreToolTip.ShowToolTip(_item, _pos, Pricenum);
+    }
+    public void HideStoreToolTip()
+    {
+        theStoreToolTip.HideToolTip();
     }
 
     public void IsActivatedquickSlot(int _num)

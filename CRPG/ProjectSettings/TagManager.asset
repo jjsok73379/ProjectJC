@@ -8,6 +8,9 @@ TagManager:
   - Coin
   - Animal
   - FxTemporaire
+  - Store
+  - Recovery
+  - Quest
   layers:
   - Default
   - TransparentFX
@@ -22,9 +25,9 @@ TagManager:
   - Item
   - Weapon
   - MinimapCamera
-  - 
-  - 
-  - 
+  - Store
+  - Recovery
+  - Quest
   - 
   - 
   - 

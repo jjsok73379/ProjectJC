@@ -3,29 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class SlotToolTip : MonoBehaviour
+public class SlotToolTip : StoreToolTip
 {
-    [SerializeField]
-    GameObject go_Base;
-
-    [SerializeField]
-    TMP_Text ItemName;
-    [SerializeField]
-    TMP_Text ItemDesc;
     [SerializeField]
     TMP_Text ItemHowtoUsed;
 
-    public void ShowToolTip(Item _item,Vector3 _pos)
+    public override void ShowToolTip(Item _item,Vector3 _pos, int Pricenum)
     {
-        go_Base.SetActive(true);
-        _pos += new Vector3(go_Base.GetComponent<RectTransform>().rect.width * 0.5f,
-            -go_Base.GetComponent<RectTransform>().rect.height * 0.5f,
-            0);
-        go_Base.transform.position = _pos;
-
-        ItemName.text = _item.itemName;
-        ItemDesc.text = _item.itemDesc;
-
         if (_item.itemType == Item.ItemType.Equipment)
         {
             ItemHowtoUsed.text = "¿ì Å¬¸¯ - ÀåÂø";
@@ -42,11 +26,6 @@ public class SlotToolTip : MonoBehaviour
         {
             ItemHowtoUsed.text = "";
         }
-    }
-
-    public void HideToolTip()
-    {
-        go_Base.SetActive(false);
     }
     // Start is called before the first frame update
     void Start()

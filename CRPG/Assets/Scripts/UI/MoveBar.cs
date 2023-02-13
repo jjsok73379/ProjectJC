@@ -11,6 +11,7 @@ public class MoveBar : MonoBehaviour,IBeginDragHandler,IDragHandler
     public void OnBeginDrag(PointerEventData eventData)
     {
         dragOffset = (Vector2)myUI.transform.position - eventData.position;
+        myUI.transform.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)

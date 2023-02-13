@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fbc2002a569fa46a2cfbf62cc2d4cc, type: 3}
   m_Name: FireLaser
   m_EditorClassIdentifier: 
+  SkillName: "\uBD88 \uB808\uC774\uC838"
   myImage: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
   myInfo: "\uBD88\uB85C \uC774\uB8E8\uC5B4\uC9C4 \uB808\uC774\uC838"
   mySkillType: 0
@@ -22,4 +23,3 @@ MonoBehaviour:
   Materials:
   - {fileID: 11400000, guid: d447ec6033e67f644a0469913fa597cc, type: 2}
   - {fileID: 11400000, guid: 5c8f0d978da865c4ba32173a0c8228c6, type: 2}
-  myComSkill: {fileID: 11400000}

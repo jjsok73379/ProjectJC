@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: 82f085732b51d714ebe1589c4b253790, type: 2}
 --- !u!114 &6640336104251563158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mySkillPoint: {fileID: 3034451794511474000}
-  SwordName: BronzeSword
+  SwordName: "\uCD08\uC2EC\uC790\uC6A9 \uAC80"
   range: 2
   AttackSpeed: 1.5
   damage: 7

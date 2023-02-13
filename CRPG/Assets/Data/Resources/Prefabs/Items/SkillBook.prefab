@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 854927016719618131}
-  - component: {fileID: -3005157641783142179}
+  - component: {fileID: -5286470597852928995}
+  - component: {fileID: 6217438030441675406}
   - component: {fileID: 8540594181695482469}
   - component: {fileID: 2718696722530424476}
   - component: {fileID: -5643327837799473859}
@@ -35,7 +36,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3005157641783142179
+--- !u!114 &-5286470597852928995
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,7 +48,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 64fda08824f2a154bb3886e1bb7f8a11, type: 2}
+  item: {fileID: 0}
+--- !u!114 &6217438030441675406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4433255413829591616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de14521802709c54dbc81b61c4de20c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RandomItem:
+  - {fileID: 11400000, guid: 488ef35c4b9c6794fad10e9175912147, type: 2}
+  - {fileID: 11400000, guid: 0b274ed0c0dbd03489e826e0e3ad8cfb, type: 2}
+  - {fileID: 11400000, guid: f7e9589acd699f441a3de8941c966d4d, type: 2}
 --- !u!33 &8540594181695482469
 MeshFilter:
   m_ObjectHideFlags: 0

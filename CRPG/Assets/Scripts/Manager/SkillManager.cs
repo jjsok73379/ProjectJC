@@ -8,32 +8,39 @@ using System.Linq;
 
 public class SkillManager : Singleton<SkillManager>
 {
+    public List<SkillData> SkillSlotDatas;
+    public SkillSlot[] SkillSlots;
+
     public SkillData mySkill;
     public List<SkillData> mySkills = new List<SkillData>();
-    public SkillData[] BasicSKills = new SkillData[6];
+    public SkillData[] BasicSkills = new SkillData[3];
+    public SkillData[] Materials = new SkillData[3];
     public List<CombinedSkillData> CombinedSkills;
-    public GameObject Content;
-    public GameObject CombineMenuContent;
+
+    public GameObject[] Contents;
+
     public GameObject SkillMenu;
+
     public GameObject CombineWindow;
     public GameObject myCombineMenu;
-    public GameObject SkillPrefab;
     public GameObject myCombinedSkill;
     public GameObject myCombinedSkillText;
-    public Sprite CombineSlotsImage;
-    public Sprite CombinedSlotImage;
-    public List<CombineSkill> CombineSlots;
+
+    public GameObject ReinforceWindow;
+    public GameObject ReinfoceSkill;
+
+    public GameObject SkillPrefab;
+
+    public CombineSkill CombineSkillSlot;
+    public CombineMaterial CombineMaterialSlot;
     public bool SkillOpen = false;
     public bool CombineOpen = false;
     public bool CombineMenuOpen = false;
+    public bool ReinforceOpen = false;
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < CombineSlots.Count; i++)
-        {
-            CombineSlotsImage = CombineSlots[i].GetComponent<Image>().sprite;
-        }
-        CombinedSlotImage = myCombinedSkill.GetComponent<Image>().sprite;
+        ReinforceOpen = false;
         SkillMenu.SetActive(false);
         CombineWindow.SetActive(false);
         myCombineMenu.SetActive(false);
@@ -46,6 +53,7 @@ public class SkillManager : Singleton<SkillManager>
         {
             SkillOpen = !SkillOpen;
             SkillMenu.SetActive(SkillOpen);
+            ReinforceWindow.SetActive(false);
         }
         if (SkillOpen)
         {
@@ -55,18 +63,14 @@ public class SkillManager : Singleton<SkillManager>
                 SkillMenu.SetActive(false);
             }
         }
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             CombineOpen = !CombineOpen;
             CombineWindow.SetActive(CombineOpen);
             if (CombineMenuOpen)
             {
-                for(int i = 0; i < CombineSlots.Count; i++)
-                {
-                    CombineSlots[i].myText.SetActive(true);
-                    CombineSlots[i].GetComponent<Image>().sprite = CombineSlotsImage;
-                }
-                myCombinedSkill.GetComponent<Image>().sprite = CombinedSlotImage;
+                CombineSkillSlot.myText.SetActive(true);
+                CombineMaterialSlot.myText.SetActive(true);
                 myCombineMenu.SetActive(false);
                 CombineMenuOpen = false;
             }
@@ -83,12 +87,22 @@ public class SkillManager : Singleton<SkillManager>
         {
             myCombinedSkillText.SetActive(true);
         }
+        SkillSlotDatas[0] = SkillSlots[0].mySkillData;
+        SkillSlotDatas[1] = SkillSlots[1].mySkillData;
+        SkillSlotDatas[2] = SkillSlots[2].mySkillData;
+        SkillSlotDatas[3] = SkillSlots[3].mySkillData;
     }
 
     public void OpenSkill()
     {
         SkillOpen = !SkillOpen;
         SkillMenu.SetActive(SkillOpen);
+    }
+
+    public void OpenReinFoce()
+    {
+        ReinforceOpen = !ReinforceOpen;
+        ReinforceWindow.SetActive(ReinforceOpen);
     }
 
     public void SelectSkill()
@@ -110,38 +124,34 @@ public class SkillManager : Singleton<SkillManager>
         }
     }
 
-    public void CloneSkill(SkillData Data)
-    {
-        GameObject CloneSlot = Instantiate(SkillPrefab, CombineMenuContent.transform);
-        mySkill = Data;
-        CloneSlot.GetComponent<Image>().sprite = mySkill.myImage;
-        CloneSlot.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
-        CloneSlot.GetComponent<SkillM>().orgData = mySkill;
-    }
-
     public void CombineSkill()
     {
-        for (int i = 0; i < CombineSlots.Count; i++)
+        if (CombineSkillSlot.mySkillData == null || CombineMaterialSlot.mySkillData == null) return;
+        for (int i = 0; i < CombinedSkills.Count; i++)
         {
-            for (int j = 0; j < CombinedSkills.Count; j++)
+            if (CombinedSkills[i].Materials[0] == CombineSkillSlot.mySkillData && CombinedSkills[i].Materials[1] == CombineMaterialSlot.mySkillData)
             {
-                if (CombinedSkills[j].Materials.Contains(CombineSlots[i].mySkillData))
-                {
-                    myCombinedSkill.GetComponent<CombinedSkill>().mySkillData = CombinedSkills[j];
-                    myCombinedSkill.GetComponent<Image>().sprite = CombinedSkills[j].myImage;
-                    myCombinedSkillText.SetActive(false);
-                }
+                myCombinedSkill.GetComponent<CombinedSkill>().mySkillData = CombinedSkills[i];
+                myCombinedSkill.GetComponent<Image>().sprite = CombinedSkills[i].myImage;
+                myCombinedSkillText.SetActive(false);
             }
         }
+        CombineSkillSlot.myImage.sprite = CombineSkillSlot.orgImage;
+        CombineMaterialSlot.myImage.sprite = CombineMaterialSlot.orgImage;
+        CombineSkillSlot.myText.SetActive(true);
+        CombineMaterialSlot.myText.SetActive(true);
     }
 
     public void AddSkill()
     {
-        GameObject Addedskill = Instantiate(SkillPrefab, Content.transform);
-        Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
-        Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
-        Addedskill.GetComponent<SkillM>().orgData = mySkill;
+        for(int i = 0; i < Contents.Length; i++)
+        {
+            GameObject AddedskillPanel = Instantiate(SkillPrefab, Contents[i].transform);
+            SkillM Addedskill = AddedskillPanel.GetComponentInChildren<SkillM>();
+            Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
+            Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
+            Addedskill.GetComponent<SkillM>().orgData = mySkill;
+        }
         mySkills.Add(mySkill);
-        CloneSkill(mySkill);
     }
 }

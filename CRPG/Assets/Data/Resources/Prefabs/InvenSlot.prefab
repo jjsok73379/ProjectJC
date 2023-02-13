@@ -36,8 +36,8 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 600, y: -120}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -58,6 +58,10 @@ MonoBehaviour:
   itemImage: {fileID: 2941280635539981274}
   text_Count: {fileID: 4992005517033040050}
   go_CountImage: {fileID: 4644711191216770743}
+  baseRect: {fileID: 0}
+  quickSlotBaseRect: {fileID: 0}
+  isQuickSlot: 0
+  quickSlotNumber: 0
 --- !u!222 &2170264943138649449
 CanvasRenderer:
   m_ObjectHideFlags: 0

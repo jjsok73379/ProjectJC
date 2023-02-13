@@ -11,7 +11,13 @@ public class Monster : BattleSystem
     [SerializeField]
     int MaxMoney; 
     [SerializeField]
-    GameObject SwordPrefab; 
+    GameObject SwordPrefab;
+    [SerializeField]
+    GameObject HP_PotionPrefab;
+    [SerializeField]
+    GameObject MP_PotionPrefab;
+    [SerializeField]
+    GameObject BookPrefab;
     [SerializeField]
     GameObject myMinimapIcon;
 
@@ -27,7 +33,7 @@ public class Monster : BattleSystem
         private set;
     }
     Vector3 startPos = Vector3.zero;
-    Vector3[] DropPos = new Vector3[3];
+    Vector3[] DropPos = new Vector3[4];
     public enum STATE
     {
         Create, Idle, Roaming, Battle, Dead
@@ -142,10 +148,11 @@ public class Monster : BattleSystem
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {
             ChangeState(STATE.Dead);
-            ObjectManager.Inst.DropItemToPosition(transform.position, ObjectManager.Inst.BookPrefab, ObjectManager.Inst.books, 0, 31, 0);
-            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos[0], ObjectManager.Inst.PotionPrefab, ObjectManager.Inst.potions, 28, 100, 0);
-            ObjectManager.Inst.DropItemToPosition(transform.position + DropPos[1], ObjectManager.Inst.CoinPrefab, ObjectManager.Inst.coins, 21, 90, rewardMoney);
-            DropWeapon(transform.position + DropPos[2]);
+            ObjectManager.Inst.DropCoinToPosition(transform.position, rewardMoney);
+            DropItem(new Vector3(transform.position.x + DropPos[1].x, 2.5f, transform.position.z + DropPos[1].z), 0, 22, SwordPrefab);
+            DropItem(new Vector3(transform.position.x + DropPos[2].x, 2.5f, transform.position.z + DropPos[2].z), 15, 90, HP_PotionPrefab);
+            DropItem(new Vector3(transform.position.x + DropPos[3].x, 2.5f, transform.position.z + DropPos[3].z), 15, 90, MP_PotionPrefab);
+            DropItem(new Vector3(transform.position.x + DropPos[0].x, 2.0f, transform.position.z + DropPos[0].z), 0, 25, BookPrefab);
         }
         else
         {
@@ -153,14 +160,13 @@ public class Monster : BattleSystem
         }
     }
 
-    void DropWeapon(Vector3 pos)
+    void DropItem(Vector3 pos, int ranmin, int ranmax, GameObject itemprefab)
     {
-        pos = new Vector3(pos.x, 2.5f, pos.z);
         int RandomDrop;
-        RandomDrop = Random.Range(0, 22);
+        RandomDrop = Random.Range(ranmin, ranmax);
         //if (RandomDrop > 20)
         {
-            Instantiate(SwordPrefab, pos, Quaternion.identity);
+            Instantiate(itemprefab, pos, Quaternion.identity);
         }
     }
 

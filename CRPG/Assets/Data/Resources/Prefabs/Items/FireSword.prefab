@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: 599baff394e53494090a1a479fd51b88, type: 2}
 --- !u!114 &-3378303965725258662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mySkillPoint: {fileID: 8445515741761398587}
-  SwordName: FireSword
+  SwordName: "\uD654\uC5FC\uAC80"
   range: 3
   AttackSpeed: 3.5
   damage: 20

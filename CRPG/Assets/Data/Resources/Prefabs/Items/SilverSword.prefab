@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: 359980f804ad30d449e1fa70f3eea659, type: 2}
 --- !u!114 &-5034956862933045885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mySkillPoint: {fileID: 8839990712103235416}
-  SwordName: SilverSword
+  SwordName: "\uC911\uAE09\uC790\uC6A9 \uAC80"
   range: 2
   AttackSpeed: 2
   damage: 9

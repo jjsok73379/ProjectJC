@@ -6,6 +6,8 @@ public class Spawner : MonoBehaviour
 {
     public GameObject orgMonster;
     List<GameObject> list = new List<GameObject>();
+    [SerializeField]
+    Vector3[] pos;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,13 +19,12 @@ public class Spawner : MonoBehaviour
     {
         if(list.Count < 6)
         {
-            Vector3 pos = new Vector3(195.34f, 0.0f, 186.31f);
-            pos.x = Random.Range(188.0f, 202.0f);
-            pos.y = 0.5f;
-            pos.z = Random.Range(176.0f, 188.0f);
+            pos[0].x = Random.Range(pos[0].x - 3.0f, pos[0].x + 3.0f);
+            pos[0].y = 1.0f;
+            pos[0].z = Random.Range(pos[0].z - 3.0f, pos[0].z + 3.0f);
             Vector3 rot = Vector3.zero;
             rot.y = Random.Range(0.0f, 360.0f);
-            GameObject obj = Instantiate(orgMonster, pos, Quaternion.Euler(rot));
+            GameObject obj = Instantiate(orgMonster, pos[0], Quaternion.Euler(rot));
             list.Add(obj);
         }
 

@@ -182,12 +182,12 @@ namespace CombineRPG
                 }
                 else if (Physics.Raycast(ray, out hit, 1000.0f, pickMask))
                 {
-                    MoveToPosition(hit.point);
+                    MoveToPositionByNav(hit.point);
                 }
             }
         }
 
-        public void IncreaseHPMP(int _count)
+        public void IncreaseHP(int _count)
         {
             if (myStat.HP + _count < myStat.maxHp)
             {
@@ -197,6 +197,10 @@ namespace CombineRPG
             {
                 myStat.HP = myStat.maxHp;
             }
+        }
+
+        public void IncreaseMP(int _count)
+        {
             if (myStat.MP + _count < myStat.maxMp)
             {
                 myStat.MP += _count;

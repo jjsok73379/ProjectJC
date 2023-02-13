@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: eba0df07407032b4d912c35bce1984c7, type: 2}
 --- !u!114 &-5697304278992309551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mySkillPoint: {fileID: 8947388061075167835}
-  SwordName: ThunderSword
+  SwordName: "\uBC88\uAC1C\uAC80"
   range: 3
   AttackSpeed: 3.5
   damage: 20

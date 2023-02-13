@@ -8,8 +8,6 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     public Transform HpBars;
-    public Transform Minimap;
-    public Canvas canVas;
     public int Goldvalue;
     int MaxGold;
     public TMP_Text GoldComma;

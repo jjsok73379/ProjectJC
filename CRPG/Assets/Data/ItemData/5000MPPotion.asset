@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d734f1267bcfb7e43b7a82ef973943e1, type: 3}
+  m_Name: 5000MPPotion
+  m_EditorClassIdentifier: 
+  itemDesc: "\uB9C8\uB098\uC744 5000 \uD68C\uBCF5\uD55C\uB2E4."
+  itemName: "\uB9C8\uB098 5000 \uD68C\uBCF5 \uD3EC\uC158"
+  itemType: 1
+  itemImage: {fileID: 21300000, guid: 0728d0fcacc90a4479b06a413548442f, type: 3}
+  itemPrefab: {fileID: 1280056767771472, guid: 2bb4477b81339ba4190d70fa7acae46c, type: 3}
+  SellPrice: 1200

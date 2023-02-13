@@ -13,6 +13,9 @@ public class InputNumber : MonoBehaviour
     }
     bool activated = false;
 
+    public bool IsDrop = false;
+    public Item DropItemData;
+
     [SerializeField]
     Text text_Preview;
     [SerializeField]
@@ -89,9 +92,16 @@ public class InputNumber : MonoBehaviour
 
     IEnumerator DropItemCoroutone(int _num)
     {
-        for(int i=0; i<_num; i++)
+        IsDrop = true;
+        for (int i = 0; i < _num; i++)
         {
-            Instantiate(DragSlot.Inst.dragSlot.item.itemPrefab, thePlayer.transform.position + thePlayer.transform.forward, Quaternion.identity);
+            if (DragSlot.Inst.dragSlot.item.itemPrefab != null)
+            {
+                DropItemData = DragSlot.Inst.dragSlot.item;
+                Instantiate(DragSlot.Inst.dragSlot.item.itemPrefab,
+                    thePlayer.transform.position + thePlayer.transform.forward,
+                    Quaternion.identity);
+            }
             DragSlot.Inst.dragSlot.SetSlotCount(-1);
             yield return new WaitForSeconds(0.05f);
         }
@@ -99,6 +109,7 @@ public class InputNumber : MonoBehaviour
         DragSlot.Inst.dragSlot = null;
         go_Base.SetActive(false);
         activated = false;
+        IsDrop = false;
     }
 
     bool CheckNumber(string _argString)

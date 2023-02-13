@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5bc4fd70ce910041b46c5692bed4411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: d75e81963a7fe66499564eac89b91159, type: 2}
 --- !u!114 &5370614328284353628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mySkillPoint: {fileID: 20758532766960247}
-  SwordName: GoldSword
+  SwordName: "\uC219\uB828\uC790\uC6A9 \uAC80"
   range: 2
   AttackSpeed: 2.5
   damage: 12

@@ -17,6 +17,8 @@ public class ActionController : MonoBehaviour
 
     [SerializeField]
     TMP_Text actionText; // 행동을 보여 줄 텍스트
+    
+    public TMP_Text itemText; // 아이템이 꽉 찼다는 경고 메세지를 보여줄 텍스트
 
     InventoryManager theInventory;
 
@@ -77,9 +79,27 @@ public class ActionController : MonoBehaviour
             {
                 Debug.Log(hitInfo.transform.GetComponent<PickupItem>().item.itemName + " 획득했습니다. "); // 인벤토리 넣기
                 theInventory.AcquireItem(hitInfo.transform.GetComponent<PickupItem>().item);
-                hitInfo.transform.gameObject.SetActive(false);
+                Destroy(hitInfo.transform.gameObject);
                 ItemInfoDisappear();
             }
         }
+    }
+
+    public IEnumerator WhenIventoryIsFull()
+    {
+        itemText.gameObject.SetActive(true);
+        itemText.text = "아이템이 꽉 찼습니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator WhenNoItem()
+    {
+        itemText.gameObject.SetActive(true);
+        itemText.text = "사용할 수 있는 아이템이 없습니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
     }
 }

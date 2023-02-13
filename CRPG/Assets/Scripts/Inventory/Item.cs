@@ -9,6 +9,8 @@ public class Item : ScriptableObject // 게임 오브젝트에 붙일 필요 X
     {
         Equipment, Potion, SkillBook
     }
+    [TextArea]
+    public string itemDesc; // 아이템의 설명
 
     public string itemName; // 아이템의 이름
     public ItemType itemType; // 아이템 유형

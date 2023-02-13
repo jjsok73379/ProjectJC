@@ -16,9 +16,17 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     [SerializeField]
     GameObject go_CountImage;
 
-    Rect baseRect; // Inventory 이미지의 Rect 정보 받아 옴.
+    [SerializeField]
+    RectTransform baseRect; // Inventory 이미지의 Rect 정보 받아 옴.
+    [SerializeField]
+    RectTransform quickSlotBaseRect;
     InputNumber theInputNumber;
     ItemEffectDatabase theItemEffectDatabase;
+
+    [SerializeField]
+    bool isQuickSlot; // 해당 슬롯이 퀵슬롯인지 여부 판단
+    [SerializeField]
+    int quickSlotNumber; // 퀵슬롯 넘버
 
     // 아이템 이미지의 투명도 조절
     void SetColor(float _alpha)
@@ -52,6 +60,14 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         itemCount += _count;
         text_Count.text = itemCount.ToString();
 
+        if(_count < 0)
+        {
+            if (theItemEffectDatabase.GetIsFull())
+            {
+                theItemEffectDatabase.SetIsFull(false);
+            }
+        }
+
         if (itemCount <= 0)
         {
             ClearSlot();
@@ -67,13 +83,22 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
 
         text_Count.text = "0";
         go_CountImage.SetActive(false);
+
+        if (theItemEffectDatabase.GetIsFull())
+        {
+            theItemEffectDatabase.SetIsFull(false);
+        }
+    }
+
+    public int GetQuickSlotNumber()
+    {
+        return quickSlotNumber;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         theInputNumber = InputNumber.Inst;
-        baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
         theItemEffectDatabase = ItemEffectDatabase.Inst;
     }
 
@@ -89,17 +114,29 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         {
             if (item != null)
             {
-                theItemEffectDatabase.UseItem(item);
-
-                if (item.itemType != Item.ItemType.Equipment)
+                if (!isQuickSlot)
                 {
-                    SetSlotCount(-1);
+                    theItemEffectDatabase.UseItem(item);
+                    theItemEffectDatabase.HideToolTip();
+
+                    if (item.itemType != Item.ItemType.Equipment)
+                    {
+                        SetSlotCount(-1);
+                    }
+                }
+                else if (!theItemEffectDatabase.GetIsCoolTime())
+                {
+                    theItemEffectDatabase.UseItem(item);
+                    theItemEffectDatabase.HideToolTip();
+
+                    if (item.itemType != Item.ItemType.Equipment)
+                    {
+                        SetSlotCount(-1);
+                    }
                 }
             }
         }
     }
-
-    
 
     void ChangeSlot()
     {
@@ -143,16 +180,21 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if(DragSlot.Inst.transform.localPosition.x<baseRect.xMin
-            ||DragSlot.Inst.transform.localPosition.x>baseRect.xMax
-            ||DragSlot.Inst.transform.localPosition.y<baseRect.yMin
-            || DragSlot.Inst.transform.localPosition.y > baseRect.yMax)
+        // 인벤토리와 퀵슬롯 영역을 벗어난 곳에서 드래그를 끝냈다면
+        if (!((DragSlot.Inst.transform.localPosition.x > baseRect.rect.xMin
+            && DragSlot.Inst.transform.localPosition.x < baseRect.rect.xMax
+            && DragSlot.Inst.transform.localPosition.y > baseRect.rect.yMin
+            && DragSlot.Inst.transform.localPosition.y < baseRect.rect.yMax)
+            ||
+            (DragSlot.Inst.transform.localPosition.x + baseRect.transform.localPosition.x > quickSlotBaseRect.rect.xMin + quickSlotBaseRect.transform.localPosition.x
+            && DragSlot.Inst.transform.localPosition.x + baseRect.transform.localPosition.x < quickSlotBaseRect.rect.xMax + quickSlotBaseRect.transform.localPosition.x
+            && DragSlot.Inst.transform.localPosition.y + baseRect.transform.localPosition.y > quickSlotBaseRect.rect.yMin + quickSlotBaseRect.transform.localPosition.y
+            && DragSlot.Inst.transform.localPosition.y + baseRect.transform.localPosition.y < quickSlotBaseRect.rect.yMax + quickSlotBaseRect.transform.localPosition.y)))
         {
-            if(DragSlot.Inst.dragSlot!= null)
-            {
+            if (DragSlot.Inst.dragSlot != null)
                 theInputNumber.Call();
-            }
         }
+        // 인벤토리 혹은 퀵슬롯 영역에서 드래그가 끝났다면
         else
         {
             DragSlot.Inst.SetColor(0);
@@ -165,16 +207,39 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         if (DragSlot.Inst.dragSlot != null)
         {
             ChangeSlot();
+
+            if (isQuickSlot)
+            {
+                theItemEffectDatabase.IsActivatedquickSlot(quickSlotNumber);
+            }
+            else
+            {
+                if (DragSlot.Inst.dragSlot.isQuickSlot)
+                {
+                    theItemEffectDatabase.IsActivatedquickSlot(DragSlot.Inst.dragSlot.quickSlotNumber);
+                }
+            }
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        if (item != null)
+        {
+            if (!isQuickSlot)
+            {
+                theItemEffectDatabase.ShowToolTip(item, transform.position);
+            }
+            else
+            {
+                Vector3 quickslotPos = new Vector3(transform.position.x, transform.position.y + 500.0f, transform.position.z);
+                theItemEffectDatabase.ShowToolTip(item, quickslotPos);
+            }
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        
+        theItemEffectDatabase.HideToolTip();
     }
 }

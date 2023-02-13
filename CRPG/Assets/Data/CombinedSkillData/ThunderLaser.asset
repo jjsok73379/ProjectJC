@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fbc2002a569fa46a2cfbf62cc2d4cc, type: 3}
   m_Name: ThunderLaser
   m_EditorClassIdentifier: 
+  SkillName: "\uBC88\uAC1C \uB808\uC774\uC838"
   myImage: {fileID: 21300000, guid: 33470548a8c102c45bec7658b3637d33, type: 3}
   myInfo: "\uC804\uAE30\uB85C \uC774\uB8E8\uC5B4\uC9C4 \uB808\uC774\uC838"
   mySkillType: 0
@@ -20,6 +21,5 @@ MonoBehaviour:
   SkillDamage: 10
   mySkill: {fileID: 1012013889074000, guid: 9ef386a14cdde2541a040c3e52223ea3, type: 3}
   Materials:
-  - {fileID: 11400000, guid: 1a77b772eb354f4449ec2941ccb46054, type: 2}
   - {fileID: 11400000, guid: d447ec6033e67f644a0469913fa597cc, type: 2}
-  myComSkill: {fileID: 11400000}
+  - {fileID: 11400000, guid: 1a77b772eb354f4449ec2941ccb46054, type: 2}

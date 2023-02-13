@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fbc2002a569fa46a2cfbf62cc2d4cc, type: 3}
   m_Name: IceLaser
   m_EditorClassIdentifier: 
+  SkillName: "\uC5BC\uC74C \uB808\uC774\uC838"
   myImage: {fileID: 21300000, guid: 4c08ab37f63684943b7512f974ef85d6, type: 3}
   myInfo: "\uC5BC\uC74C\uC73C\uB85C \uC774\uB8E8\uC5B4\uC9C4 \uB808\uC774\uC838"
   mySkillType: 0
@@ -20,6 +21,5 @@ MonoBehaviour:
   SkillDamage: 7
   mySkill: {fileID: 1427661989262336, guid: 7c6ecf9677a64fd4290922ea3ebc2493, type: 3}
   Materials:
-  - {fileID: 11400000, guid: ac6bfbf5e01d7a64d93e5f7a115a69d0, type: 2}
   - {fileID: 11400000, guid: d447ec6033e67f644a0469913fa597cc, type: 2}
-  myComSkill: {fileID: 11400000}
+  - {fileID: 11400000, guid: ac6bfbf5e01d7a64d93e5f7a115a69d0, type: 2}

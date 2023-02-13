@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,51 +10,48 @@ public class SkillSlot : MonoBehaviour,IDropHandler
 {
     Coroutine act = null;
     public Image myImage;
-    [SerializeField] GameObject mySlot;
+    [SerializeField] 
+    GameObject mySlot;
+    [SerializeField]
+    Image[] skillImages;
     public SkillData mySkillData;
     public float orgCool;
-    public GameObject myText = null;
 
     void Start()
     {
         mySlot = gameObject;
-        myText.SetActive(false);
     }
 
     void Update()
     {
         if (mySlot.name == "SkillQ")
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                myText.SetActive(true);
                 if (act != null) return;
                 act = StartCoroutine(Cooling());
             }
         }
         if (mySlot.name == "SkillW")
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                myText.SetActive(true);
                 if (act != null) return;
                 act = StartCoroutine(Cooling());
             }
         }
         if (mySlot.name == "SkillE")
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                myText.SetActive(true);
                 if (act != null) return;
                 act = StartCoroutine(Cooling());
             }
         }
         if (mySlot.name == "SkillR")
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.Alpha4))
             {
-                myText.SetActive(true);
                 if (act != null) return;
                 act = StartCoroutine(Cooling());
             }
@@ -63,38 +61,20 @@ public class SkillSlot : MonoBehaviour,IDropHandler
     {
         GameObject icon = eventData.pointerDrag.GetComponent<SkillM>().selectedSkill;
         SkillData Data = icon.GetComponent<SelectedSkill>().myData;
+        if (SkillManager.Inst.SkillSlotDatas.Contains(Data)) return;
         mySkillData = Data;
-        Image[] skillchild = mySlot.GetComponentsInChildren<Image>();//mySlot의 자식들의 이미지를 가져옴
-        for (int j = 0; j < skillchild.Length; j++)
+        for (int i = 0; i < skillImages.Length; i++)
         {
             if (mySkillData != null)
             {
-                orgCool = mySkillData.CoolTime;
-                skillchild[j].sprite = mySkillData.myImage;//자식들 이미지에 mySkillData의 이미지를 넣음
-            }
-        }
-        /*for (int i = 0; i < skillDatas.Length; ++i)//skillDatas의 포문
-        {
-            if (skillDatas.Contains(Data))
-            {
-                mySkillData = null;
-            }
-            else
-            {
-                mySkillData = Data; //skillDatas에 SelectedSkill의 myData를 가져옴
-            }
-            skillDatas[i] = mySkillData;//mySkillData에 가져온 myData를 넣음
-            Image[] skillchild = mySlot.GetComponentsInChildren<Image>();//mySlot의 자식들의 이미지를 가져옴
-            for (int j = 0; j < skillchild.Length; j++)
-            {
-                if (mySkillData != null)
+                for (int j = 0; j < SkillManager.Inst.SkillSlots.Length; j++)
                 {
                     orgCool = mySkillData.CoolTime;
-                    skillchild[j].sprite = mySkillData.myImage;//자식들 이미지에 mySkillData의 이미지를 넣음
+                    skillImages[i].sprite = mySkillData.myImage;
+                    //자식들 이미지에 mySkillData의 이미지를 넣음
                 }
             }
-        }*/
-
+        }
     }
     IEnumerator Cooling()
     {
@@ -105,12 +85,10 @@ public class SkillSlot : MonoBehaviour,IDropHandler
             while (myImage.fillAmount < 1.0f)
             {
                 myImage.fillAmount += speed * Time.deltaTime;
-                myText.GetComponent<TMP_Text>().text = (mySkillData.CoolTime -= speed * Time.deltaTime * 10.0f).ToString("0.0");
                 yield return null;
             }
             act = null;
             mySkillData.CoolTime = orgCool;
-            myText.SetActive(false);
         }
     }
 }

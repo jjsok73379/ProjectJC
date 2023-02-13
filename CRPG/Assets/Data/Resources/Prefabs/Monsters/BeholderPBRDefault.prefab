@@ -1418,6 +1418,9 @@ MonoBehaviour:
   MinMoney: 10
   MaxMoney: 50
   SwordPrefab: {fileID: 8750428140314534140, guid: 304e95966345eb744a5951d09481c81a, type: 3}
+  HP_PotionPrefab: {fileID: 1305883699301654, guid: 5c956f5449329a64db55949d81d170b2, type: 3}
+  MP_PotionPrefab: {fileID: 1305883699301654, guid: 9b5f8f5c4e5772149b0e7b4b1637aca3, type: 3}
+  BookPrefab: {fileID: 4433255413829591616, guid: a8ffe7396f8a9c340a69fd6779ea843e, type: 3}
   myMinimapIcon: {fileID: 1453518587}
   GiveExp: 360
   myHeadTop: {fileID: 7331585632769963828}

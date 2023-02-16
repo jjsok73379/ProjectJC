@@ -8,6 +8,9 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     float range; // 아이템 습득이 가능한 최대 거리
 
+    bool IsStore = false;
+    bool IsRecovery = false;
+    bool IsQuest = false;
     bool pickupActivated = false; // 아이템 습득 가능할시 True
     bool talkActivated = false; // 아이템 습득 가능할시 True
 
@@ -15,21 +18,17 @@ public class ActionController : MonoBehaviour
 
     [SerializeField]
     LayerMask ItemMask; // 특정 레이어를 가진 오브젝트에 대해서만 습득할 수 있어야 한다.
-    [SerializeField]
-    LayerMask Store_NpcMask;
-    [SerializeField]
-    LayerMask Recovery_NpcMask;
-    [SerializeField]
-    LayerMask Quest_NpcMask;
+    public LayerMask Store_NpcMask;
+    public LayerMask Recovery_NpcMask;
+    public LayerMask Quest_NpcMask;
 
     [SerializeField]
     TMP_Text actionText; // 행동을 보여 줄 텍스트
-    [SerializeField]
-    GameObject Store_NPC_Text;
-    [SerializeField]
-    GameObject Recovery_NPC_Text;
-    [SerializeField]
-    GameObject Quest_NPC_Text;
+    public GameObject Store_NPC_Text;
+    public GameObject Recovery_NPC_Text;
+    public GameObject Quest_NPC_Text;
+
+    string NPC_Name;
 
     //string Recovery_NPC_Typing = "많이 다치셨네요. 치료를 받으로 오셨나요?";
     //string UnRecovery_NPC_Typing = "다치신 곳이 없어요. 치료를 받을 수 없습니다.";
@@ -40,6 +39,9 @@ public class ActionController : MonoBehaviour
     private void Start()
     {
         theInventory = InventoryManager.Inst;
+        Store_NPC_Text.SetActive(false);
+        Recovery_NPC_Text.SetActive(false);
+        Quest_NPC_Text.SetActive(false);
     }
 
     // Update is called once per frame
@@ -47,6 +49,7 @@ public class ActionController : MonoBehaviour
     {
         CheckItem();
         TryAction();
+        NPC_Communication();
     }
 
     void TryAction()
@@ -59,6 +62,7 @@ public class ActionController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             NPC_Communication();
+            CanTalk();
         }
     }
 
@@ -79,20 +83,30 @@ public class ActionController : MonoBehaviour
 
     void NPC_Communication()
     {
-        if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, ItemMask))
+        if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Store_NpcMask))
         {
-            if (hitInfo.transform.tag == "Store")
-            {
-                TalkWithNPC("반트너");
-            }
+            IsStore = true;
+            IsRecovery = false;
+            IsQuest = false;
+            NPC_Name = "반트너";
+            TalkWithNPC(NPC_Name);
         }
-        else if (hitInfo.transform.tag == "Recovery")
+        else if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Recovery_NpcMask))
         {
-            TalkWithNPC("픽시");
+            IsStore = false;
+            IsRecovery = true;
+            IsQuest = false;
+            NPC_Name = "픽시";
+            TalkWithNPC(NPC_Name);
+
         }
-        else if (hitInfo.transform.tag == "Quest")
+        else if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Quest_NpcMask))
         {
-            TalkWithNPC("캐트 시");
+            IsStore = false;
+            IsRecovery = false;
+            IsQuest = true;
+            NPC_Name = "캐트 시";
+            TalkWithNPC(NPC_Name);
         }
         else
         {
@@ -146,7 +160,22 @@ public class ActionController : MonoBehaviour
         {
             if(hitInfo.transform != null)
             {
-
+                if (IsStore)
+                {
+                    Store_NPC_Text.SetActive(true);
+                    Store_NPC_Text.GetComponent<NPC_Store>().ChangeState(NPC.STATE.Talk);
+                }
+                else if (IsRecovery)
+                {
+                    Recovery_NPC_Text.SetActive(true);
+                    Recovery_NPC_Text.GetComponent<NPC_Recovery>().ChangeState(NPC.STATE.Talk);
+                }
+                else if (IsQuest)
+                {
+                    Quest_NPC_Text.SetActive(true);
+                    Quest_NPC_Text.GetComponent<NPC_Quest>().ChangeState(NPC.STATE.Talk);
+                }
+                NobodyCanTalk();
             }
         }
     }
@@ -164,6 +193,15 @@ public class ActionController : MonoBehaviour
     {
         itemText.gameObject.SetActive(true);
         itemText.text = "사용할 수 있는 아이템이 없습니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator WhenCannotSell()
+    {
+        itemText.gameObject.SetActive(true);
+        itemText.text = "해당 아이템을 장착하고 있어서\n판매할 수 없습니다.";
 
         yield return new WaitForSeconds(1.0f);
         itemText.gameObject.SetActive(false);

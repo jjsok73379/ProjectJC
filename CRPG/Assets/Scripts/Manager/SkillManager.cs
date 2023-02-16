@@ -63,7 +63,7 @@ public class SkillManager : Singleton<SkillManager>
                 SkillMenu.SetActive(false);
             }
         }
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             CombineOpen = !CombineOpen;
             CombineWindow.SetActive(CombineOpen);

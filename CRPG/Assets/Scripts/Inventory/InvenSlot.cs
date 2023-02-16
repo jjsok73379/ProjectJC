@@ -1,15 +1,18 @@
+using CombineRPG;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public Item item; // 획득한 아이템
     public int itemCount; // 획득한 아이템의 개수
     public Image itemImage; // 아이템의 이미지
+    public bool isFullSlot = false;
 
     [SerializeField]
     TMP_Text text_Count;
@@ -20,6 +23,12 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     RectTransform baseRect; // Inventory 이미지의 Rect 정보 받아 옴.
     [SerializeField]
     RectTransform quickSlotBaseRect;
+    [SerializeField]
+    NPC_Store theNPC_Store;
+    [SerializeField]
+    RPGPlayer theRPGPlayer;
+    [SerializeField]
+    ActionController theActionController;
     InputNumber theInputNumber;
     ItemEffectDatabase theItemEffectDatabase;
     int SellPrice;
@@ -28,6 +37,34 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     bool isQuickSlot; // 해당 슬롯이 퀵슬롯인지 여부 판단
     [SerializeField]
     int quickSlotNumber; // 퀵슬롯 넘버
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        theInputNumber = InputNumber.Inst;
+        theItemEffectDatabase = ItemEffectDatabase.Inst;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (itemCount == 99)
+        {
+            isFullSlot = true;
+        }
+        else
+        {
+            isFullSlot = false;
+        }
+        if (item != null)
+        {
+            SellPrice = item.SellPrice;
+        }
+        else
+        {
+            SellPrice = 0;
+        }
+    }
 
     // 아이템 이미지의 투명도 조절
     void SetColor(float _alpha)
@@ -45,8 +82,11 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
 
         if (item.itemType != Item.ItemType.Equipment)
         {
-            go_CountImage.SetActive(true);
-            text_Count.text = itemCount.ToString();
+            if (!isFullSlot)
+            {
+                go_CountImage.SetActive(true);
+                text_Count.text = itemCount.ToString();
+            }
         }
         else
         {
@@ -59,6 +99,10 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     public void SetSlotCount(int _count)
     {
         itemCount += _count;
+        if (itemCount >= 99)
+        {
+            itemCount = 99;
+        }
         text_Count.text = itemCount.ToString();
 
         if(_count < 0)
@@ -96,50 +140,61 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         return quickSlotNumber;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        theInputNumber = InputNumber.Inst;
-        theItemEffectDatabase = ItemEffectDatabase.Inst;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(item != null)
-        {
-            SellPrice = item.SellPrice;
-        }
-        else
-        {
-            SellPrice = 0;
-        }
-    }
-
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             if (item != null)
             {
-                if (!isQuickSlot)
+                if (theNPC_Store.IsStoreOpen)
                 {
-                    theItemEffectDatabase.UseItem(item);
-                    theItemEffectDatabase.HideToolTip();
-
                     if (item.itemType != Item.ItemType.Equipment)
                     {
                         SetSlotCount(-1);
+                        theItemEffectDatabase.SellItem(item);
+                    }
+                    else
+                    {
+                        if (theRPGPlayer.mySword != null)
+                        {
+                            if (item.itemName == theRPGPlayer.mySword.SwordName)
+                            {
+                                StartCoroutine(theActionController.WhenCannotSell());
+                            }
+                            else
+                            {
+                                theItemEffectDatabase.SellItem(item);
+                                ClearSlot();
+                            }
+                        }
+                        else
+                        {
+                            theItemEffectDatabase.SellItem(item);
+                            ClearSlot();
+                        }
                     }
                 }
-                else if (!theItemEffectDatabase.GetIsCoolTime())
+                else
                 {
-                    theItemEffectDatabase.UseItem(item);
-                    theItemEffectDatabase.HideToolTip();
-
-                    if (item.itemType != Item.ItemType.Equipment)
+                    if (!isQuickSlot)
                     {
-                        SetSlotCount(-1);
+                        theItemEffectDatabase.UseItem(item);
+                        theItemEffectDatabase.HideToolTip();
+
+                        if (item.itemType != Item.ItemType.Equipment)
+                        {
+                            SetSlotCount(-1);
+                        }
+                    }
+                    else if (!theItemEffectDatabase.GetIsCoolTime())
+                    {
+                        theItemEffectDatabase.UseItem(item);
+                        theItemEffectDatabase.HideToolTip();
+
+                        if (item.itemType != Item.ItemType.Equipment)
+                        {
+                            SetSlotCount(-1);
+                        }
                     }
                 }
             }

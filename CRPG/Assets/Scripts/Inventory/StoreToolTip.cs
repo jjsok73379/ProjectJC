@@ -6,14 +6,14 @@ using UnityEngine;
 public class StoreToolTip : MonoBehaviour
 {
     [SerializeField]
-    GameObject go_Base;
+    protected GameObject go_Base;
 
     [SerializeField]
-    TMP_Text ItemName;
+    protected TMP_Text ItemName;
     [SerializeField]
-    TMP_Text ItemDesc;
+    protected TMP_Text ItemDesc;
     [SerializeField]
-    TMP_Text Price;
+    protected TMP_Text Price;
 
     public virtual void ShowToolTip(Item _item, Vector3 _pos, int Pricenum)
     {

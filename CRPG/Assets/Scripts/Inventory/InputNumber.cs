@@ -33,6 +33,7 @@ public class InputNumber : MonoBehaviour
     void Start()
     {
         go_Base.SetActive(false);
+        text_Preview.text = "1";
     }
 
     // Update is called once per frame
@@ -65,11 +66,10 @@ public class InputNumber : MonoBehaviour
 
     public void OK()
     {
-        DragSlot.Inst.SetColor(0);
-
         int num;
         if (text_Input.text != "")
         {
+            DragSlot.Inst.SetColor(0);
             if (CheckNumber(text_Input.text))
             {
                 num = int.Parse(text_Input.text);

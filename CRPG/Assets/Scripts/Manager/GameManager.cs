@@ -7,11 +7,14 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    public static bool CharacterInfoActivated = false;
     public Transform HpBars;
     public int Goldvalue;
     int MaxGold;
     public TMP_Text GoldComma;
     public TMP_Text ZeroGold;
+    [SerializeField]
+    GameObject CharacterInfo;
 
     public struct USERGOLD
     {
@@ -30,10 +33,12 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         MaxGold = 999999999;
+        CharacterInfo.SetActive(false);
     }
 
     private void Update()
     {
+        TryOpenCharacterInfo();
         if (Goldvalue == 0)
         {
             ZeroGold.text = Goldvalue.ToString();
@@ -44,15 +49,32 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    void TryOpenCharacterInfo()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            CharacterInfoActivated = !CharacterInfoActivated;
+
+            if (CharacterInfoActivated)
+            {
+                CharacterInfo.SetActive(true);
+            }
+            else
+            {
+                CharacterInfo.SetActive(false);
+            }
+        }
+    }
+
     public void AddGold(int Price)
     {
-        if (Goldvalue != MaxGold)
+        if (Goldvalue >= MaxGold)
         {
-            Goldvalue += Price;
+            Goldvalue = MaxGold;
         }
         else
         {
-            Goldvalue = MaxGold;
+            Goldvalue += Price;
         }
     }
 

@@ -10,10 +10,11 @@ namespace CombineRPG
     {
         [SerializeField]
         GameObject Holder;
-        [SerializeField]
-        Sword mySword;
+        public Sword mySword;
         [SerializeField]
         Transform mySkillPoint = null;
+        [SerializeField]
+        CharacterInfo theCharacterInfo;
 
         public PlayerUI myUI;
         public enum STATE
@@ -58,6 +59,7 @@ namespace CombineRPG
                     break;
                 case STATE.Play:
                     _mytarget = myTarget;
+                    mySword = Holder.GetComponentInChildren<Sword>();
                     UIText();
                     LevelUp();
                     PlayerMove();
@@ -75,7 +77,6 @@ namespace CombineRPG
             myStat.changeMp = (float v) => myUI.myMpBar.value = v;
             myStat.changeExp = (float v) => myUI.myExpBar.value = v;
 
-            mySword = Holder.GetComponentInChildren<Sword>();
             ChangeState(STATE.Play);
         }
 
@@ -84,7 +85,11 @@ namespace CombineRPG
             myUI.myLevelText.text = "·¹º§ " + Level.ToString();
             myUI.HP_Text.text = myStat.HP.ToString() + " / " + myStat.maxHp.ToString();
             myUI.MP_Text.text = myStat.MP.ToString() + " / " + myStat.maxMp.ToString();
-            myUI.EXP_Text.text = (myStat.EXP/myStat.maxExp * 100).ToString() + " %";
+            myUI.EXP_Text.text = (myStat.EXP / myStat.maxExp * 100).ToString() + " %";
+            theCharacterInfo.HPText.text = myStat.HP.ToString() + " / " + myStat.maxHp.ToString();
+            theCharacterInfo.MPText.text = myStat.MP.ToString() + " / " + myStat.maxMp.ToString();
+            theCharacterInfo.APText.text = myStat.AP.ToString();
+            theCharacterInfo.ADText.text = myStat.AttackDelay.ToString();
         }
 
         // Update is called once per frame

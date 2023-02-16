@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : Singleton<InventoryManager>
 {
-    public static InventoryManager Inst = null;
 
     public static bool inventoryActivated = false; // 인벤토리 활성화 여부. true가 되면 카메라 움직임과 다른 입력을 막을 것이다.
 
@@ -17,20 +16,19 @@ public class InventoryManager : MonoBehaviour
     GameObject go_QuickSlotParent;
 
     public Item FirstItem;
+    public Item SecondItem;
+    public int itemMaxCount = 99; // 아이템의 최대 개수
 
     InvenSlot[] invenSlots;
     InvenSlot[] quickSlots;
     bool isNotPut;
+    int tempcount;
+    int sumcount;
 
     bool isFull = false;
 
     [SerializeField]
     ActionController theActionController;
-
-    private void Awake()
-    {
-        Inst = this;
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +37,7 @@ public class InventoryManager : MonoBehaviour
         quickSlots = go_QuickSlotParent.GetComponentsInChildren<InvenSlot>();
         go_Inventory.SetActive(false);
         invenSlots[0].AddItem(FirstItem);
+        invenSlots[1].AddItem(SecondItem);
     }
 
     // Update is called once per frame
@@ -53,7 +52,7 @@ public class InventoryManager : MonoBehaviour
         {
             inventoryActivated = !inventoryActivated;
 
-            if(inventoryActivated)
+            if (inventoryActivated)
             {
                 OpenInventory();
             }
@@ -76,13 +75,17 @@ public class InventoryManager : MonoBehaviour
 
     public void AcquireItem(Item _item, int _count = 1)
     {
-        PutSlot(quickSlots, _item, _count);
-        if (isNotPut)
+        if (_item.itemType != Item.ItemType.Equipment)
+        {
+            PutSlot(quickSlots, _item, _count);
+        }
+        else
         {
             PutSlot(invenSlots, _item, _count);
         }
         if (isNotPut)
         {
+            PutSlot(invenSlots, _item, _count);
             isFull = true;
             StartCoroutine(theActionController.WhenIventoryIsFull());
         }
@@ -98,34 +101,49 @@ public class InventoryManager : MonoBehaviour
         isFull = _flag;
     }
 
-    void PutSlot(InvenSlot[] _slots,Item _item, int _count)
+    void PutSlot(InvenSlot[] _slots, Item _item, int _count)
+    {
+        if (Item.ItemType.Equipment != _item.itemType)
         {
-            if (Item.ItemType.Equipment != _item.itemType)
+            for (int i = 0; i < _slots.Length; i++)
             {
-                for(int i = 0; i < _slots.Length; i++)
+                if (_slots[i].item != null)
                 {
-                    if (_slots[i].item != null)
+                    if (_slots[i].item.itemName == _item.itemName)
                     {
-                        if (_slots[i].item.itemName == _item.itemName)
+                        if (!_slots[i].isFullSlot)
                         {
-                            _slots[i].SetSlotCount(_count);
+                            sumcount = _slots[i].itemCount + _count;
+                            tempcount = sumcount - itemMaxCount;
+                            if (sumcount >= itemMaxCount)
+                            {
+                                _count = itemMaxCount;
+                                _slots[i].SetSlotCount(_count);
+                                isFull = true;
+                                if (tempcount > 0)
+                                {
+                                    if (_slots[i + 1] == null) return;
+                                    _slots[i + 1].AddItem(_item, tempcount);
+                                }
+                            }
                             isNotPut = false;
                             return;
                         }
                     }
                 }
             }
-
-            for(int i = 0; i < _slots.Length; i++)
-            {
-                if (_slots[i].item == null)
-                {
-                    _slots[i].AddItem(_item, _count);
-                    isNotPut = false;
-                    return;
-                }
-            }
-
-            isNotPut=true;
         }
+
+        for (int i = 0; i < _slots.Length; i++)
+        {
+            if (_slots[i].item == null)
+            {
+                _slots[i].AddItem(_item, _count);
+                isNotPut = false;
+                return;
+            }
+        }
+
+        isNotPut = true;
+    }
 }

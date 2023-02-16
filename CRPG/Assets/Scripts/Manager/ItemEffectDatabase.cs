@@ -1,6 +1,9 @@
 using CombineRPG;
 using System;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 [Serializable]
 public class PotionItemEffect
@@ -39,10 +42,17 @@ public class ItemEffectDatabase : MonoBehaviour
     InventoryManager theInventoryManager;
     [SerializeField]
     StoreToolTip theStoreToolTip;
+    [SerializeField]
+    CharacterInfo theCharacterInfo;
 
     private void Awake()
     {
         Inst = this;
+    }
+
+    public void SellItem(Item _item)
+    {
+        GameManager.Inst.Goldvalue += _item.SellPrice;
     }
 
     public void UseItem(Item _item)
@@ -50,6 +60,7 @@ public class ItemEffectDatabase : MonoBehaviour
         if (_item.itemType == Item.ItemType.Equipment)
         {
             StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(_item.itemName));
+            theCharacterInfo.SwordImage.sprite = _item.itemImage;
             thePlayer.WeaponStat();
         }
         if (_item.itemType == Item.ItemType.Potion)

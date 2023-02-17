@@ -164,7 +164,7 @@ public class Monster : BattleSystem
     {
         int RandomDrop;
         RandomDrop = Random.Range(ranmin, ranmax);
-        //if (RandomDrop > 20)
+        if (RandomDrop > 20)
         {
             Instantiate(itemprefab, pos, Quaternion.identity);
         }

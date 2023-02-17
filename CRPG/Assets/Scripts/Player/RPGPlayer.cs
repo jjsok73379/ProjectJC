@@ -15,6 +15,8 @@ namespace CombineRPG
         Transform mySkillPoint = null;
         [SerializeField]
         CharacterInfo theCharacterInfo;
+        [SerializeField]
+        GameObject LevelUpEff;
 
         public PlayerUI myUI;
         public enum STATE
@@ -29,6 +31,7 @@ namespace CombineRPG
         public Transform _mytarget = null;
         public LayerMask pickMask = default;
         public LayerMask enemyMask = default;
+        public Quest quest;
 
         void ChangeState(STATE s)
         {
@@ -73,6 +76,7 @@ namespace CombineRPG
         {
             _myanim = myAnim;
 
+            LevelUpEff.SetActive(false);
             myStat.changeHp = (float v) => myUI.myHpBar.value = v;
             myStat.changeMp = (float v) => myUI.myMpBar.value = v;
             myStat.changeExp = (float v) => myUI.myExpBar.value = v;
@@ -126,6 +130,7 @@ namespace CombineRPG
                 else
                 {
                     Level++;
+                    LevelUpEff.SetActive(true);
                     remainExp = myStat.EXP - myStat.maxExp;
                     myStat.maxHp += 100;
                     myStat.maxMp += 100;
@@ -135,6 +140,7 @@ namespace CombineRPG
                     myStat.EXP = remainExp;
                     myStat.AP += 5;
                 }
+                LevelUpEff.SetActive(false);
             }
         }
 
@@ -161,6 +167,10 @@ namespace CombineRPG
             if (tr == myTarget)
             {
                 StopAllCoroutines();
+                if (quest.isActive)
+                {
+                    quest.goal.EnemyKilled(myTarget.gameObject);
+                }
                 if (Level == MaxLevel)
                 {
                     Mathf.Clamp(myStat.EXP, 0, myStat.maxExp - 1);

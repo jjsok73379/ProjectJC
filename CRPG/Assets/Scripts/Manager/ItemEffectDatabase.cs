@@ -161,6 +161,10 @@ public class ItemEffectDatabase : MonoBehaviour
                 }
             }
         }
+        if (thePlayer.quest.isActive)
+        {
+            thePlayer.quest.goal.IsDoAction();
+        }
     }
 
     public void ShowToolTip(Item _item, Vector3 _pos, int Pricenum)

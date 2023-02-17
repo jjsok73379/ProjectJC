@@ -1,3 +1,4 @@
+using CombineRPG;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,6 +6,7 @@ using UnityEngine;
 
 public class ActionController : MonoBehaviour
 {
+    public static ActionController Inst;
     [SerializeField]
     float range; // 아이템 습득이 가능한 최대 거리
 
@@ -35,9 +37,16 @@ public class ActionController : MonoBehaviour
     public TMP_Text itemText; // 아이템이 꽉 찼다는 경고 메세지를 보여줄 텍스트
 
     InventoryManager theInventory;
+    RPGPlayer theRPGPlayer;
+
+    private void Awake()
+    {
+        Inst = this;
+    }
 
     private void Start()
     {
+        theRPGPlayer = GetComponent<RPGPlayer>();
         theInventory = InventoryManager.Inst;
         Store_NPC_Text.SetActive(false);
         Recovery_NPC_Text.SetActive(false);
@@ -148,6 +157,10 @@ public class ActionController : MonoBehaviour
             {
                 Debug.Log(hitInfo.transform.GetComponent<PickupItem>().item.itemName + " 획득했습니다. "); // 인벤토리 넣기
                 theInventory.AcquireItem(hitInfo.transform.GetComponent<PickupItem>().item);
+                if (theRPGPlayer.quest.isActive)
+                {
+                    theRPGPlayer.quest.goal.ItemCollected(hitInfo.transform.gameObject);
+                }
                 Destroy(hitInfo.transform.gameObject);
                 ItemInfoDisappear();
             }
@@ -202,6 +215,15 @@ public class ActionController : MonoBehaviour
     {
         itemText.gameObject.SetActive(true);
         itemText.text = "해당 아이템을 장착하고 있어서\n판매할 수 없습니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator WhenNotCompleted()
+    {
+        itemText.gameObject.SetActive(true);
+        itemText.text = "퀘스트 조건을 충족시키지 못하였습니다.";
 
         yield return new WaitForSeconds(1.0f);
         itemText.gameObject.SetActive(false);

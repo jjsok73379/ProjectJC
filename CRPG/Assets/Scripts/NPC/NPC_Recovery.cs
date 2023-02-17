@@ -46,33 +46,6 @@ public class NPC_Recovery : NPC
         }
     }
 
-    void StateProcess()
-    {
-        switch (myState)
-        {
-            case STATE.Create:
-                break;
-            case STATE.Talk:
-                break;
-            case STATE.Accept:
-                break;
-            case STATE.Refuse:
-                break;
-        }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        StateProcess();
-    }
-
     public override void AcceptBtn()
     {
         ChangeState(STATE.Accept);

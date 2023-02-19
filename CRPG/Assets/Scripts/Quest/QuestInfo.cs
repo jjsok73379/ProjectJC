@@ -77,6 +77,8 @@ public class QuestInfo : MonoBehaviour
                 GameManager.Inst.Goldvalue += theRPGPlayer.quest.goldReward;
                 Destroy(QuestManager.Inst.objQ);
                 Destroy(QuestManager.Inst.objQ2);
+                QuestManager.Inst.theQuestPost.gameObject.SetActive(false);
+                QuestManager.Inst.theQuestPost.NoQuest();
                 theRPGPlayer.quest.Complete();
                 theRPGPlayer.quest = null;
             }

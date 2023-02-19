@@ -6,18 +6,31 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SkillData", menuName = "ScriptableObjects/SkillData", order = 1)]
 public class SkillData : ScriptableObject
 {
-    public enum SkillType
-    {
-        Targeting, nonTargeting, Material
-    }
     public string SkillName;
     public Sprite myImage = null;
     public string myInfo;
-    public SkillType mySkillType;
-    [SerializeField] float AttackRange;
+    [SerializeField] 
+    float AttackRange;
     public float CoolTime;
-    public float SkillDamage;
-    public GameObject mySkill;
+    [SerializeField]
+    float[] skillDamage;
+    [SerializeField] int[] MaterialCounts;
+    public List<SkillData> Materials;
+
+    public int GetMaterialCount(int lv)
+    {
+        return MaterialCounts[lv - 1];
+    }
+
+    public int GetMaxLevel()
+    {
+        return MaterialCounts.Length;
+    }
+
+    public float SkillDamage(int lv)
+    {
+        return skillDamage[lv - 1];
+    }
 
     public string MyInfo
     {

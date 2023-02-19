@@ -5,17 +5,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using CombineRPG;
 
 public class SkillManager : Singleton<SkillManager>
 {
     public List<SkillData> SkillSlotDatas;
     public SkillSlot[] SkillSlots;
+    public RPGPlayer theRPGPlayer;
 
     public SkillData mySkill;
     public List<SkillData> mySkills = new List<SkillData>();
     public SkillData[] BasicSkills = new SkillData[3];
     public SkillData[] Materials = new SkillData[3];
-    public List<CombinedSkillData> CombinedSkills;
+    public List<SkillData> CombinedSkills;
 
     public GameObject[] Contents;
 
@@ -150,7 +152,7 @@ public class SkillManager : Singleton<SkillManager>
             SkillM Addedskill = AddedskillPanel.GetComponentInChildren<SkillM>();
             Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
             Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
-            Addedskill.GetComponent<SkillM>().orgData = mySkill;
+            Addedskill.GetComponent<SkillM>().myData = mySkill;
         }
         mySkills.Add(mySkill);
     }

@@ -9,17 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79fbc2002a569fa46a2cfbf62cc2d4cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1caf35a9e92419e49bf46865471c2755, type: 3}
   m_Name: ThunderLaser
   m_EditorClassIdentifier: 
-  SkillName: "\uBC88\uAC1C \uB808\uC774\uC838"
+  SkillName: "\uBC88\uAC1C\uAD11\uC120"
   myImage: {fileID: 21300000, guid: ff42a689ad961fd4b9da0a00643acce7, type: 3}
   myInfo: "\uC804\uAE30\uB85C \uC774\uB8E8\uC5B4\uC9C4 \uB808\uC774\uC838"
-  mySkillType: 0
   AttackRange: 20
   CoolTime: 5
-  SkillDamage: 10
-  mySkill: {fileID: 1012013889074000, guid: 9ef386a14cdde2541a040c3e52223ea3, type: 3}
+  skillDamage:
+  - 5
+  - 15
+  - 30
+  - 45
+  - 60
+  MaterialCounts: 0100000002000000030000000400000005000000
   Materials:
   - {fileID: 11400000, guid: d447ec6033e67f644a0469913fa597cc, type: 2}
   - {fileID: 11400000, guid: 1a77b772eb354f4449ec2941ccb46054, type: 2}

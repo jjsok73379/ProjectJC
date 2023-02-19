@@ -32,6 +32,7 @@ public class QuestGoal
             if (monster == Target)
             {
                 currentAmount++;
+                QuestManager.Inst.theQuestPost.QuestCount.text = "( " + QuestManager.Inst.theRPGPlayer.quest.goal.currentAmount.ToString() + " / " + QuestManager.Inst.theRPGPlayer.quest.goal.requiredAmount.ToString() + " )";
             }
         }
     }
@@ -43,6 +44,7 @@ public class QuestGoal
             if(item == Target)
             {
                 currentAmount++;
+                QuestManager.Inst.theQuestPost.QuestCount.text = "( " + QuestManager.Inst.theRPGPlayer.quest.goal.currentAmount.ToString() + " / " + QuestManager.Inst.theRPGPlayer.quest.goal.requiredAmount.ToString() + " )";
             }
         }
     }
@@ -51,6 +53,7 @@ public class QuestGoal
     {
         if (goalType == GoalType.Etc)
         {
+            QuestManager.Inst.theQuestPost.QuestChk.isOn = true;
             donechk = true;
         }
     }

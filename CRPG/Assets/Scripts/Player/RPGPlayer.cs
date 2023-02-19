@@ -1,3 +1,4 @@
+using ARPGFX;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -17,6 +18,8 @@ namespace CombineRPG
         CharacterInfo theCharacterInfo;
         [SerializeField]
         GameObject LevelUpEff;
+        [SerializeField]
+        ARPGFXPortalScript thePortal;
 
         public PlayerUI myUI;
         public enum STATE
@@ -32,6 +35,7 @@ namespace CombineRPG
         public LayerMask pickMask = default;
         public LayerMask enemyMask = default;
         public Quest quest;
+        public float orgRange;
 
         void ChangeState(STATE s)
         {
@@ -76,6 +80,7 @@ namespace CombineRPG
         {
             _myanim = myAnim;
 
+            orgRange = myStat.AttackRange;
             LevelUpEff.SetActive(false);
             myStat.changeHp = (float v) => myUI.myHpBar.value = v;
             myStat.changeMp = (float v) => myUI.myMpBar.value = v;
@@ -108,6 +113,7 @@ namespace CombineRPG
             {
                 mySkillPoint = mySword.mySkillPoint;
                 myStat.AttackRange = myStat.AttackRange + mySword.range;
+                orgRange = myStat.AttackRange;
                 myStat.AttackDelay = myStat.AttackDelay - mySword.AttackSpeed;
                 myStat.AP = myStat.AP + mySword.damage;
             }

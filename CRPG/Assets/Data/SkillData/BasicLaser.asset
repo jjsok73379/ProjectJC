@@ -18,5 +18,6 @@ MonoBehaviour:
   mySkillType: 0
   AttackRange: 20
   CoolTime: 10
-  SkillDamage: 5
+  skillDamage:
+  - 10
   mySkill: {fileID: 1347034509603832, guid: 7164c0ed5238e8c42822815a6bdfc4be, type: 3}

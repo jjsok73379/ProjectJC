@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1caf35a9e92419e49bf46865471c2755, type: 3}
+  m_Name: IceBall
+  m_EditorClassIdentifier: 
+  SkillName: "\uBE59\uACB0\uAD6C"
+  myImage: {fileID: 21300000, guid: 5b581be6bcf7ab44f8bcd0abd50e0652, type: 3}
+  myInfo: "\uC5BC\uC74C\uC73C\uB85C \uC774\uB8E8\uC5B4\uC9C4 \uAD6C"
+  AttackRange: 20
+  CoolTime: 10
+  skillDamage:
+  - 10
+  - 20
+  - 30
+  - 40
+  - 50
+  MaterialCounts: 0100000002000000030000000400000005000000
+  Materials:
+  - {fileID: 11400000, guid: cc2eec7fcda490d488c3d774ff33c1cb, type: 2}
+  - {fileID: 11400000, guid: ac6bfbf5e01d7a64d93e5f7a115a69d0, type: 2}

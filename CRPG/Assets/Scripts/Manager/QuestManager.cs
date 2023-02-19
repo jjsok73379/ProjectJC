@@ -19,12 +19,16 @@ public class QuestManager : Singleton<QuestManager>
     GameObject QuestContent;
     [SerializeField]
     GameObject UIContent;
+    public QuestPost theQuestPost;
     public GameObject objQ;
     public GameObject objQ2;
     public int i = 0;
 
     private void Start()
     {
+        theQuestPost.gameObject.SetActive(false);
+        theQuestPost.QuestChk.isOn = false;
+        theQuestPost.NoQuest();
         QuestUI.SetActive(false);
         OpenQuestWindow();
     }
@@ -85,6 +89,8 @@ public class QuestManager : Singleton<QuestManager>
         objQ2.GetComponent<QuestInfo>().descriptionText.text = quest[i].description;
         objQ2.GetComponent<QuestInfo>().EXP_text.text = quest[i].experienceReward.ToString();
         objQ2.GetComponent<QuestInfo>().goldText.text = quest[i].goldReward.ToString();
+        theQuestPost.gameObject.SetActive(true);
+        theQuestPost.HaveQuest();
         objQ2.GetComponent<QuestInfo>().AfterAccept();
         objQ.GetComponent<QuestInfo>().AfterAccept();
     }

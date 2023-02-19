@@ -1,10 +1,24 @@
 using CombineRPG;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public struct Debuff
+{
+    public enum Type
+    {
+        Slow, Stun
+    }
+    public Type type;
+    public float value;
+    public float keepTime;
+}
+
 public class Monster : BattleSystem
 {
+    public List<Debuff> debuffList = new List<Debuff>();
     int rewardMoney; 
     [SerializeField]
     int MinMoney; 
@@ -24,6 +38,8 @@ public class Monster : BattleSystem
     public int GiveExp;
     public Transform myHeadTop;
     HpBar myUI = null;
+    float SlowMoveSpeed = 1.0f;
+    float StunMoveSpeed = 0.0f;
 
     public GameObject AIPer = null;
     [field:SerializeField]
@@ -53,8 +69,8 @@ public class Monster : BattleSystem
                 break;
             case STATE.Roaming:
                 Vector3 pos = Vector3.zero;
-                pos.x = Random.Range(-3.0f, 3.0f);
-                pos.z = Random.Range(-3.0f, 3.0f);
+                pos.x = UnityEngine.Random.Range(-3.0f, 3.0f);
+                pos.z = UnityEngine.Random.Range(-3.0f, 3.0f);
                 pos = startPos + pos;
                 MoveToPosition(pos,() => ChangeState(STATE.Idle));
                 break;
@@ -101,7 +117,7 @@ public class Monster : BattleSystem
     // Start is called before the first frame update
     void Start()
     {
-        rewardMoney = Random.Range(MinMoney, MaxMoney);
+        rewardMoney = UnityEngine.Random.Range(MinMoney, MaxMoney);
         GameObject obj = Instantiate(Resources.Load("Prefabs/HpBar"), GameManager.Inst.HpBars) as GameObject;
         myUI = obj.GetComponent<HpBar>();
         myUI.myTarget = myHeadTop;
@@ -112,8 +128,8 @@ public class Monster : BattleSystem
         
         for (int i = 0; i < DropPos.Length; i++)
         {
-            DropPos[i].x = Random.Range(-3.0f, 3.0f);
-            DropPos[i].z = Random.Range(-3.0f, 3.0f);
+            DropPos[i].x = UnityEngine.Random.Range(-3.0f, 3.0f);
+            DropPos[i].z = UnityEngine.Random.Range(-3.0f, 3.0f);
         }
         ChangeState(STATE.Idle);
     }
@@ -122,6 +138,57 @@ public class Monster : BattleSystem
     void Update()
     {
         StateProcess();
+        for(int i = 0; i < debuffList.Count;)
+        {
+            Debuff temp = debuffList[i];
+            temp.keepTime -= Time.deltaTime;
+            if (temp.keepTime <= 0.0f)
+            {
+                switch(temp.type)
+                {
+                    case Debuff.Type.Slow:
+                        SlowMoveSpeed /= temp.value;
+                        break;
+                    case Debuff.Type.Stun:
+                        StunMoveSpeed /= temp.value;
+                        break;
+                }
+                debuffList.RemoveAt(i);
+                continue;
+            }
+            debuffList[i] = temp;
+            ++i;
+        }
+    }
+
+    public void AddDebuff(Debuff.Type type, float value, float keep)
+    {
+        for (int i = 0; i < debuffList.Count; i++)
+        {
+            if (type == debuffList[i].type)
+            {
+                Debuff temp = debuffList[i];
+                temp.keepTime = keep;
+                debuffList[i] = temp;
+                return;
+            }
+        }
+
+        Debuff def = new Debuff();
+        def.type = type;
+        def.value = value;
+        def.keepTime = keep;
+
+        switch (type)
+        {
+            case Debuff.Type.Slow:
+                SlowMoveSpeed *= value;
+                break;
+            case Debuff.Type.Stun:
+                StunMoveSpeed *= value;
+                break;
+        }
+        debuffList.Add(def);
     }
 
     public void FindTarget(Transform target)
@@ -163,7 +230,7 @@ public class Monster : BattleSystem
     void DropItem(Vector3 pos, int ranmin, int ranmax, GameObject itemprefab)
     {
         int RandomDrop;
-        RandomDrop = Random.Range(ranmin, ranmax);
+        RandomDrop = UnityEngine.Random.Range(ranmin, ranmax);
         if (RandomDrop > 20)
         {
             Instantiate(itemprefab, pos, Quaternion.identity);

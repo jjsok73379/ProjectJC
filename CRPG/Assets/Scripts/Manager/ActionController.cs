@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ActionController : MonoBehaviour
 {
@@ -14,12 +15,15 @@ public class ActionController : MonoBehaviour
     bool IsRecovery = false;
     bool IsQuest = false;
     bool pickupActivated = false; // 아이템 습득 가능할시 True
-    bool talkActivated = false; // 아이템 습득 가능할시 True
+    bool talkActivated = false;
+    bool portalActivated = false;
 
     RaycastHit hitInfo; // 충돌체 정보 저장
 
     [SerializeField]
     LayerMask ItemMask; // 특정 레이어를 가진 오브젝트에 대해서만 습득할 수 있어야 한다.
+    [SerializeField]
+    LayerMask PortalMask;
     public LayerMask Store_NpcMask;
     public LayerMask Recovery_NpcMask;
     public LayerMask Quest_NpcMask;
@@ -59,6 +63,7 @@ public class ActionController : MonoBehaviour
         CheckItem();
         TryAction();
         NPC_Communication();
+        CheckPortal();
     }
 
     void TryAction()
@@ -72,6 +77,8 @@ public class ActionController : MonoBehaviour
         {
             NPC_Communication();
             CanTalk();
+            CheckPortal();
+            CanUsePortal();
         }
     }
 
@@ -121,6 +128,34 @@ public class ActionController : MonoBehaviour
         {
             NobodyCanTalk();
         }
+    }
+
+    void CheckPortal()
+    {
+        if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, PortalMask))
+        {
+            if (hitInfo.transform.tag == "Portal")
+            {
+                FrontPortal();
+            }
+        }
+        else
+        {
+            NoPortal();
+        }
+    }
+
+    void FrontPortal()
+    {
+        portalActivated = true;
+        actionText.gameObject.SetActive(true);
+        actionText.text = "포탈로 이동하려면 (F)키를 누르세요";
+    }
+
+    void NoPortal()
+    {
+        portalActivated = false;
+        actionText.gameObject.SetActive(false);
     }
 
     void TalkWithNPC(string npcName)
@@ -190,6 +225,14 @@ public class ActionController : MonoBehaviour
                 }
                 NobodyCanTalk();
             }
+        }
+    }
+
+    void CanUsePortal()
+    {
+        if (portalActivated)
+        {
+            SceneManager.LoadScene("LoadingScene");
         }
     }
 

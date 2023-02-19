@@ -283,6 +283,7 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
                 }
             }
         }
+        else return;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

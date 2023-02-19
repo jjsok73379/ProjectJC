@@ -3,47 +3,45 @@ using System.Collections;
 
 namespace ARPGFX
 {
-
-
-public class ARPGFXPortalScript : MonoBehaviour
-{
-
-    public GameObject portalOpenPrefab;
-    public GameObject portalIdlePrefab;
-    public GameObject portalClosePrefab;
-    private GameObject portalOpen;
-    private GameObject portalIdle;
-    private GameObject portalClose;
-
-    public float portalLifetime = 4.0f;
-
-
-    void Start()
+    public class ARPGFXPortalScript : MonoBehaviour
     {
-        portalOpen = Instantiate(portalOpenPrefab, transform.position, transform.rotation);
-        portalIdle = Instantiate(portalIdlePrefab, transform.position, transform.rotation);
-        portalIdle.SetActive(false);
-        portalClose = Instantiate(portalClosePrefab, transform.position, transform.rotation);
-        portalClose.SetActive(false);
+        [SerializeField]
+        GameObject portalOpen;
+        [SerializeField]
+        GameObject portalIdle;
+        [SerializeField]
+        GameObject portalClose;
 
-        StartCoroutine("PortalLoop");
-    }
 
-    IEnumerator PortalLoop()
-    {
-        while (true)
+        void Start()
         {
-            portalOpen.SetActive(true);
-
-            yield return new WaitForSeconds(0.8f);
-
-            portalIdle.SetActive(true);
-			portalOpen.SetActive(false);
-
-            yield return new WaitForSeconds(portalLifetime);
-           
+            portalOpen.transform.position = transform.position;
+            portalIdle.transform.position = transform.position;
+            portalClose.transform.position = transform.position;
+            portalOpen.transform.rotation = transform.rotation;
+            portalIdle.transform.rotation = transform.rotation;
+            portalClose.transform.rotation = transform.rotation;
+            portalOpen.SetActive(false);
             portalIdle.SetActive(false);
+            portalClose.SetActive(false);
+        }
 
+        public IEnumerator PortalEnterLoop()
+        {
+            while (true)
+            {
+                portalOpen.SetActive(true);
+
+                yield return new WaitForSeconds(0.8f);
+
+                portalIdle.SetActive(true);
+                portalOpen.SetActive(false);
+            }
+        }
+
+        public IEnumerator PortalExitLoop()
+        {
+            portalIdle.SetActive(false);
             portalClose.SetActive(true);
 
             yield return new WaitForSeconds(1f);
@@ -51,6 +49,4 @@ public class ARPGFXPortalScript : MonoBehaviour
             portalClose.SetActive(false);
         }
     }
-}
-
 }

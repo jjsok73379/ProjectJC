@@ -17,6 +17,7 @@ public class Quest
     public void Complete()
     {
         isActive = false;
+        QuestManager.Inst.theQuestPost.QuestChk.isOn = false;
         QuestManager.Inst.i++;
         QuestManager.Inst.OpenQuestWindow();
     }

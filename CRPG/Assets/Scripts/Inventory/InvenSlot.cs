@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -33,8 +32,7 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     ItemEffectDatabase theItemEffectDatabase;
     int SellPrice;
 
-    [SerializeField]
-    bool isQuickSlot; // 해당 슬롯이 퀵슬롯인지 여부 판단
+    public bool isQuickSlot; // 해당 슬롯이 퀵슬롯인지 여부 판단
     [SerializeField]
     int quickSlotNumber; // 퀵슬롯 넘버
 

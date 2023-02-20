@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace CombineRPG
 {
@@ -20,6 +21,8 @@ namespace CombineRPG
         GameObject LevelUpEff;
         [SerializeField]
         ARPGFXPortalScript thePortal;
+        [SerializeField]
+        GameObject DeadWindow;
 
         public PlayerUI myUI;
         public enum STATE
@@ -55,6 +58,7 @@ namespace CombineRPG
                     {
                         ib.DeadMessage(transform);
                     }
+                    DeadWindow.SetActive(true);
                     break;
             }
         }
@@ -79,7 +83,7 @@ namespace CombineRPG
         void Start()
         {
             _myanim = myAnim;
-
+            DeadWindow.SetActive(false);
             orgRange = myStat.AttackRange;
             LevelUpEff.SetActive(false);
             myStat.changeHp = (float v) => myUI.myHpBar.value = v;
@@ -230,6 +234,44 @@ namespace CombineRPG
             {
                 myStat.MP = myStat.maxMp;
             }
+        }
+
+        public void Revive()
+        {
+            if (GameManager.Inst.Goldvalue >= 2000)
+            {
+                GameManager.Inst.Goldvalue -= 2000;
+                myAnim.SetTrigger("Revive");
+                ChangeState(STATE.Play);
+                myStat.HP = myStat.maxHp;
+                myStat.MP = myStat.maxMp;
+            }
+            else
+            {
+                StartCoroutine(GetComponent<ActionController>().WhenNoMoney());
+            }
+        }
+
+        public void GoVillage()
+        {
+            myStat.HP = 1;
+            myStat.MP = 1;
+            if (myStat.EXP != 0)
+            {
+                if (myStat.EXP < 20)
+                {
+                    myStat.EXP = 0;
+                }
+                else
+                {
+                    myStat.EXP -= 20;
+                }
+            }
+            else
+            {
+                myStat.EXP = 0;
+            }
+            SceneManager.LoadScene("Village");
         }
     }
 }

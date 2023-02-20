@@ -271,4 +271,31 @@ public class ActionController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         itemText.gameObject.SetActive(false);
     }
+
+    public IEnumerator WhenLessCount()
+    {
+        itemText.gameObject.SetActive(true);
+        itemText.text = "아이템 수량이 부족합니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator WhenDontHave()
+    {
+        itemText.gameObject.SetActive(true);
+        itemText.text = "아이템을 가지고 있지 않습니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator WhenNoMoney()
+    {
+        itemText.gameObject.SetActive(true);
+        itemText.text = "돈이 부족합니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
+    }
 }

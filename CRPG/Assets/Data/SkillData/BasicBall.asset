@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1caf35a9e92419e49bf46865471c2755, type: 3}
   m_Name: BasicBall
   m_EditorClassIdentifier: 
-  SkillName: BasicBall
+  SkillName: "\uAE30\uBCF8 \uAD6C"
   myImage: {fileID: 21300000, guid: 188d00ffd2a18c341a38d8ed6b131b7c, type: 3}
   myInfo: "\uAE30\uBCF8\uC801\uC778 \uAD6C"
-  mySkillType: 0
   AttackRange: 20
+  _mana: 15
   CoolTime: 15
   skillDamage:
   - 15
-  mySkill: {fileID: 1603989468733260, guid: 1272e5ec3deb4db41b06a60c3840abba, type: 3}
+  MaterialCounts: 
+  Materials: []

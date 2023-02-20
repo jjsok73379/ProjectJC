@@ -11,15 +11,23 @@ public class SkillData : ScriptableObject
     public string myInfo;
     [SerializeField] 
     float AttackRange;
+    [SerializeField]
+    int _mana;
     public float CoolTime;
     [SerializeField]
     float[] skillDamage;
     [SerializeField] int[] MaterialCounts;
-    public List<SkillData> Materials;
+    public SkillData[] Materials;
+
+    public int Mana
+    {
+        get => _mana;
+        set => _mana = value;
+    }
 
     public int GetMaterialCount(int lv)
     {
-        return MaterialCounts[lv - 1];
+        return MaterialCounts[lv];
     }
 
     public int GetMaxLevel()
@@ -29,7 +37,7 @@ public class SkillData : ScriptableObject
 
     public float SkillDamage(int lv)
     {
-        return skillDamage[lv - 1];
+        return skillDamage[lv];
     }
 
     public string MyInfo

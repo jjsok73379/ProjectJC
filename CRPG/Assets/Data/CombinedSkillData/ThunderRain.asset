@@ -16,6 +16,7 @@ MonoBehaviour:
   myImage: {fileID: 21300000, guid: 9f922002032136c4687b8dced9bc624c, type: 3}
   myInfo: "\uBC88\uAC1C\uB85C \uC774\uB8E8\uC5B4\uC9C4 \uBE44"
   AttackRange: 30
+  _mana: 40
   CoolTime: 35
   skillDamage:
   - 30
@@ -23,7 +24,7 @@ MonoBehaviour:
   - 70
   - 90
   - 150
-  MaterialCounts: 0100000002000000030000000400000005000000
+  MaterialCounts: 010000000300000005000000070000000a000000
   Materials:
   - {fileID: 11400000, guid: 6df88fb40d044c2459e7c80e041b75af, type: 2}
   - {fileID: 11400000, guid: 1a77b772eb354f4449ec2941ccb46054, type: 2}

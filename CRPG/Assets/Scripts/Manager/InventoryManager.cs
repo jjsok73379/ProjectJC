@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class InventoryManager : Singleton<InventoryManager>
 {
 
-    public static bool inventoryActivated = false; // 인벤토리 활성화 여부. true가 되면 카메라 움직임과 다른 입력을 막을 것이다.
+    public bool inventoryActivated = false; // 인벤토리 활성화 여부. true가 되면 카메라 움직임과 다른 입력을 막을 것이다.
 
     [SerializeField]
     GameObject go_Inventory; // Inventory의 이미지
@@ -19,6 +19,7 @@ public class InventoryManager : Singleton<InventoryManager>
     public Item SecondItem;
     public int itemMaxCount = 99; // 아이템의 최대 개수
 
+    public InvenSlot[] allSlots;
     InvenSlot[] invenSlots;
     InvenSlot[] quickSlots;
     bool isNotPut;
@@ -29,6 +30,8 @@ public class InventoryManager : Singleton<InventoryManager>
 
     [SerializeField]
     ActionController theActionController;
+    [SerializeField]
+    ItemEffectDatabase theItemEffectDatabase;
 
     // Start is called before the first frame update
     void Start()
@@ -36,14 +39,24 @@ public class InventoryManager : Singleton<InventoryManager>
         invenSlots = go_SlotsParent.GetComponentsInChildren<InvenSlot>();
         quickSlots = go_QuickSlotParent.GetComponentsInChildren<InvenSlot>();
         go_Inventory.SetActive(false);
-        invenSlots[0].AddItem(FirstItem);
-        invenSlots[1].AddItem(SecondItem);
+        invenSlots[0].AddItem(FirstItem, 2);
+        invenSlots[1].AddItem(SecondItem, 2);
     }
 
     // Update is called once per frame
     void Update()
     {
         TryOpenInventory();
+        for(int i = 0; i < allSlots.Length; i++)
+        {
+            if (!allSlots[i].isQuickSlot)
+            {
+                if (!inventoryActivated)
+                {
+                    theItemEffectDatabase.HideToolTip();
+                }
+            }
+        }
     }
 
     void TryOpenInventory()
@@ -51,26 +64,8 @@ public class InventoryManager : Singleton<InventoryManager>
         if (Input.GetKeyDown(KeyCode.I))
         {
             inventoryActivated = !inventoryActivated;
-
-            if (inventoryActivated)
-            {
-                OpenInventory();
-            }
-            else
-            {
-                CloseInventory();
-            }
+            go_Inventory.SetActive(inventoryActivated);
         }
-    }
-
-    void OpenInventory()
-    {
-        go_Inventory.SetActive(true);
-    }
-
-    void CloseInventory()
-    {
-        go_Inventory.SetActive(false);
     }
 
     public void AcquireItem(Item _item, int _count = 1)

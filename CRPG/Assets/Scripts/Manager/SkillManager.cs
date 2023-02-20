@@ -11,7 +11,6 @@ public class SkillManager : Singleton<SkillManager>
 {
     public List<SkillData> SkillSlotDatas;
     public SkillSlot[] SkillSlots;
-    public RPGPlayer theRPGPlayer;
 
     public SkillData mySkill;
     public List<SkillData> mySkills = new List<SkillData>();
@@ -29,7 +28,9 @@ public class SkillManager : Singleton<SkillManager>
     public GameObject myCombinedSkillText;
 
     public GameObject ReinforceWindow;
-    public GameObject ReinfoceSkill;
+    public MaterialSlot[] theMaterialSlots;
+    public Image ReinforceImage;
+    public Button UpgradeButton;
 
     public GameObject SkillPrefab;
 
@@ -42,7 +43,6 @@ public class SkillManager : Singleton<SkillManager>
     // Start is called before the first frame update
     void Start()
     {
-        ReinforceOpen = false;
         SkillMenu.SetActive(false);
         CombineWindow.SetActive(false);
         myCombineMenu.SetActive(false);
@@ -55,7 +55,6 @@ public class SkillManager : Singleton<SkillManager>
         {
             SkillOpen = !SkillOpen;
             SkillMenu.SetActive(SkillOpen);
-            ReinforceWindow.SetActive(false);
         }
         if (SkillOpen)
         {
@@ -64,6 +63,11 @@ public class SkillManager : Singleton<SkillManager>
                 SkillOpen = false;
                 SkillMenu.SetActive(false);
             }
+        }
+        else
+        {
+            ReinforceOpen = false;
+            ReinforceWindow.SetActive(false);
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -101,11 +105,6 @@ public class SkillManager : Singleton<SkillManager>
         SkillMenu.SetActive(SkillOpen);
     }
 
-    public void OpenReinFoce()
-    {
-        ReinforceOpen = !ReinforceOpen;
-        ReinforceWindow.SetActive(ReinforceOpen);
-    }
 
     public void SelectSkill()
     {
@@ -152,7 +151,7 @@ public class SkillManager : Singleton<SkillManager>
             SkillM Addedskill = AddedskillPanel.GetComponentInChildren<SkillM>();
             Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
             Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
-            Addedskill.GetComponent<SkillM>().myData = mySkill;
+            Addedskill.GetComponent<SkillM>().myStat.orgData = mySkill;
         }
         mySkills.Add(mySkill);
     }

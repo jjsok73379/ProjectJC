@@ -19,6 +19,9 @@ public class QuestManager : Singleton<QuestManager>
     GameObject QuestContent;
     [SerializeField]
     GameObject UIContent;
+    public GameObject QuestionMark;
+    public GameObject UnfinishQuestionMark;
+    public GameObject ExclamationMark;
     public QuestPost theQuestPost;
     public GameObject objQ;
     public GameObject objQ2;

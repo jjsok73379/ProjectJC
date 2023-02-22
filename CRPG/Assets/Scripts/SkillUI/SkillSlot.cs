@@ -7,64 +7,55 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillSlot : MonoBehaviour,IDropHandler
+
+public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
 {
-    Coroutine act = null;
     public Image myImage;
-    GameObject mySlot;
     [SerializeField]
     Image[] skillImages;
     [SerializeField]
+    SkillManager theSkillManager;
+    [SerializeField]
     RPGPlayer theRPGPlayer;
+    Sprite[] orgImages = new Sprite[2];
     public SkillData mySkillData;
     public float orgCool;
+    public float mySkillDamage;
+    int Level;
 
-    void Start()
+    private void Start()
     {
-        mySlot = gameObject;
+        for (int i = 0; i < skillImages.Length; i++)
+        {
+            orgImages[i] = skillImages[i].sprite;
+        }
     }
 
-    void Update()
+    private void Update()
     {
-        if (mySlot.name == "SkillQ")
+        if (mySkillData != null)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                if (act != null) return;
-                theRPGPlayer._myanim.SetBool("Skill", true);
-                act = StartCoroutine(Cooling());
-            }
+            mySkillDamage = mySkillData.SkillDamage(Level);
         }
-        if (mySlot.name == "SkillW")
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            mySkillData = null;
+            myImage = null;
+            orgCool = 0;
+            for (int i = 0; i < skillImages.Length; i++)
             {
-                if (act != null) return;
-                theRPGPlayer._myanim.SetBool("Skill", true);
-                act = StartCoroutine(Cooling());
-            }
-        }
-        if (mySlot.name == "SkillE")
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                if (act != null) return;
-                theRPGPlayer._myanim.SetBool("Skill", true);
-                act = StartCoroutine(Cooling());
-            }
-        }
-        if (mySlot.name == "SkillR")
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                if (act != null) return;
-                theRPGPlayer._myanim.SetBool("Skill", true);
-                act = StartCoroutine(Cooling());
+                skillImages[i].sprite = orgImages[i];
             }
         }
     }
+
     public void OnDrop(PointerEventData eventData)
     {
+        Level = eventData.pointerDrag.GetComponent<SkillM>().myStat.Level;
         GameObject icon = eventData.pointerDrag.GetComponent<SkillM>().selectedSkill;
         SkillData Data = icon.GetComponent<SelectedSkill>().myData;
         if (SkillManager.Inst.SkillSlotDatas.Contains(Data)) return;
@@ -82,19 +73,23 @@ public class SkillSlot : MonoBehaviour,IDropHandler
             }
         }
     }
-    IEnumerator Cooling()
+
+    public IEnumerator Cooling()
     {
-        if (mySkillData != null)
+        for (int i = 0; i < theSkillManager.SkillSlots.Length; i++)
         {
-            myImage.fillAmount = 0.0f;
-            float speed = 1.0f / mySkillData.CoolTime;
-            while (myImage.fillAmount < 1.0f)
+            if (theSkillManager.SkillSlots[i].mySkillData != null)
             {
-                myImage.fillAmount += speed * Time.deltaTime;
-                yield return null;
+                theSkillManager.SkillSlots[i].myImage.fillAmount = 0.0f;
+                float speed = 1.0f / theSkillManager.SkillSlots[i].mySkillData.CoolTime;
+                while (theSkillManager.SkillSlots[i].myImage.fillAmount < 1.0f)
+                {
+                    theSkillManager.SkillSlots[i].myImage.fillAmount += speed * Time.deltaTime;
+                    yield return null;
+                }
+                theRPGPlayer.act = null;
+                theSkillManager.SkillSlots[i].mySkillData.CoolTime = theSkillManager.SkillSlots[i].orgCool;
             }
-            act = null;
-            mySkillData.CoolTime = orgCool;
         }
     }
 }

@@ -14,7 +14,7 @@ public abstract class TargetingProjectile : Projectile
             float delta = Time.deltaTime * moveSpeed;
             if (myTarget != null)
             {
-                pos = myTarget.AttackPoint.position;
+                pos = myTarget.GetComponent<Monster>().AttackPoint.position;
             }
             dir = pos - transform.position;
             if (delta > dir.magnitude)
@@ -30,7 +30,7 @@ public abstract class TargetingProjectile : Projectile
                     // 몬스터에 맞았을 때
                     transform.position = hit.point + -dir * radius;
                     Destroy(gameObject);
-                    myTarget.OnDamage(SkillPoint);
+                    myTarget.GetComponent<Monster>().OnDamage(SkillPoint);
                     OnHit();
                     yield break;
                 }

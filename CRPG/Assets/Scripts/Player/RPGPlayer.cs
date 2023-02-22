@@ -2,6 +2,7 @@ using ARPGFX;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -10,19 +11,27 @@ namespace CombineRPG
 {
     public class RPGPlayer : BattleSystem
     {
+        public Coroutine act = null;
+        bool SkillPrepare = false;
+        Transform mySkillPoint = null;
+        int selectnum;
         [SerializeField]
         GameObject Holder;
         public Sword mySword;
-        [SerializeField]
-        Transform mySkillPoint = null;
         [SerializeField]
         CharacterInfo theCharacterInfo;
         [SerializeField]
         GameObject LevelUpEff;
         [SerializeField]
-        ARPGFXPortalScript thePortal;
-        [SerializeField]
         GameObject DeadWindow;
+        [SerializeField]
+        SkillManager theSkillManager;
+        [SerializeField]
+        GameObject[] SkillRegions;
+        [SerializeField]
+        GameObject TargetingRegion;
+        [SerializeField]
+        GameObject NonTargetingRegion;
 
         public PlayerUI myUI;
         public enum STATE
@@ -74,6 +83,20 @@ namespace CombineRPG
                     UIText();
                     LevelUp();
                     PlayerMove();
+                    UseSkill(KeyCode.Alpha1, 0);
+                    UseSkill(KeyCode.Alpha2, 1);
+                    UseSkill(KeyCode.Alpha3, 2);
+                    UseSkill(KeyCode.Alpha4, 3);
+                    StartCoroutine(SkillStart());
+                    if (quest.isActive)
+                    {
+                        if (quest.goal.IsReached() || quest.goal.IsDone())
+                        {
+                            QuestManager.Inst.QuestionMark.SetActive(true);
+                            QuestManager.Inst.UnfinishQuestionMark.SetActive(false);
+                            QuestManager.Inst.ExclamationMark.SetActive(false);
+                        }
+                    }
                     break;
                 case STATE.Death:
                     break;
@@ -212,6 +235,36 @@ namespace CombineRPG
             }
         }
 
+        IEnumerator SkillStart()
+        {
+            if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0))
+            {
+                if (SkillPrepare)
+                {
+                    if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Targeting)
+                    {
+                        if (myTarget != null)
+                        {
+                            GameObject TargetingSkill = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, mySkillPoint);
+                            TargetingSkill.GetComponent<Projectile>().OnFire(myTarget, enemyMask, theSkillManager.SkillSlots[selectnum].mySkillDamage);
+                            myAnim.SetTrigger("TargetingSkill");
+                        }
+                    }
+                    else if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
+                    {
+                        GameObject NonTargetingSkill = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill);
+                        NonTargetingSkill.GetComponent<Projectile>().OnFire(NonTargetingRegion.transform, pickMask, theSkillManager.SkillSlots[selectnum].mySkillDamage);
+                        myAnim.SetTrigger("NonTargetingSkill");
+                    }
+                }
+            }
+            yield return null;
+            yield return StartCoroutine(SkillStart());
+            act = StartCoroutine(theSkillManager.SkillSlots[selectnum].Cooling());
+            myAnim.SetBool("Skill", false);
+            SkillPrepare = false;
+        }
+
         public void IncreaseHP(int _count)
         {
             if (myStat.HP + _count < myStat.maxHp)
@@ -272,6 +325,36 @@ namespace CombineRPG
                 myStat.EXP = 0;
             }
             SceneManager.LoadScene("Village");
+        }
+
+        void UseSkill(KeyCode alpha, int num)
+        {
+            if (Input.GetKeyDown(alpha))
+            {
+                if (theSkillManager.SkillSlots[num].mySkillData == null) return;
+                if (act != null) return;
+                SkillPrepare = true;
+                if (theSkillManager.SkillSlots[num].mySkillData.myType == SkillData.SkillType.Targeting)
+                {
+                    TargetingRegion.SetActive(true);
+                    NonTargetingRegion.SetActive(false);
+                }
+                else if (theSkillManager.SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
+                {
+                    TargetingRegion.SetActive(false);
+                    NonTargetingRegion.SetActive(true);
+                }
+                Debug.Log(theSkillManager.SkillSlots[num].mySkillData.myType);
+                selectnum = num;
+                myAnim.SetBool("Skill", true);
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SkillPrepare = false;
+                myAnim.SetBool("Skill", false);
+                TargetingRegion.SetActive(false);
+                NonTargetingRegion.SetActive(false);
+            }
         }
     }
 }

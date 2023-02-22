@@ -15,8 +15,12 @@ public class InventoryManager : Singleton<InventoryManager>
     [SerializeField]
     GameObject go_QuickSlotParent;
 
-    public Item FirstItem;
-    public Item SecondItem;
+    [SerializeField]
+    Item FirstItem;
+    [SerializeField] 
+    Item SecondItem; // 추후 삭제
+    [SerializeField]
+    Item ThirdItem; // 추후 삭제
     public int itemMaxCount = 99; // 아이템의 최대 개수
 
     public InvenSlot[] allSlots;
@@ -39,8 +43,9 @@ public class InventoryManager : Singleton<InventoryManager>
         invenSlots = go_SlotsParent.GetComponentsInChildren<InvenSlot>();
         quickSlots = go_QuickSlotParent.GetComponentsInChildren<InvenSlot>();
         go_Inventory.SetActive(false);
-        invenSlots[0].AddItem(FirstItem, 2);
-        invenSlots[1].AddItem(SecondItem, 2);
+        invenSlots[0].AddItem(FirstItem);
+        invenSlots[1].AddItem(SecondItem);
+        invenSlots[2].AddItem(ThirdItem);
     }
 
     // Update is called once per frame

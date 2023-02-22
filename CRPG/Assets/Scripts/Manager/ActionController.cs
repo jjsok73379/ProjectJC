@@ -30,6 +30,8 @@ public class ActionController : MonoBehaviour
 
     [SerializeField]
     TMP_Text actionText; // 행동을 보여 줄 텍스트
+    [SerializeField]
+    TMP_Text portalText;
     public GameObject Store_NPC_Text;
     public GameObject Recovery_NPC_Text;
     public GameObject Quest_NPC_Text;
@@ -80,6 +82,9 @@ public class ActionController : MonoBehaviour
             CheckPortal();
             CanUsePortal();
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+        }
     }
 
     void CheckItem()
@@ -101,28 +106,37 @@ public class ActionController : MonoBehaviour
     {
         if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Store_NpcMask))
         {
-            IsStore = true;
-            IsRecovery = false;
-            IsQuest = false;
-            NPC_Name = "반트너";
-            TalkWithNPC(NPC_Name);
+            if(hitInfo.transform.tag == "Store")
+            {
+                IsStore = true;
+                IsRecovery = false;
+                IsQuest = false;
+                NPC_Name = "반트너";
+                TalkWithNPC(NPC_Name);
+            }
         }
         else if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Recovery_NpcMask))
         {
-            IsStore = false;
-            IsRecovery = true;
-            IsQuest = false;
-            NPC_Name = "픽시";
-            TalkWithNPC(NPC_Name);
+            if(hitInfo.transform.tag == "Recovery")
+            {
+                IsStore = false;
+                IsRecovery = true;
+                IsQuest = false;
+                NPC_Name = "픽시";
+                TalkWithNPC(NPC_Name);
+            }
 
         }
         else if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Quest_NpcMask))
         {
-            IsStore = false;
-            IsRecovery = false;
-            IsQuest = true;
-            NPC_Name = "캐트 시";
-            TalkWithNPC(NPC_Name);
+            if(hitInfo.transform.tag == "Quest")
+            {
+                IsStore = false;
+                IsRecovery = false;
+                IsQuest = true;
+                NPC_Name = "캐트 시";
+                TalkWithNPC(NPC_Name);
+            }
         }
         else
         {
@@ -148,14 +162,14 @@ public class ActionController : MonoBehaviour
     void FrontPortal()
     {
         portalActivated = true;
-        actionText.gameObject.SetActive(true);
-        actionText.text = "포탈로 이동하려면 (F)키를 누르세요";
+        portalText.gameObject.SetActive(true);
+        portalText.text = "포탈로 이동하려면 (F)키를 누르세요";
     }
 
     void NoPortal()
     {
         portalActivated = false;
-        actionText.gameObject.SetActive(false);
+        portalText.gameObject.SetActive(false);
     }
 
     void TalkWithNPC(string npcName)
@@ -266,7 +280,7 @@ public class ActionController : MonoBehaviour
     public IEnumerator WhenNotCompleted()
     {
         itemText.gameObject.SetActive(true);
-        itemText.text = "퀘스트 조건을 충족시키지 못하였습니다.";
+        itemText.text = "퀘스트 조건을\n충족시키지 못하였습니다.";
 
         yield return new WaitForSeconds(1.0f);
         itemText.gameObject.SetActive(false);

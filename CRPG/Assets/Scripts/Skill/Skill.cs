@@ -5,10 +5,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public enum SkillType
-{
-    Targeting, NonTargeting, Material
-}
 
 public class Skill : MonoBehaviour
 {

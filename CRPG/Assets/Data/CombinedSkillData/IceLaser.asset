@@ -28,3 +28,5 @@ MonoBehaviour:
   Materials:
   - {fileID: 11400000, guid: d447ec6033e67f644a0469913fa597cc, type: 2}
   - {fileID: 11400000, guid: ac6bfbf5e01d7a64d93e5f7a115a69d0, type: 2}
+  mySkill: {fileID: 1427661989262336, guid: 7c6ecf9677a64fd4290922ea3ebc2493, type: 3}
+  mySkillRegion: {fileID: 795787725143366518, guid: b11d2d9f47b488e44a3ba95e9f687acd, type: 3}

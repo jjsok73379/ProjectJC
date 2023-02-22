@@ -18,8 +18,8 @@ public abstract class Projectile : MonoBehaviour
         get;
         private set;
     }
-    protected Monster myTarget = null;
-    public void OnFire(Monster target, LayerMask mask, float damage)
+    protected Transform myTarget = null;
+    public void OnFire(Transform target, LayerMask mask, float damage)
     {
         SkillPoint = damage;
         myTarget = target;

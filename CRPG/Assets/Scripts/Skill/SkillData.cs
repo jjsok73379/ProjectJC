@@ -6,6 +6,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SkillData", menuName = "ScriptableObjects/SkillData", order = 1)]
 public class SkillData : ScriptableObject
 {
+    public enum SkillType
+    {
+        Targeting, NonTargeting, Material
+    }
+
     public string SkillName;
     public Sprite myImage = null;
     public string myInfo;
@@ -18,6 +23,8 @@ public class SkillData : ScriptableObject
     float[] skillDamage;
     [SerializeField] int[] MaterialCounts;
     public SkillData[] Materials;
+    public GameObject mySkill;
+    public SkillType myType;
 
     public int Mana
     {

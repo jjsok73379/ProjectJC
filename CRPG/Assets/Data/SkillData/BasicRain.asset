@@ -22,3 +22,6 @@ MonoBehaviour:
   - 10
   MaterialCounts: 
   Materials: []
+  mySkill: {fileID: 6077168872989578693, guid: d154695d860a5814396e030ed6ff93f5, type: 3}
+  mySkillRegion: {fileID: 3656534823255315731, guid: 8e78b73b79d8f7c43aac478137bc542d, type: 3}
+  myType: 1

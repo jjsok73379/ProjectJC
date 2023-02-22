@@ -1,0 +1,9 @@
+Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            Vector3 dirPos = Vector3.zero;
+            if(Physics.Raycast(ray, out hit))
+            {
+                dirPos.y = 0;
+                dirPos = hit.point - transform.position;                
+                straightTarget.transform.rotation = Quaternion.LookRotation(dirPos);
+                if(Input.GetMouseButtonDown(0))

@@ -47,6 +47,9 @@ public class QuestInfo : MonoBehaviour
         RefuseBtn.gameObject.SetActive(true);
         CompleteBtn.gameObject.SetActive(false);
         ForgiveBtn.gameObject.SetActive(false);
+        QuestManager.Inst.QuestionMark.SetActive(false);
+        QuestManager.Inst.UnfinishQuestionMark.SetActive(false);
+        QuestManager.Inst.ExclamationMark.SetActive(true);
     }
 
     public void AfterAccept()
@@ -54,7 +57,10 @@ public class QuestInfo : MonoBehaviour
         AcceptBtn.gameObject.SetActive(false);
         RefuseBtn.gameObject.SetActive(false);
         CompleteBtn.gameObject.SetActive(true);
-        ForgiveBtn.gameObject.SetActive(true);
+        ForgiveBtn.gameObject.SetActive(true); 
+        QuestManager.Inst.QuestionMark.SetActive(false);
+        QuestManager.Inst.UnfinishQuestionMark.SetActive(true);
+        QuestManager.Inst.ExclamationMark.SetActive(false);
     }
 
     public void OpenInfo()

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4987393732589744}
-  - component: {fileID: 4658049303520370333}
+  - component: {fileID: 7615630240024783964}
   - component: {fileID: 198668683269137338}
   - component: {fileID: 114854165852359842}
   - component: {fileID: 199798401150151838}
@@ -39,7 +39,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4658049303520370333
+--- !u!114 &7615630240024783964
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,14 +48,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1135581048890362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 244bcb333bfc3a247a1ae1d29d2cad8c, type: 3}
+  m_Script: {fileID: 11500000, guid: bfe7fe74395bb2e41abb19cd223a61f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitEffect: {fileID: 0}
-  myEnemy:
+  theRPGPlayer: {fileID: 0}
+  enemyMask:
     serializedVersion: 2
     m_Bits: 128
-  <moveSpeed>k__BackingField: 8
+  SkillDamage: 0
+  disy: 8
 --- !u!198 &198668683269137338
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4882,6 +4883,9 @@ MonoBehaviour:
   useOnlyRotationOffset: 1
   UseFirePointRotation: 0
   DestoyMainEffect: 0
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!199 &199798401150151838
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -9800,7 +9804,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 546164282ba8044478b5f36bfeb26fde, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14625,7 +14628,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: fe3fbcea8e93fec468be670c547e0aa1, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19450,7 +19452,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 35f5e6dc715494f44b17248eee5426bd, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

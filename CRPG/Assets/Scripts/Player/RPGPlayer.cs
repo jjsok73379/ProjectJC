@@ -1,4 +1,5 @@
 using ARPGFX;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,28 +12,26 @@ namespace CombineRPG
 {
     public class RPGPlayer : BattleSystem
     {
-        public Coroutine act = null;
         bool SkillPrepare = false;
-        Transform mySkillPoint = null;
+        bool IsSkillStart = false;
+        bool IsCombable = false;
+        int clickCount = 0;
         int selectnum;
+        ActionController theActionController;
+        [SerializeField]
+        Camera myCam;
         [SerializeField]
         GameObject Holder;
         public Sword mySword;
         [SerializeField]
         CharacterInfo theCharacterInfo;
         [SerializeField]
-        GameObject LevelUpEff;
+        ParticleSystem LevelUpEff;
         [SerializeField]
         GameObject DeadWindow;
         [SerializeField]
         SkillManager theSkillManager;
-        [SerializeField]
-        GameObject[] SkillRegions;
-        [SerializeField]
-        GameObject TargetingRegion;
-        [SerializeField]
-        GameObject NonTargetingRegion;
-
+        public GameObject NonTargetingRegion;
         public PlayerUI myUI;
         public enum STATE
         {
@@ -42,12 +41,12 @@ namespace CombineRPG
         int MaxLevel = 99;
         float remainExp;
         public STATE myState = STATE.Create;
-        public Animator _myanim = null;
-        public Transform _mytarget = null;
         public LayerMask pickMask = default;
         public LayerMask enemyMask = default;
         public Quest quest;
         public float orgRange;
+        public float orgDamage;
+        Coroutine SkillChk;
 
         void ChangeState(STATE s)
         {
@@ -58,6 +57,13 @@ namespace CombineRPG
                 case STATE.Create:
                     break;
                 case STATE.Play:
+                    NonTargetingRegion.SetActive(false);
+                    DeadWindow.SetActive(false);
+                    orgRange = myStat.AttackRange;
+                    orgDamage = myStat.AP;
+                    myStat.changeHp = (float v) => myUI.myHpBar.value = v;
+                    myStat.changeMp = (float v) => myUI.myMpBar.value = v;
+                    myStat.changeExp = (float v) => myUI.myExpBar.value = v;
                     WeaponStat();
                     break;
                 case STATE.Death:
@@ -78,16 +84,25 @@ namespace CombineRPG
                 case STATE.Create:
                     break;
                 case STATE.Play:
-                    _mytarget = myTarget;
-                    mySword = Holder.GetComponentInChildren<Sword>();
                     UIText();
                     LevelUp();
                     PlayerMove();
+                    LookMouseCursor();
                     UseSkill(KeyCode.Alpha1, 0);
                     UseSkill(KeyCode.Alpha2, 1);
                     UseSkill(KeyCode.Alpha3, 2);
                     UseSkill(KeyCode.Alpha4, 3);
-                    StartCoroutine(SkillStart());
+                    if (IsCombable)
+                    {
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            ++clickCount;
+                        }
+                    }
+                    if (IsSkillStart)
+                    {
+                        StartCoroutine(SkillEnd());
+                    }
                     if (quest.isActive)
                     {
                         if (quest.goal.IsReached() || quest.goal.IsDone())
@@ -97,22 +112,17 @@ namespace CombineRPG
                             QuestManager.Inst.ExclamationMark.SetActive(false);
                         }
                     }
+                    else return;
                     break;
                 case STATE.Death:
                     break;
             }
         }
+
         // Start is called before the first frame update
         void Start()
         {
-            _myanim = myAnim;
-            DeadWindow.SetActive(false);
-            orgRange = myStat.AttackRange;
-            LevelUpEff.SetActive(false);
-            myStat.changeHp = (float v) => myUI.myHpBar.value = v;
-            myStat.changeMp = (float v) => myUI.myMpBar.value = v;
-            myStat.changeExp = (float v) => myUI.myExpBar.value = v;
-
+            theActionController = GetComponent<ActionController>();
             ChangeState(STATE.Play);
         }
 
@@ -138,16 +148,16 @@ namespace CombineRPG
         {
             if (mySword != null)
             {
-                mySkillPoint = mySword.mySkillPoint;
                 myStat.AttackRange = myStat.AttackRange + mySword.range;
-                orgRange = myStat.AttackRange;
                 myStat.AttackDelay = myStat.AttackDelay - mySword.AttackSpeed;
                 myStat.AP = myStat.AP + mySword.damage;
+                orgRange = myStat.AttackRange;
+                orgDamage = myStat.AP;
             }
             else
             {
                 myStat.AttackRange = 1;
-                myStat.AttackDelay = 1;
+                myStat.AttackDelay = 4;
                 myStat.AP = 5;
             }
         }
@@ -163,7 +173,7 @@ namespace CombineRPG
                 else
                 {
                     Level++;
-                    LevelUpEff.SetActive(true);
+                    LevelUpEff.Play(true);
                     remainExp = myStat.EXP - myStat.maxExp;
                     myStat.maxHp += 100;
                     myStat.maxMp += 100;
@@ -173,7 +183,6 @@ namespace CombineRPG
                     myStat.EXP = remainExp;
                     myStat.AP += 5;
                 }
-                LevelUpEff.SetActive(false);
             }
         }
 
@@ -217,7 +226,8 @@ namespace CombineRPG
 
         public void PlayerMove()
         {
-            if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0))
+            if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0)
+                && !myAnim.GetBool("IsSkill") && !myAnim.GetBool("IsComboAttacking"))
             {
                 //마우스 위치에서 내부의 가상공간으로 뻗어 나가는 레이를 만든다.
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -226,43 +236,103 @@ namespace CombineRPG
                 if (Physics.Raycast(ray, out hit, 1000.0f, enemyMask))
                 {
                     myTarget = hit.transform;
-                    AttackTarget(myTarget);
+                    if (SkillPrepare)
+                    {
+                        if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Targeting)
+                        {
+                            if (myTarget != null)
+                            {
+                                if (myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
+                                {
+                                    myStat.MP -= theSkillManager.SkillSlots[selectnum].mySkillData.Mana;
+                                    myAnim.SetTrigger("TargetingSkill");
+                                    GameObject Projectile = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, mySword.mySkillPoint.position, Quaternion.LookRotation(myTarget.position)); ;
+                                    Projectile.GetComponent<Projectile>().myTarget = myTarget.GetComponent<Monster>();
+                                    Projectile.GetComponent<Skill>().SkillDamage = myStat.AP;
+                                    Projectile.GetComponent<Skill>().OnFire();
+                                }
+                                else
+                                {
+                                    StartCoroutine(theActionController.WhenNoMana());
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AttackTarget();
+                    }
                 }
                 else if (Physics.Raycast(ray, out hit, 1000.0f, pickMask))
                 {
-                    MoveToPositionByNav(hit.point);
+                    if (SkillPrepare)
+                    {
+                        if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
+                        {
+                            if (myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
+                            {
+                                myStat.MP -= theSkillManager.SkillSlots[selectnum].mySkillData.Mana;
+                                myAnim.SetTrigger("NonTargetingSkill");
+                                GameObject NonTargeting = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, NonTargetingRegion.transform.position, Quaternion.Euler(-270, 0, 0));
+                                NonTargeting.GetComponent<Skill>().SkillDamage = myStat.AP;
+                                NonTargeting.GetComponent<Skill>().OnFire();
+                            }
+                            else
+                            {
+                                StartCoroutine(theActionController.WhenNoMana());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MoveToPositionByNav(hit.point);
+                    }
                 }
             }
         }
 
-        IEnumerator SkillStart()
+        public void ComboCheck(bool v)
         {
-            if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0))
+            if (v)
             {
-                if (SkillPrepare)
+                // 콤보 시작
+                IsCombable = true;
+                clickCount = 0;
+            }
+            else
+            {
+                // 콤보 끝
+                IsCombable = false;
+                if (clickCount == 0)
                 {
-                    if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Targeting)
-                    {
-                        if (myTarget != null)
-                        {
-                            GameObject TargetingSkill = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, mySkillPoint);
-                            TargetingSkill.GetComponent<Projectile>().OnFire(myTarget, enemyMask, theSkillManager.SkillSlots[selectnum].mySkillDamage);
-                            myAnim.SetTrigger("TargetingSkill");
-                        }
-                    }
-                    else if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
-                    {
-                        GameObject NonTargetingSkill = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill);
-                        NonTargetingSkill.GetComponent<Projectile>().OnFire(NonTargetingRegion.transform, pickMask, theSkillManager.SkillSlots[selectnum].mySkillDamage);
-                        myAnim.SetTrigger("NonTargetingSkill");
-                    }
+                    myAnim.SetTrigger("ComboFail");
                 }
             }
-            yield return null;
-            yield return StartCoroutine(SkillStart());
-            act = StartCoroutine(theSkillManager.SkillSlots[selectnum].Cooling());
+        }
+
+        IEnumerator SkillEnd()
+        {
+            StartCoroutine(theSkillManager.SkillSlots[selectnum].Coolact);
+            theSkillManager.SkillSlots[selectnum].act = StartCoroutine(theSkillManager.SkillSlots[selectnum].Coolact);
+            myStat.AttackRange = orgRange;
+            myStat.AP = orgDamage;
             myAnim.SetBool("Skill", false);
+            if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
+            {
+                NonTargetingRegion.SetActive(false);
+            }
             SkillPrepare = false;
+            yield return null;
+        }
+
+        public void Skill_end()
+        {
+            if (SkillChk != null)
+            {
+                StopCoroutine(SkillChk);
+                SkillChk = null;
+            }
+            SkillChk = StartCoroutine(SkillEnd());
         }
 
         public void IncreaseHP(int _count)
@@ -329,31 +399,41 @@ namespace CombineRPG
 
         void UseSkill(KeyCode alpha, int num)
         {
+            if (theSkillManager.SkillSlots[num].mySkillData == null) return;
+            if (theSkillManager.SkillSlots[num].act != null) return;
             if (Input.GetKeyDown(alpha))
             {
-                if (theSkillManager.SkillSlots[num].mySkillData == null) return;
-                if (act != null) return;
                 SkillPrepare = true;
-                if (theSkillManager.SkillSlots[num].mySkillData.myType == SkillData.SkillType.Targeting)
+                myStat.AttackRange = theSkillManager.SkillSlots[num].mySkillRange;
+                myStat.AP = theSkillManager.SkillSlots[num].mySkillDamage + myStat.AP;
+                if (theSkillManager.SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
                 {
-                    TargetingRegion.SetActive(true);
-                    NonTargetingRegion.SetActive(false);
-                }
-                else if (theSkillManager.SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
-                {
-                    TargetingRegion.SetActive(false);
                     NonTargetingRegion.SetActive(true);
                 }
-                Debug.Log(theSkillManager.SkillSlots[num].mySkillData.myType);
                 selectnum = num;
                 myAnim.SetBool("Skill", true);
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
                 SkillPrepare = false;
+                myStat.AttackRange = orgRange;
+                myStat.AP = orgDamage;
                 myAnim.SetBool("Skill", false);
-                TargetingRegion.SetActive(false);
-                NonTargetingRegion.SetActive(false);
+                if (theSkillManager.SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
+                {
+                    NonTargetingRegion.SetActive(false);
+                }
+            }
+        }
+
+        public void LookMouseCursor()
+        {
+            Ray ray = myCam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                Vector3 mouseDir = new Vector3(hit.point.x, transform.position.y, hit.point.z) - transform.position;
+                myAnim.transform.forward = mouseDir;
             }
         }
     }

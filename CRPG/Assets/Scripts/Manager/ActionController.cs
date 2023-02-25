@@ -312,4 +312,12 @@ public class ActionController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         itemText.gameObject.SetActive(false);
     }
+    public IEnumerator WhenNoMana()
+    {
+        itemText.gameObject.SetActive(true);
+        itemText.text = "마나가 부족합니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
+    }
 }

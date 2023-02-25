@@ -9724,7 +9724,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4424731503520034}
-  - component: {fileID: -810330932345580984}
+  - component: {fileID: 3623398854460182236}
   - component: {fileID: 198620100365262566}
   - component: {fileID: 199413474041559024}
   m_Layer: 0
@@ -9754,7 +9754,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &-810330932345580984
+--- !u!114 &3623398854460182236
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9763,14 +9763,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1347034509603832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6be230e61ae649842822577036bd8bf0, type: 3}
+  m_Script: {fileID: 11500000, guid: d2fbc1e506b6d8e4da86d5bfa9111e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitEffect: {fileID: 0}
-  myEnemy:
+  theRPGPlayer: {fileID: 0}
+  enemyMask:
     serializedVersion: 2
     m_Bits: 128
-  <moveSpeed>k__BackingField: 5
+  SkillDamage: 0
+  myTarget: {fileID: 0}
 --- !u!198 &198620100365262566
 ParticleSystem:
   m_ObjectHideFlags: 0

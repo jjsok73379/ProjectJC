@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using CombineRPG;
 
 public class ParticleCollisionInstance : MonoBehaviour
 {
@@ -17,9 +18,14 @@ public class ParticleCollisionInstance : MonoBehaviour
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
     private ParticleSystem ps;
 
+    [SerializeField]
+    LayerMask enemyMask;
+    RPGPlayer theRPGPlayer;
+
     void Start()
     {
         part = GetComponent<ParticleSystem>();
+        theRPGPlayer = ActionController.Inst.GetComponent<RPGPlayer>();
     }
     void OnParticleCollision(GameObject other)
     {      
@@ -28,7 +34,7 @@ public class ParticleCollisionInstance : MonoBehaviour
         {
             foreach (var effect in EffectsOnCollision)
             {
-                var instance = Instantiate(effect, collisionEvents[i].intersection + collisionEvents[i].normal * Offset, new Quaternion()) as GameObject;
+                var instance = Instantiate(effect, collisionEvents[i].intersection + collisionEvents[i].normal * Offset, new Quaternion());
                 if (!UseWorldSpacePosition) instance.transform.parent = transform;
                 if (UseFirePointRotation) { instance.transform.LookAt(transform.position); }
                 else if (rotationOffset != Vector3.zero && useOnlyRotationOffset) { instance.transform.rotation = Quaternion.Euler(rotationOffset); }
@@ -42,7 +48,7 @@ public class ParticleCollisionInstance : MonoBehaviour
         }
         if (DestoyMainEffect == true)
         {
-            /*Destroy(gameObject, DestroyTimeDelay + 0.5f);*/
+            Destroy(gameObject, DestroyTimeDelay + 0.5f);
         }
     }
 }

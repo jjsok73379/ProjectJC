@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6077168872989578692}
-  - component: {fileID: -3360228319452680562}
+  - component: {fileID: -491504224973968216}
   - component: {fileID: 6077168872989578746}
   - component: {fileID: 6077168872989578747}
   - component: {fileID: 2461203982218664524}
@@ -36,7 +36,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3360228319452680562
+--- !u!114 &-491504224973968216
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,14 +45,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6077168872989578693}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee8950589d3809f4aa0938f7c44933f2, type: 3}
+  m_Script: {fileID: 11500000, guid: bfe7fe74395bb2e41abb19cd223a61f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitEffect: {fileID: 100012, guid: a905d8e5159ffeb46baa8d2a7624717f, type: 3}
-  myEnemy:
+  theRPGPlayer: {fileID: 0}
+  enemyMask:
     serializedVersion: 2
     m_Bits: 128
-  <moveSpeed>k__BackingField: 8
+  SkillDamage: 0
+  disy: 2
 --- !u!198 &6077168872989578746
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4789,7 +4790,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f2beba2f11be47c4b93abe40da54b177, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

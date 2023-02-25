@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4494156932542222}
-  - component: {fileID: 808364855441188528}
+  - component: {fileID: -8835555602510095929}
   - component: {fileID: 198365587299786030}
   - component: {fileID: 199602846296022876}
   m_Layer: 0
@@ -37,7 +37,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &808364855441188528
+--- !u!114 &-8835555602510095929
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,14 +46,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1079946990457772}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b1418fa1711b0f4fb5cfbcaad74ee3f, type: 3}
+  m_Script: {fileID: 11500000, guid: d2fbc1e506b6d8e4da86d5bfa9111e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitEffect: {fileID: 0}
-  myEnemy:
+  theRPGPlayer: {fileID: 0}
+  enemyMask:
     serializedVersion: 2
     m_Bits: 128
-  <moveSpeed>k__BackingField: 5
+  SkillDamage: 0
+  myTarget: {fileID: 0}
 --- !u!198 &198365587299786030
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -9678,7 +9679,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 35f5e6dc715494f44b17248eee5426bd, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14561,7 +14561,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 7dad299f9caed054ea10097fd11f0a54, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19444,7 +19443,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: fe3fbcea8e93fec468be670c547e0aa1, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

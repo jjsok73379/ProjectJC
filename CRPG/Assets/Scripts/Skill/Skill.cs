@@ -1,31 +1,26 @@
 using CombineRPG;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 
-public class Skill : MonoBehaviour
+public abstract class Skill : MonoBehaviour
 {
-    public enum State
-    {
-        Create, Activate, UnActivate
-    }
-    public State myState = State.Create;
+    [SerializeField]
+    protected RPGPlayer theRPGPlayer;
+    [SerializeField]
+    protected LayerMask enemyMask;
+    public float SkillDamage;
 
-    public List<Transform> myEnemys = new List<Transform>();
-    public Monster myTarget = null;
-    public LayerMask enemyMask;
-    public Transform mySkillPoint;
-    public GameObject mySkill;
-    public void UnActivate()
+    private void Start()
     {
-        myState = State.UnActivate;
-        StopAllCoroutines();
+        theRPGPlayer = ActionController.Inst.GetComponent<RPGPlayer>();
     }
-    public void OnActivate()
+
+    public void OnFire()
     {
-        myState = State.Activate;
+        StartCoroutine(SkillTarget());
     }
+    protected abstract IEnumerator SkillTarget();
+    protected abstract void OnHit();
 }

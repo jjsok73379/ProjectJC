@@ -10,21 +10,23 @@ using UnityEngine.UI;
 
 public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
 {
+    public Coroutine act = null;
+    public IEnumerator Coolact = null;
     public Image myImage;
     [SerializeField]
     Image[] skillImages;
     [SerializeField]
     SkillManager theSkillManager;
-    [SerializeField]
-    RPGPlayer theRPGPlayer;
     Sprite[] orgImages = new Sprite[2];
     public SkillData mySkillData;
     public float orgCool;
     public float mySkillDamage;
+    public float mySkillRange;
     int Level;
 
     private void Start()
     {
+        Coolact = Cooling();
         for (int i = 0; i < skillImages.Length; i++)
         {
             orgImages[i] = skillImages[i].sprite;
@@ -36,6 +38,7 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
         if (mySkillData != null)
         {
             mySkillDamage = mySkillData.SkillDamage(Level);
+            mySkillRange = mySkillData.GetAttackRange();
         }
     }
 
@@ -44,8 +47,9 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             mySkillData = null;
-            myImage = null;
+            myImage.fillAmount = 1;
             orgCool = 0;
+            act = null;
             for (int i = 0; i < skillImages.Length; i++)
             {
                 skillImages[i].sprite = orgImages[i];
@@ -76,19 +80,19 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
 
     public IEnumerator Cooling()
     {
-        for (int i = 0; i < theSkillManager.SkillSlots.Length; i++)
+        if (mySkillData != null)
         {
-            if (theSkillManager.SkillSlots[i].mySkillData != null)
+            myImage.fillAmount = 0.0f;
+            float speed = 1.0f / mySkillData.CoolTime;
+            while (myImage.fillAmount < 1.0f)
             {
-                theSkillManager.SkillSlots[i].myImage.fillAmount = 0.0f;
-                float speed = 1.0f / theSkillManager.SkillSlots[i].mySkillData.CoolTime;
-                while (theSkillManager.SkillSlots[i].myImage.fillAmount < 1.0f)
-                {
-                    theSkillManager.SkillSlots[i].myImage.fillAmount += speed * Time.deltaTime;
-                    yield return null;
-                }
-                theRPGPlayer.act = null;
-                theSkillManager.SkillSlots[i].mySkillData.CoolTime = theSkillManager.SkillSlots[i].orgCool;
+                myImage.fillAmount += speed * Time.deltaTime;
+                yield return null;
+            }
+            act = null;
+            if (mySkillData != null)
+            {
+                mySkillData.CoolTime = orgCool;
             }
         }
     }

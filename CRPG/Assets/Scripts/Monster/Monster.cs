@@ -34,7 +34,6 @@ public class Monster : BattleSystem
     GameObject BookPrefab;
     [SerializeField]
     GameObject myMinimapIcon;
-
     public int GiveExp;
     public Transform myHeadTop;
     HpBar myUI = null;

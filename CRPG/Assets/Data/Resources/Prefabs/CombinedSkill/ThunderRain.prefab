@@ -4832,7 +4832,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 85455188b71fea741bd0b80cbe893384, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9716,7 +9715,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 205b00b67e6f0f040a51d0b763dd2bae, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9788,6 +9786,9 @@ MonoBehaviour:
   useOnlyRotationOffset: 1
   UseFirePointRotation: 0
   DestoyMainEffect: 0
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1699778448724398
 GameObject:
   m_ObjectHideFlags: 0
@@ -14620,7 +14621,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 2e554b9a8a972ba4fb64c5ce512230f7, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14680,7 +14680,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4893867491853512}
-  - component: {fileID: 1869247877177749952}
+  - component: {fileID: 3951980680502226999}
   - component: {fileID: 198724927268712924}
   - component: {fileID: 199276795878250424}
   - component: {fileID: 82402265451621132}
@@ -14710,7 +14710,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1869247877177749952
+--- !u!114 &3951980680502226999
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14719,14 +14719,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1701074268541622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d55a17db386b18945aeeca0cb71f112e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dab5824cd3e0c94ea521d3f4b0d6cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitEffect: {fileID: 0}
-  myEnemy:
+  theRPGPlayer: {fileID: 0}
+  enemyMask:
     serializedVersion: 2
     m_Bits: 128
-  <moveSpeed>k__BackingField: 8
+  SkillDamage: 0
+  disy: 5
 --- !u!198 &198724927268712924
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -19554,7 +19555,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 484ca6693678d664092bcb9f49cb9e01, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

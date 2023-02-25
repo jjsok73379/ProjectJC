@@ -61,6 +61,7 @@ public class ItemEffectDatabase : MonoBehaviour
         {
             StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(_item.itemName));
             theCharacterInfo.SwordImage.sprite = _item.itemImage;
+            thePlayer.mySword = _item.itemPrefab.GetComponent<Sword>();
             thePlayer.WeaponStat();
         }
         if (_item.itemType == Item.ItemType.Potion)

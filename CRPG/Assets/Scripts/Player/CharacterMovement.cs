@@ -52,16 +52,14 @@ public class CharacterMovement : CharacterProperty
 
         while (Angle > 0.0f)
         {
-            if (!myAnim.GetBool("IsAttacking"))
+            float delta = myStat.RotSpeed * Time.deltaTime;
+            if (delta > Angle)
             {
-                float delta = myStat.RotSpeed * Time.deltaTime;
-                if (delta > Angle)
-                {
-                    delta = Angle;
-                }
-                Angle -= delta;
-                transform.Rotate(Vector3.up * rotDir * delta, Space.World);
+                delta = Angle;
             }
+            Angle -= delta;
+            transform.Rotate(Vector3.up * rotDir * delta, Space.World);
+
             yield return null;
         }
     }
@@ -77,24 +75,13 @@ public class CharacterMovement : CharacterProperty
         myAnim.SetBool("IsMoving", true);
         while (dist > 0.0f)
         {
-
-            if (myAnim.GetBool("IsAttacking"))
+            float delta = myStat.MoveSpeed * Time.deltaTime;
+            if (delta > dist)
             {
-                myAnim.SetBool("IsMoving", false);
-                yield break;
+                delta = dist;
             }
-
-
-            if (!myAnim.GetBool("IsAttacking"))
-            {
-                float delta = myStat.MoveSpeed * Time.deltaTime;
-                if (delta > dist)
-                {
-                    delta = dist;
-                }
-                dist -= delta;
-                transform.Translate(dir * delta, Space.World);
-            }
+            dist -= delta;
+            transform.Translate(dir * delta, Space.World);
             yield return null;
         }
         //달리기 끝 - 도착
@@ -108,7 +95,6 @@ public class CharacterMovement : CharacterProperty
         float delta = 0.0f;
         while (target != null)
         {
-            if(!myAnim.GetBool("IsAttacking")) playTime += Time.deltaTime;
             //이동
             Vector3 dir = target.position - transform.position;
             float dist = dir.magnitude;
@@ -130,7 +116,7 @@ public class CharacterMovement : CharacterProperty
                 {
                     //공격
                     playTime = 0.0f;
-                    myAnim.SetTrigger("Attack");
+                    myAnim.SetTrigger("ComboAttack");
                 }
             }
             //회전

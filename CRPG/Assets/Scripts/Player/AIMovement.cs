@@ -19,7 +19,6 @@ public class AIMovement : CharacterMovement
                 case NavMeshPathStatus.PathInvalid:
                     break;
             }
-            StopAllCoroutines();
             StartCoroutine(MovingByPath(path.corners));
         }
     }

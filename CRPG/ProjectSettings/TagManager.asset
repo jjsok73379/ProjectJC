@@ -12,6 +12,7 @@ TagManager:
   - Recovery
   - Quest
   - Portal
+  - Enemy
   layers:
   - Default
   - TransparentFX

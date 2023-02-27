@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using CombineRPG;
+using Mono.CompilerServices.SymbolWriter;
 
 public class ParticleCollisionInstance : MonoBehaviour
 {
@@ -17,15 +18,15 @@ public class ParticleCollisionInstance : MonoBehaviour
     private ParticleSystem part;
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
     private ParticleSystem ps;
+    public Transform myTarget;
+    public float Damage;
 
     [SerializeField]
     LayerMask enemyMask;
-    RPGPlayer theRPGPlayer;
 
     void Start()
     {
         part = GetComponent<ParticleSystem>();
-        theRPGPlayer = ActionController.Inst.GetComponent<RPGPlayer>();
     }
     void OnParticleCollision(GameObject other)
     {      
@@ -46,9 +47,9 @@ public class ParticleCollisionInstance : MonoBehaviour
                 Destroy(instance, DestroyTimeDelay);
             }
         }
-        if (DestoyMainEffect == true)
+        if (myTarget.gameObject.layer == enemyMask)
         {
-            Destroy(gameObject, DestroyTimeDelay + 0.5f);
+            myTarget.GetComponent<Monster>().OnDamage(Damage);
         }
     }
 }

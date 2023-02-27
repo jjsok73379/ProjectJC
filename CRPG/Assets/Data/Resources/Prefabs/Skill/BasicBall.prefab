@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.6745098, b: 0.77254903, a: 1}
+      maxColor: {r: 1, g: 0.56037736, b: 0.6927937, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -19557,7 +19557,6 @@ GameObject:
   - component: {fileID: 4584415724192722}
   - component: {fileID: -6592459554043522230}
   - component: {fileID: 198555527199407782}
-  - component: {fileID: 114018302957566592}
   - component: {fileID: 199470418353522432}
   m_Layer: 0
   m_Name: BasicBall
@@ -24391,30 +24390,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &114018302957566592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603989468733260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a959a1b0b8414d4fb8a68bdc12d69ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectsOnCollision:
-  - {fileID: 1117273264044518, guid: bb82163de313d09469f964543a10922a, type: 3}
-  DestroyTimeDelay: 2
-  UseWorldSpacePosition: 1
-  Offset: 0.1
-  rotationOffset: {x: 0, y: 0, z: 0}
-  useOnlyRotationOffset: 1
-  UseFirePointRotation: 0
-  DestoyMainEffect: 1
-  enemyMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!199 &199470418353522432
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -24711,7 +24686,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.6745098, b: 0.77254903, a: 0.2509804}
+      maxColor: {r: 0.9528302, g: 0.5519224, b: 0.6726777, a: 0.2509804}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

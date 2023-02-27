@@ -29,5 +29,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6df88fb40d044c2459e7c80e041b75af, type: 2}
   - {fileID: 11400000, guid: 5c8f0d978da865c4ba32173a0c8228c6, type: 2}
   mySkill: {fileID: 1135581048890362, guid: e854c7bd7136258499ab1857bd80dac2, type: 3}
-  mySkillRegion: {fileID: 3656534823255315731, guid: 8e78b73b79d8f7c43aac478137bc542d, type: 3}
-  myType: 1
+  myType: 2

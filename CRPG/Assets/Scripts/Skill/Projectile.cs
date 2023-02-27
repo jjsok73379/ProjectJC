@@ -17,26 +17,25 @@ public abstract class Projectile : Skill
             {
                 pos = myTarget.AttackPoint.position;
             }
-            dir = pos - transform.position;
+            dir = (pos - transform.position).normalized;
             if (delta > dir.magnitude)
             {
                 delta = dir.magnitude;
             }
-            dir.Normalize();
-            if(myTarget != null)
+            if (myTarget != null)
             {
                 Ray ray = new Ray(transform.position, dir);
-                if(Physics.Raycast(ray, out RaycastHit hit, delta + radius, enemyMask))
+                if (Physics.Raycast(ray, out RaycastHit hit, delta + radius, enemyMask))
                 {
                     transform.position = hit.point + -dir * radius;
-                    Destroy(gameObject);
                     myTarget.OnDamage(SkillDamage);
+                    Destroy(gameObject);
                     OnHit();
                     yield break;
                 }
             }
-            transform.Translate(dir * delta, Space.World);
-            yield return new WaitForFixedUpdate();
+            transform.Translate(dir * delta);
+            yield return new WaitForSeconds(3.0f);
         }
         Destroy(gameObject);
     }

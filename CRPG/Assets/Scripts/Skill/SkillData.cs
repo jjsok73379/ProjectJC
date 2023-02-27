@@ -8,7 +8,7 @@ public class SkillData : ScriptableObject
 {
     public enum SkillType
     {
-        Targeting, NonTargeting, Material
+        Ball, Bomb, NonTargeting, Material
     }
 
     public string SkillName;

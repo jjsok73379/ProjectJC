@@ -135,7 +135,7 @@ public class ItemEffectDatabase : MonoBehaviour
                         case "스킬북 : 기본 구":
                             theSkillManager.mySkill = SkillBookitemEffects[0].Eff;
                             break;
-                        case "스킬북 : 기본 레이져":
+                        case "스킬북 : 기본 폭발":
                             theSkillManager.mySkill = SkillBookitemEffects[1].Eff;
                             break;
                         case "스킬북 : 기본 비":

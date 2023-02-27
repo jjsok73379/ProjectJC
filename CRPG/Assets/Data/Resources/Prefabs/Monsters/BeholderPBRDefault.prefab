@@ -1366,7 +1366,7 @@ GameObject:
   - component: {fileID: 7331585632769928011}
   m_Layer: 7
   m_Name: BeholderPBRDefault
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1415,6 +1415,7 @@ MonoBehaviour:
     ap: 1
     attackDelay: 3
     attackRange: 3
+  debuffList: []
   MinMoney: 10
   MaxMoney: 50
   SwordPrefab: {fileID: 8750428140314534140, guid: 304e95966345eb744a5951d09481c81a, type: 3}
@@ -1459,6 +1460,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caaf0138864b50e42bafec0b15fb0b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Skill:
+    m_PersistentCalls:
+      m_Calls: []
   Attack:
     m_PersistentCalls:
       m_Calls:
@@ -1474,6 +1478,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  ComboCheck:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &7331585632769928013
 Rigidbody:
   m_ObjectHideFlags: 0

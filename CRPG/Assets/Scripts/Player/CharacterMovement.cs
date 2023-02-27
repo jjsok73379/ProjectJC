@@ -8,19 +8,19 @@ public class CharacterMovement : CharacterProperty
 {
     Coroutine moveCo = null;
     Coroutine rotCo = null;
-    Coroutine attackCo = null;
+    Coroutine comboattackCo = null;
     protected void AttackTarget(Transform target)
     {
         StopAllCoroutines();
-        attackCo = StartCoroutine(AttckingTarget(target, myStat.AttackRange, myStat.AttackDelay));
+        comboattackCo = StartCoroutine(AttckingTarget(target, myStat.AttackRange, myStat.AttackDelay));
     }
 
     protected void MoveToPosition(Vector3 pos, UnityAction done = null, bool Rot = true)
     {
-        if(attackCo != null)
+        if (comboattackCo != null)
         {
-            StopCoroutine(attackCo);
-            attackCo = null;
+            StopCoroutine(comboattackCo);
+            comboattackCo = null;
         }
         if (moveCo != null)
         {
@@ -95,6 +95,7 @@ public class CharacterMovement : CharacterProperty
         float delta = 0.0f;
         while (target != null)
         {
+            playTime += Time.deltaTime;
             //이동
             Vector3 dir = target.position - transform.position;
             float dist = dir.magnitude;
@@ -116,7 +117,7 @@ public class CharacterMovement : CharacterProperty
                 {
                     //공격
                     playTime = 0.0f;
-                    myAnim.SetTrigger("ComboAttack");
+                    myAnim.SetTrigger("Attack");
                 }
             }
             //회전

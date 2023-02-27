@@ -6,10 +6,8 @@ using UnityEngine.UI;
 public class Sword : MonoBehaviour
 {
     public Sprite myImage;
-    public Transform mySkillPoint;
+    public Transform myAttackPoint;
     public string SwordName; // 검의 이름
-    public float range; // 검의 사정 거리
-    public float AttackSpeed; // 검의 공격속도
 
     public int damage; // 검의 공격력
 

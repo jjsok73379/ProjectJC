@@ -36,9 +36,11 @@ public class Monster : BattleSystem
     GameObject myMinimapIcon;
     public int GiveExp;
     public Transform myHeadTop;
+    Transform Player;
     HpBar myUI = null;
-    float SlowMoveSpeed = 1.0f;
+    float SlowMoveSpeed = 0.5f;
     float StunMoveSpeed = 0.0f;
+    Color orgColor = Color.white;
 
     public GameObject AIPer = null;
     [field:SerializeField]
@@ -81,10 +83,7 @@ public class Monster : BattleSystem
                 GetComponent<CapsuleCollider>().enabled = false;
                 StopAllCoroutines();
                 myAnim.SetTrigger("Dead");
-                foreach(IBattle ib in myAttackers)
-                {
-                    ib.DeadMessage(transform);
-                }
+                Player.GetComponent<RPGPlayer>().DeadMessage(transform);
                 StartCoroutine(DisApearing(2.0f, 2.0f));
                 break;
         }
@@ -121,6 +120,8 @@ public class Monster : BattleSystem
         myUI = obj.GetComponent<HpBar>();
         myUI.myTarget = myHeadTop;
         myStat.changeHp = (float v) => myUI.myBar.value = v;
+
+        orgColor = GetComponentInChildren<Renderer>().material.color;
 
         startPos = transform.position;
         startPos.y = 1.63f;
@@ -181,9 +182,12 @@ public class Monster : BattleSystem
         switch (type)
         {
             case Debuff.Type.Slow:
+                StartCoroutine(DamagingColor(Color.blue, keep));
                 SlowMoveSpeed *= value;
                 break;
             case Debuff.Type.Stun:
+                StartCoroutine(DamagingColor(Color.yellow, keep));
+                myAnim.SetTrigger("Stun");
                 StunMoveSpeed *= value;
                 break;
         }
@@ -193,6 +197,7 @@ public class Monster : BattleSystem
     public void FindTarget(Transform target)
     {
         //if (myState == STATE.Dead) return;
+        Player = target;
         myTarget = target;
         StopAllCoroutines();
         ChangeState(STATE.Battle);
@@ -223,7 +228,22 @@ public class Monster : BattleSystem
         else
         {
             myAnim.SetTrigger("Damage");
+            StartCoroutine(SearchWide(2.0f));
         }
+    }
+
+    IEnumerator SearchWide(float t)
+    {
+        AIPer.GetComponent<SphereCollider>().radius *= 3;
+        yield return new WaitForSeconds(t);
+        AIPer.GetComponent<SphereCollider>().radius = 7;
+    }
+
+    IEnumerator DamagingColor(Color color, float t)
+    {
+        GetComponentInChildren<Renderer>().material.color = color;
+        yield return new WaitForSeconds(t);
+        GetComponentInChildren<Renderer>().material.color = orgColor;
     }
 
     void DropItem(Vector3 pos, int ranmin, int ranmax, GameObject itemprefab)

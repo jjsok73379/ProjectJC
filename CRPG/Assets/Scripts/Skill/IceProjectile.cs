@@ -6,6 +6,6 @@ public class IceProjectile : Projectile
 {
     protected override void OnHit()
     {
-        myTarget.AddDebuff(Debuff.Type.Slow, 0.5f, 1.0f);
+        myTarget.AddDebuff(Debuff.Type.Slow, 0.5f, 2.0f);
     }
 }

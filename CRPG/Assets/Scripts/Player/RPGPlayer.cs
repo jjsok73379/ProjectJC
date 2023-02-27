@@ -18,6 +18,7 @@ namespace CombineRPG
         int clickCount = 0;
         int selectnum;
         ActionController theActionController;
+        GameObject bombSkill;
         [SerializeField]
         Camera myCam;
         [SerializeField]
@@ -31,6 +32,8 @@ namespace CombineRPG
         GameObject DeadWindow;
         [SerializeField]
         SkillManager theSkillManager;
+        [SerializeField]
+        Transform mySkillPoint;
         public GameObject NonTargetingRegion;
         public PlayerUI myUI;
         public enum STATE
@@ -87,18 +90,11 @@ namespace CombineRPG
                     UIText();
                     LevelUp();
                     PlayerMove();
-                    LookMouseCursor();
+                    ComboAttack();
                     UseSkill(KeyCode.Alpha1, 0);
                     UseSkill(KeyCode.Alpha2, 1);
                     UseSkill(KeyCode.Alpha3, 2);
                     UseSkill(KeyCode.Alpha4, 3);
-                    if (IsCombable)
-                    {
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            ++clickCount;
-                        }
-                    }
                     if (IsSkillStart)
                     {
                         StartCoroutine(SkillEnd());
@@ -148,16 +144,11 @@ namespace CombineRPG
         {
             if (mySword != null)
             {
-                myStat.AttackRange = myStat.AttackRange + mySword.range;
-                myStat.AttackDelay = myStat.AttackDelay - mySword.AttackSpeed;
                 myStat.AP = myStat.AP + mySword.damage;
-                orgRange = myStat.AttackRange;
                 orgDamage = myStat.AP;
             }
             else
             {
-                myStat.AttackRange = 1;
-                myStat.AttackDelay = 4;
                 myStat.AP = 5;
             }
         }
@@ -227,7 +218,7 @@ namespace CombineRPG
         public void PlayerMove()
         {
             if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0)
-                && !myAnim.GetBool("IsSkill") && !myAnim.GetBool("IsComboAttacking"))
+                && !myAnim.GetBool("IsSkill"))
             {
                 //마우스 위치에서 내부의 가상공간으로 뻗어 나가는 레이를 만든다.
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -238,15 +229,16 @@ namespace CombineRPG
                     myTarget = hit.transform;
                     if (SkillPrepare)
                     {
-                        if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Targeting)
+                        if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Ball)
                         {
                             if (myTarget != null)
                             {
+                                transform.LookAt(myTarget.transform.position);
                                 if (myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
                                 {
                                     myStat.MP -= theSkillManager.SkillSlots[selectnum].mySkillData.Mana;
-                                    myAnim.SetTrigger("TargetingSkill");
-                                    GameObject Projectile = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, mySword.mySkillPoint.position, Quaternion.LookRotation(myTarget.position)); ;
+                                    myAnim.SetTrigger("Ball");
+                                    GameObject Projectile = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, mySkillPoint.position, mySkillPoint.rotation);
                                     Projectile.GetComponent<Projectile>().myTarget = myTarget.GetComponent<Monster>();
                                     Projectile.GetComponent<Skill>().SkillDamage = myStat.AP;
                                     Projectile.GetComponent<Skill>().OnFire();
@@ -257,10 +249,17 @@ namespace CombineRPG
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        AttackTarget();
+                        else if(theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Bomb)
+                        {
+                            if (myTarget != null)
+                            {
+                                if(myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
+                                {
+                                    myStat.MP -= theSkillManager.SkillSlots[selectnum].mySkillData.Mana;
+                                    myAnim.SetTrigger("Bomb");
+                                }
+                            }
+                        }
                     }
                 }
                 else if (Physics.Raycast(ray, out hit, 1000.0f, pickMask))
@@ -291,6 +290,48 @@ namespace CombineRPG
             }
         }
 
+        public void BombSkill()
+        {
+            bombSkill = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, myTarget.position, Quaternion.identity);
+            if (bombSkill.name == "IceBomb(Clone)")
+            {
+                myTarget.GetComponent<Monster>().AddDebuff(Debuff.Type.Slow, 0.5f, 1.0f);
+            }
+            else if (bombSkill.name == "ThunderBomb(Clone)")
+            {
+                myTarget.GetComponent<Monster>().AddDebuff(Debuff.Type.Stun, 0.3f, 0.4f);
+            }
+            myTarget.GetComponent<Monster>().OnDamage(myStat.AP);
+        }
+
+        public void ComboAttack()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && !myAnim.GetBool("IsComboAttacking"))
+            {
+                if (!SkillPrepare)
+                {
+                    myAnim.SetTrigger("ComboAttack");
+                }
+            }
+            if (IsCombable)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    ++clickCount;
+                }
+            }
+        }
+
+        public void ComboAttackTarget()
+        {
+            Collider[] list = Physics.OverlapSphere(mySword.myAttackPoint.position, 1f, enemyMask);
+
+            foreach (Collider col in list)
+            {
+                col.GetComponent<IBattle>()?.OnDamage(myStat.AP);
+            }
+        }
+
         public void ComboCheck(bool v)
         {
             if (v)
@@ -312,11 +353,12 @@ namespace CombineRPG
 
         IEnumerator SkillEnd()
         {
-            StartCoroutine(theSkillManager.SkillSlots[selectnum].Coolact);
             theSkillManager.SkillSlots[selectnum].act = StartCoroutine(theSkillManager.SkillSlots[selectnum].Coolact);
+            StartCoroutine(theSkillManager.SkillSlots[selectnum].Coolact);
             myStat.AttackRange = orgRange;
             myStat.AP = orgDamage;
             myAnim.SetBool("Skill", false);
+            Destroy(bombSkill);
             if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
             {
                 NonTargetingRegion.SetActive(false);
@@ -423,17 +465,6 @@ namespace CombineRPG
                 {
                     NonTargetingRegion.SetActive(false);
                 }
-            }
-        }
-
-        public void LookMouseCursor()
-        {
-            Ray ray = myCam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                Vector3 mouseDir = new Vector3(hit.point.x, transform.position.y, hit.point.z) - transform.position;
-                myAnim.transform.forward = mouseDir;
             }
         }
     }

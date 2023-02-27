@@ -75,7 +75,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8839990712103235416}
   m_Layer: 10
-  m_Name: SkillPoint
+  m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,14 +88,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2524256746085381991}
-  m_LocalRotation: {x: 0.7071068, y: 1.1641534e-10, z: 2.619345e-10, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1.4000002, z: -0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.7, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8414799470984261028}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6177555944785026253
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,10 +253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfcb727f8c6fd4445854976b05e0ac1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mySkillPoint: {fileID: 8839990712103235416}
+  myImage: {fileID: 28792387, guid: 0c8391968139e1345b7a7734385763f3, type: 3}
+  myAttackPoint: {fileID: 8839990712103235416}
   SwordName: "\uC911\uAE09\uC790\uC6A9 \uAC80"
-  range: 2
-  AttackSpeed: 2
   damage: 9
 --- !u!33 &4857277455157060097
 MeshFilter:

@@ -5,10 +5,9 @@ using UnityEngine.Events;
 
 public class AnimEvent : MonoBehaviour
 {
+    public UnityEvent Skill = default;
     public UnityEvent Attack = default;
     public UnityEvent<bool> ComboCheck = default;
-    public Transform myTarget;
-    public GameObject SkillEff;
 
     public void OnAttack()
     {
@@ -17,7 +16,7 @@ public class AnimEvent : MonoBehaviour
 
     public void OnSkill()
     {
-        Instantiate(SkillEff, myTarget.position, Quaternion.identity);
+        Skill?.Invoke();
     }
 
     public void ComboCheckStart()

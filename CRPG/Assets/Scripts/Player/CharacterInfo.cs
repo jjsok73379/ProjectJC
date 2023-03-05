@@ -11,5 +11,4 @@ public class CharacterInfo : MonoBehaviour
     public TMP_Text HPText;
     public TMP_Text MPText;
     public TMP_Text APText;
-    public TMP_Text ADText;
 }

@@ -6,18 +6,35 @@ using UnityEngine.UI;
 
 public class LoadManager : Singleton<LoadManager>
 {
+    public static int nextScene;
     public Slider slider;
-    AsyncOperation operation;
+    [SerializeField]
+    GameObject TouchToScreen;
+    [SerializeField]
+    GameObject Loading;
+
+    SaveAndLoad theSaveAndLoad;
 
     // Start is called before the first frame update
     void Start()
     {
+        TouchToScreen.SetActive(false);
+        Loading.SetActive(false);
         StartCoroutine(LoadCoroutine());
+    }
+
+    public static void LoadScene(int index)
+    {
+        nextScene = index;
+        SceneManager.LoadScene("LoadingScene");
     }
 
     IEnumerator LoadCoroutine()
     {
-        operation = SceneManager.LoadSceneAsync("Forest");
+        yield return null;
+
+        AsyncOperation operation;
+        operation = SceneManager.LoadSceneAsync(nextScene);
         operation.allowSceneActivation = false;
 
         float timer = 0.0f;
@@ -28,6 +45,8 @@ public class LoadManager : Singleton<LoadManager>
             timer += Time.deltaTime;
             if (operation.progress < 0.9f)
             {
+                Loading.SetActive(true);
+                TouchToScreen.SetActive(false);
                 slider.value = Mathf.Lerp(operation.progress, 1.0f, timer);
                 if (slider.value >= operation.progress)
                 {
@@ -37,11 +56,20 @@ public class LoadManager : Singleton<LoadManager>
             else
             {
                 slider.value = Mathf.Lerp(slider.value, 1.0f, timer);
-                if (slider.value >= 0.99f)
+                if (slider.value == 1.0f)
                 {
-                    operation.allowSceneActivation = true;
+                    Loading.SetActive(false);
+                    TouchToScreen.SetActive(true);
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        operation.allowSceneActivation = true;
+                    }
                 }
             }
         }
+
+        theSaveAndLoad = FindObjectOfType<SaveAndLoad>();
+        theSaveAndLoad.LoadData();
+        gameObject.SetActive(false);
     }
 }

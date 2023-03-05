@@ -15,7 +15,7 @@ public class CircleSkill : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit))
         {
-            transform.position = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+            transform.position = new Vector3(hit.point.x, transform.position.y + 1, hit.point.z);
         }
     }
 }

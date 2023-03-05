@@ -12,6 +12,7 @@ namespace CombineRPG
 {
     public class RPGPlayer : BattleSystem
     {
+        Coroutine[] act = new Coroutine[3];
         bool SkillPrepare = false;
         bool IsSkillStart = false;
         bool IsCombable = false;
@@ -32,15 +33,14 @@ namespace CombineRPG
         GameObject DeadWindow;
         [SerializeField]
         SkillManager theSkillManager;
-        [SerializeField]
-        Transform mySkillPoint;
+        public Transform mySkillPoint;
         public GameObject NonTargetingRegion;
         public PlayerUI myUI;
         public enum STATE
         {
             Create, Play, Death
         }
-        int Level = 1;
+        public int Level = 1;
         int MaxLevel = 99;
         float remainExp;
         public STATE myState = STATE.Create;
@@ -131,7 +131,6 @@ namespace CombineRPG
             theCharacterInfo.HPText.text = myStat.HP.ToString() + " / " + myStat.maxHp.ToString();
             theCharacterInfo.MPText.text = myStat.MP.ToString() + " / " + myStat.maxMp.ToString();
             theCharacterInfo.APText.text = myStat.AP.ToString();
-            theCharacterInfo.ADText.text = myStat.AttackDelay.ToString();
         }
 
         // Update is called once per frame
@@ -233,6 +232,7 @@ namespace CombineRPG
                         {
                             if (myTarget != null)
                             {
+                                CoolTIme_end(0);
                                 transform.LookAt(myTarget.transform.position);
                                 if (myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
                                 {
@@ -251,6 +251,7 @@ namespace CombineRPG
                         }
                         else if(theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Bomb)
                         {
+                            CoolTIme_end(1);
                             if (myTarget != null)
                             {
                                 if(myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
@@ -268,6 +269,7 @@ namespace CombineRPG
                     {
                         if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
                         {
+                            CoolTIme_end(2);
                             if (myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
                             {
                                 myStat.MP -= theSkillManager.SkillSlots[selectnum].mySkillData.Mana;
@@ -326,9 +328,12 @@ namespace CombineRPG
         {
             Collider[] list = Physics.OverlapSphere(mySword.myAttackPoint.position, 1f, enemyMask);
 
-            foreach (Collider col in list)
+            if (list.Length > 0)
             {
-                col.GetComponent<IBattle>()?.OnDamage(myStat.AP);
+                foreach (Collider col in list)
+                {
+                    col.GetComponent<IBattle>()?.OnDamage(myStat.AP);
+                }
             }
         }
 
@@ -351,10 +356,18 @@ namespace CombineRPG
             }
         }
 
+        public void CoolTIme_end(int i)
+        {
+            if (act[i] != null)
+            {
+                StopCoroutine(act[i]);
+                act[i] = null;
+            }
+            act[i] = theSkillManager.SkillSlots[selectnum].StartCoroutine(theSkillManager.SkillSlots[selectnum].Cooling());
+        }
+
         IEnumerator SkillEnd()
         {
-            theSkillManager.SkillSlots[selectnum].act = StartCoroutine(theSkillManager.SkillSlots[selectnum].Coolact);
-            StartCoroutine(theSkillManager.SkillSlots[selectnum].Coolact);
             myStat.AttackRange = orgRange;
             myStat.AP = orgDamage;
             myAnim.SetBool("Skill", false);
@@ -436,13 +449,13 @@ namespace CombineRPG
             {
                 myStat.EXP = 0;
             }
-            SceneManager.LoadScene("Village");
+            LoadManager.LoadScene(1);
         }
 
         void UseSkill(KeyCode alpha, int num)
         {
             if (theSkillManager.SkillSlots[num].mySkillData == null) return;
-            if (theSkillManager.SkillSlots[num].act != null) return;
+            if (theSkillManager.SkillSlots[num].IsCooling) return;
             if (Input.GetKeyDown(alpha))
             {
                 SkillPrepare = true;

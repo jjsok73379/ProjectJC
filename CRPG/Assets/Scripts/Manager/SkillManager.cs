@@ -4,11 +4,15 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Linq;
-using CombineRPG;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class SkillManager : Singleton<SkillManager>
 {
+    [SerializeField]
+    SkillData[] skillDatas;
+
+    public List<SkillData> GetSkills() { return mySkills; }
+
     public List<SkillData> SkillSlotDatas;
     public SkillSlot[] SkillSlots;
 
@@ -20,15 +24,12 @@ public class SkillManager : Singleton<SkillManager>
 
     public GameObject[] Contents;
 
-    public GameObject SkillMenu;
-
-    public GameObject CombineWindow;
-    public GameObject myCombineMenu;
     public GameObject myCombinedSkill;
+    public GameObject myCombineMenu;
     public GameObject myCombinedSkillText;
 
-    public GameObject ReinforceWindow;
     public MaterialSlot[] theMaterialSlots;
+    public GameObject ReinforceWindow;
     public Image ReinforceImage;
     public Button UpgradeButton;
 
@@ -36,62 +37,24 @@ public class SkillManager : Singleton<SkillManager>
 
     public CombineSkill CombineSkillSlot;
     public CombineMaterial CombineMaterialSlot;
-    public bool SkillOpen = false;
-    public bool CombineOpen = false;
     public bool CombineMenuOpen = false;
     public bool ReinforceOpen = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        SkillMenu.SetActive(false);
-        CombineWindow.SetActive(false);
         myCombineMenu.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (CombineMenuOpen)
         {
-            SkillOpen = !SkillOpen;
-            SkillMenu.SetActive(SkillOpen);
-        }
-        if (SkillOpen)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                SkillOpen = false;
-                SkillMenu.SetActive(false);
-            }
-        }
-        else
-        {
-            ReinforceOpen = false;
-            ReinforceWindow.SetActive(false);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            CombineOpen = !CombineOpen;
-            CombineWindow.SetActive(CombineOpen);
-            if (CombineMenuOpen)
-            {
-                CombineSkillSlot.myText.SetActive(true);
-                CombineMaterialSlot.myText.SetActive(true);
-                myCombineMenu.SetActive(false);
-                CombineMenuOpen = false;
-            }
-        }
-        if (CombineOpen)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CombineOpen = false;
-                CombineWindow.SetActive(false);
-            }
-        }
-        else
-        {
-            myCombinedSkillText.SetActive(true);
+            CombineSkillSlot.myText.SetActive(true);
+            CombineMaterialSlot.myText.SetActive(true);
+            myCombineMenu.SetActive(false);
+            CombineMenuOpen = false;
         }
         SkillSlotDatas[0] = SkillSlots[0].mySkillData;
         SkillSlotDatas[1] = SkillSlots[1].mySkillData;
@@ -99,12 +62,16 @@ public class SkillManager : Singleton<SkillManager>
         SkillSlotDatas[3] = SkillSlots[3].mySkillData;
     }
 
-    public void OpenSkill()
+   public void LoadToSkill(SkillData skilldata)
     {
-        SkillOpen = !SkillOpen;
-        SkillMenu.SetActive(SkillOpen);
+        for (int i = 0; i < mySkills.Count; i++)
+        {
+            if (skillDatas[i] == skilldata)
+            {
+                mySkills.Add(skillDatas[i]);
+            }
+        }
     }
-
 
     public void SelectSkill()
     {
@@ -112,17 +79,10 @@ public class SkillManager : Singleton<SkillManager>
         myCombineMenu.SetActive(CombineMenuOpen);
     }
 
-    public void CloseMenu()
+    public void CloseReinforce()
     {
-        if (CombineOpen)
-        {
-            CombineOpen = false;
-            CombineWindow.SetActive(false);
-        }
-        else
-        {
-            return;
-        }
+        ReinforceOpen = false;
+        ReinforceWindow.SetActive(false);
     }
 
     public void CombineSkill()

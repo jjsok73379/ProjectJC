@@ -83,7 +83,10 @@ public class Monster : BattleSystem
                 GetComponent<CapsuleCollider>().enabled = false;
                 StopAllCoroutines();
                 myAnim.SetTrigger("Dead");
-                Player.GetComponent<RPGPlayer>().DeadMessage(transform);
+                foreach (IBattle ib in myAttackers)
+                {
+                    ib.DeadMessage(transform);
+                }
                 StartCoroutine(DisApearing(2.0f, 2.0f));
                 break;
         }
@@ -197,7 +200,6 @@ public class Monster : BattleSystem
     public void FindTarget(Transform target)
     {
         //if (myState == STATE.Dead) return;
-        Player = target;
         myTarget = target;
         StopAllCoroutines();
         ChangeState(STATE.Battle);
@@ -216,6 +218,7 @@ public class Monster : BattleSystem
     public override void OnDamage(float dmg)
     {
         myStat.HP -= dmg;
+        Debug.Log("À¸¾Ç");
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {
             ChangeState(STATE.Dead);

@@ -6,5 +6,6 @@ public class BasicProjectile : Projectile
 {
     protected override void OnHit()
     {
+        Instantiate(myEff, transform.position, Quaternion.identity);
     }
 }

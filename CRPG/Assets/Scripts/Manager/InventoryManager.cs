@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
-
-    public bool inventoryActivated = false; // 인벤토리 활성화 여부. true가 되면 카메라 움직임과 다른 입력을 막을 것이다.
-
     [SerializeField]
-    GameObject go_Inventory; // Inventory의 이미지
+    Item[] items;
+
+    public InvenSlot[] GetSlots() { return allSlots; }
+
     [SerializeField]
     GameObject go_SlotsParent; // Slot들의 부모인 Grid Setting
     [SerializeField]
@@ -18,9 +17,7 @@ public class InventoryManager : Singleton<InventoryManager>
     [SerializeField]
     Item FirstItem;
     [SerializeField] 
-    Item SecondItem; // 추후 삭제
-    [SerializeField]
-    Item ThirdItem; // 추후 삭제
+    Item SecondItem;
     public int itemMaxCount = 99; // 아이템의 최대 개수
 
     public InvenSlot[] allSlots;
@@ -42,34 +39,24 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         invenSlots = go_SlotsParent.GetComponentsInChildren<InvenSlot>();
         quickSlots = go_QuickSlotParent.GetComponentsInChildren<InvenSlot>();
-        go_Inventory.SetActive(false);
         invenSlots[0].AddItem(FirstItem);
         invenSlots[1].AddItem(SecondItem);
-        invenSlots[2].AddItem(ThirdItem);
     }
 
     // Update is called once per frame
     void Update()
     {
-        TryOpenInventory();
-        for(int i = 0; i < allSlots.Length; i++)
-        {
-            if (!allSlots[i].isQuickSlot)
-            {
-                if (!inventoryActivated)
-                {
-                    theItemEffectDatabase.HideToolTip();
-                }
-            }
-        }
+        
     }
 
-    void TryOpenInventory()
+    public void LoadToSlot(int _arrayNum, string _itemName, int _itemNum)
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        for (int i = 0; i < items.Length; i++)
         {
-            inventoryActivated = !inventoryActivated;
-            go_Inventory.SetActive(inventoryActivated);
+            if (items[i].itemName == _itemName)
+            {
+                allSlots[_arrayNum].AddItem(items[i], _itemNum);
+            }
         }
     }
 

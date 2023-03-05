@@ -5,16 +5,14 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class QuestManager : Singleton<QuestManager>
+public class QuestManager : MonoBehaviour
 {
-    public static bool QuestActivated = false;
+    public static QuestManager Inst;
     public Quest[] quest;
 
     public RPGPlayer theRPGPlayer;
 
     public GameObject QuestPrefab;
-    [SerializeField]
-    GameObject QuestUI;
     [SerializeField]
     GameObject QuestContent;
     [SerializeField]
@@ -27,42 +25,17 @@ public class QuestManager : Singleton<QuestManager>
     public GameObject objQ2;
     public int i = 0;
 
+    private void Awake()
+    {
+        Inst = this;
+    }
+
     private void Start()
     {
         theQuestPost.gameObject.SetActive(false);
         theQuestPost.QuestChk.isOn = false;
         theQuestPost.NoQuest();
-        QuestUI.SetActive(false);
         OpenQuestWindow();
-    }
-
-    private void Update()
-    {
-        TryOpenQuestUI();
-    }
-
-    void TryOpenQuestUI()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            QuestActivated = !QuestActivated;
-
-            if (QuestActivated)
-            {
-                QuestUI.SetActive(true);
-            }
-            else
-            {
-                QuestUI.SetActive(false);
-            }
-        }
-        if(!QuestActivated)
-        {
-            if (objQ2 != null)
-            {
-                objQ2.GetComponent<QuestInfo>().myInfo.SetActive(false);
-            }
-        }
     }
 
     public void OpenQuestWindow()

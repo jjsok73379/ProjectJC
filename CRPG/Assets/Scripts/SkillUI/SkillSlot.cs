@@ -10,8 +10,6 @@ using UnityEngine.UI;
 
 public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
 {
-    public Coroutine act = null;
-    public IEnumerator Coolact = null;
     public Image myImage;
     [SerializeField]
     Image[] skillImages;
@@ -22,11 +20,11 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
     public float orgCool;
     public float mySkillDamage;
     public float mySkillRange;
+    public bool IsCooling = false;
     int Level;
 
     private void Start()
     {
-        Coolact = Cooling();
         for (int i = 0; i < skillImages.Length; i++)
         {
             orgImages[i] = skillImages[i].sprite;
@@ -49,7 +47,6 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
             mySkillData = null;
             myImage.fillAmount = 1;
             orgCool = 0;
-            act = null;
             for (int i = 0; i < skillImages.Length; i++)
             {
                 skillImages[i].sprite = orgImages[i];
@@ -80,8 +77,11 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
 
     public IEnumerator Cooling()
     {
+        Debug.Log("ÄðÅ¸ÀÓ½ÃÀÛ");
         if (mySkillData != null)
         {
+            IsCooling = true;
+            mySkillData.CoolTime = orgCool;
             myImage.fillAmount = 0.0f;
             float speed = 1.0f / mySkillData.CoolTime;
             while (myImage.fillAmount < 1.0f)
@@ -89,11 +89,7 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
                 myImage.fillAmount += speed * Time.deltaTime;
                 yield return null;
             }
-            act = null;
-            if (mySkillData != null)
-            {
-                mySkillData.CoolTime = orgCool;
-            }
+            IsCooling = false;
         }
     }
 }

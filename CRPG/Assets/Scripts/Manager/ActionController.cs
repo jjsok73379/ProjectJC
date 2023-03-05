@@ -30,8 +30,6 @@ public class ActionController : MonoBehaviour
 
     [SerializeField]
     TMP_Text actionText; // 행동을 보여 줄 텍스트
-    [SerializeField]
-    TMP_Text portalText;
     public GameObject Store_NPC_Text;
     public GameObject Recovery_NPC_Text;
     public GameObject Quest_NPC_Text;
@@ -62,6 +60,10 @@ public class ActionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!pickupActivated && !talkActivated && !portalActivated)
+        {
+            actionText.gameObject.SetActive(false);
+        }
         CheckItem();
         TryAction();
         NPC_Communication();
@@ -82,16 +84,13 @@ public class ActionController : MonoBehaviour
             CheckPortal();
             CanUsePortal();
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-        }
     }
 
     void CheckItem()
     {
         if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, ItemMask))
         {
-            if (hitInfo.transform.tag == "Item")
+            if (hitInfo.transform.CompareTag("Item"))
             {
                 ItemInfoAppear();
             }
@@ -106,7 +105,7 @@ public class ActionController : MonoBehaviour
     {
         if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Store_NpcMask))
         {
-            if(hitInfo.transform.tag == "Store")
+            if(hitInfo.transform.CompareTag("Store"))
             {
                 IsStore = true;
                 IsRecovery = false;
@@ -117,7 +116,7 @@ public class ActionController : MonoBehaviour
         }
         else if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Recovery_NpcMask))
         {
-            if(hitInfo.transform.tag == "Recovery")
+            if(hitInfo.transform.CompareTag("Recovery"))
             {
                 IsStore = false;
                 IsRecovery = true;
@@ -129,7 +128,7 @@ public class ActionController : MonoBehaviour
         }
         else if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Quest_NpcMask))
         {
-            if(hitInfo.transform.tag == "Quest")
+            if(hitInfo.transform.CompareTag("Quest"))
             {
                 IsStore = false;
                 IsRecovery = false;
@@ -148,7 +147,7 @@ public class ActionController : MonoBehaviour
     {
         if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, PortalMask))
         {
-            if (hitInfo.transform.tag == "Portal")
+            if (hitInfo.transform.CompareTag("Portal"))
             {
                 FrontPortal();
             }
@@ -162,14 +161,13 @@ public class ActionController : MonoBehaviour
     void FrontPortal()
     {
         portalActivated = true;
-        portalText.gameObject.SetActive(true);
-        portalText.text = "포탈로 이동하려면 (F)키를 누르세요";
+        actionText.gameObject.SetActive(true);
+        actionText.text = "포탈로 이동하려면 (F)키를 누르세요";
     }
 
     void NoPortal()
     {
         portalActivated = false;
-        portalText.gameObject.SetActive(false);
     }
 
     void TalkWithNPC(string npcName)
@@ -182,7 +180,6 @@ public class ActionController : MonoBehaviour
     void NobodyCanTalk() 
     {
         talkActivated = false;
-        actionText.gameObject.SetActive(false);
     }
 
     void ItemInfoAppear()
@@ -195,7 +192,6 @@ public class ActionController : MonoBehaviour
     void ItemInfoDisappear()
     {
         pickupActivated = false;
-        actionText.gameObject.SetActive(false);
     }
 
     void CanPickUp()
@@ -246,7 +242,11 @@ public class ActionController : MonoBehaviour
     {
         if (portalActivated)
         {
-            SceneManager.LoadScene("LoadingScene");
+            LoadManager.LoadScene(2);
+            if (SceneManager.GetActiveScene().name == "Forest")
+            {
+                theRPGPlayer.transform.position = new Vector3(350.0f, 2.0f, 301.0f);
+            }
         }
     }
 

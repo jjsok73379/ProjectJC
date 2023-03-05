@@ -118,7 +118,7 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
     void Update()
     {
         ShowReinforceButton();
-        if (!SkillManager.Inst.SkillOpen)
+        if (!OpenManager.Inst.SkillActivated)
         {
             SkillManager.Inst.ReinforceWindow.SetActive(false);
         }

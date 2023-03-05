@@ -25,6 +25,7 @@ public class Spawner : MonoBehaviour
             Vector3 rot = Vector3.zero;
             rot.y = Random.Range(0.0f, 360.0f);
             GameObject obj = Instantiate(orgMonster, pos[0], Quaternion.Euler(rot));
+            obj.name = orgMonster.name + $"{list.Count}";
             list.Add(obj);
         }
 

@@ -18,8 +18,6 @@ public class ParticleCollisionInstance : MonoBehaviour
     private ParticleSystem part;
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
     private ParticleSystem ps;
-    public Transform myTarget;
-    public float Damage;
 
     [SerializeField]
     LayerMask enemyMask;
@@ -46,10 +44,6 @@ public class ParticleCollisionInstance : MonoBehaviour
                 }
                 Destroy(instance, DestroyTimeDelay);
             }
-        }
-        if (myTarget.gameObject.layer == enemyMask)
-        {
-            myTarget.GetComponent<Monster>().OnDamage(Damage);
         }
     }
 }

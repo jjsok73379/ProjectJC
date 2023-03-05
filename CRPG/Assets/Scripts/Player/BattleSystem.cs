@@ -43,6 +43,7 @@ public class BattleSystem : AIMovement, IBattle
     }
     public void AddAttacker(IBattle ib)
     {
+        if (myAttackers.Contains(ib)) return;
         myAttackers.Add(ib);
     }
     public virtual void DeadMessage(Transform tr)

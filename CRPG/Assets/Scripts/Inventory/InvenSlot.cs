@@ -11,7 +11,9 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     public Item item; // 획득한 아이템
     public int itemCount; // 획득한 아이템의 개수
     public Image itemImage; // 아이템의 이미지
+    public GameObject Equipment_Text; // 장착중인 아이템 표시
     public bool isFullSlot = false;
+    public bool isEquipped = false;
 
     [SerializeField]
     TMP_Text text_Count;
@@ -46,6 +48,10 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     // Update is called once per frame
     void Update()
     {
+        if (Equipment_Text != null)
+        {
+            Equipment_Text.SetActive(isEquipped);
+        }
         if (itemCount == 99)
         {
             isFullSlot = true;
@@ -155,7 +161,7 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
                     {
                         if (theRPGPlayer.mySword != null)
                         {
-                            if (item.itemName == theRPGPlayer.mySword.SwordName)
+                            if (isEquipped)
                             {
                                 StartCoroutine(theActionController.WhenCannotSell());
                             }

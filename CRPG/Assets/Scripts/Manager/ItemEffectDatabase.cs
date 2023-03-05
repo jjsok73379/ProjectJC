@@ -1,9 +1,7 @@
 using CombineRPG;
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 [Serializable]
 public class PotionItemEffect
@@ -60,11 +58,28 @@ public class ItemEffectDatabase : MonoBehaviour
         if (_item.itemType == Item.ItemType.Equipment)
         {
             StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(_item.itemName));
+            for (int i = 0; i < theInventoryManager.allSlots.Length; i++)
+            {
+                if (theInventoryManager.allSlots[i].item != null)
+                {
+                    if (theInventoryManager.allSlots[i].item.itemType == Item.ItemType.Equipment)
+                    {
+                        if (theInventoryManager.allSlots[i].item.itemName == _item.itemName)
+                        {
+                            theInventoryManager.allSlots[i].isEquipped = true;
+                        }
+                        else
+                        {
+                            theInventoryManager.allSlots[i].isEquipped = false;
+                        }
+                    }
+                }
+            }
             theCharacterInfo.SwordImage.sprite = _item.itemImage;
             thePlayer.mySword = _item.itemPrefab.GetComponent<Sword>();
             thePlayer.WeaponStat();
         }
-        if (_item.itemType == Item.ItemType.Potion)
+        else if (_item.itemType == Item.ItemType.Potion)
         {
             for(int i = 0; i < PotionitemEffects.Length; i++)
             {
@@ -124,7 +139,7 @@ public class ItemEffectDatabase : MonoBehaviour
                 }
             }
         }
-        if (_item.itemType == Item.ItemType.SkillBook)
+        else if (_item.itemType == Item.ItemType.SkillBook)
         {
             for(int i = 0; i < SkillBookitemEffects.Length; i++)
             {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,6 +16,10 @@ public class TitleButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (theCharacter.gameObject.IsDestroyed())
+        {
+            return;
+        }
         theCharacter.GetComponent<Animator>().SetBool("Run", false);
     }
 }

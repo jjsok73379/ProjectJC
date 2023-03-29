@@ -7,11 +7,6 @@ public class Coin : MonoBehaviour
 {
     [System.NonSerialized]
     public int money;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void SetCoinValue(int money)
     {

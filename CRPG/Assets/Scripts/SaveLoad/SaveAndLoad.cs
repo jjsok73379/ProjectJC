@@ -28,7 +28,7 @@ public class SaveData
     public List<SkillData> Datas = new List<SkillData>();
 }
 
-public class SaveAndLoad : MonoBehaviour
+public class SaveAndLoad : Singleton<SaveAndLoad>
 {
     public SaveData saveData = new SaveData();
 
@@ -88,6 +88,19 @@ public class SaveAndLoad : MonoBehaviour
             }
         }
 
+        if (saveData.SceneName == "Village")
+        {
+            saveData.SceneNum = 1;
+        }
+        else if (saveData.SceneName == "Forest")
+        {
+            saveData.SceneNum = 2;
+        }
+        else if(saveData.SceneName == "Boss")
+        {
+            saveData.SceneNum = 3;
+        }
+
         // 최종 전체 저장
         string json = JsonUtility.ToJson(saveData); // 제이슨화
 
@@ -106,19 +119,6 @@ public class SaveAndLoad : MonoBehaviour
             theRPGPlayer = FindObjectOfType<RPGPlayer>();
             theInventoryManager = FindObjectOfType<InventoryManager>();
             theSkillManager = FindObjectOfType<SkillManager>();
-
-            if (saveData.SceneName == "Title")
-            {
-                saveData.SceneNum = 0;
-            }
-            else if (saveData.SceneName == "Village")
-            {
-                saveData.SceneNum = 1;
-            }
-            else if (saveData.SceneName == "Forest")
-            {
-                saveData.SceneNum = 2;
-            }
 
             // 플레이어 정보 로드
             theRPGPlayer.transform.position = saveData.playerPos;
@@ -145,12 +145,6 @@ public class SaveAndLoad : MonoBehaviour
         {
             Debug.Log("세이브 파일이 없습니다.");
         }
-    }
-
-    public void GoTitle()
-    {
-        Time.timeScale = 1;
-        LoadManager.LoadScene(0);
     }
 
     public void QuitGame()

@@ -13,6 +13,7 @@ TagManager:
   - Quest
   - Portal
   - Enemy
+  - BossZone
   layers:
   - Default
   - TransparentFX
@@ -32,7 +33,7 @@ TagManager:
   - Quest
   - Portal
   - Button
-  - 
+  - BossZone
   - 
   - 
   - 

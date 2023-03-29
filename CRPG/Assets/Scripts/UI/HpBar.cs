@@ -8,9 +8,10 @@ public class HpBar : MonoBehaviour
     public Transform myTarget;
     public Slider myBar;
     // Start is called before the first frame update
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

@@ -5,7 +5,8 @@ using UnityEngine;
 public abstract class Projectile : Skill
 {
     public Monster myTarget;
-    public GameObject myEff;
+    [SerializeField]
+    protected GameObject myEff;
     protected override IEnumerator SkillTarget()
     {
         Vector3 pos = Vector3.zero;

@@ -29,9 +29,4 @@ public class NPC_Quest : NPC
                 break;
         }
     }
-
-    public override void AcceptBtn()
-    {
-        ChangeState(STATE.Accept);
-    }
 }

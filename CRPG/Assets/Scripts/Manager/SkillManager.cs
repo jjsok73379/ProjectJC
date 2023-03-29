@@ -5,16 +5,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Data;
 
-public class SkillManager : Singleton<SkillManager>
+public class SkillManager : MonoBehaviour
 {
+    public static SkillManager Inst;
+
     [SerializeField]
     SkillData[] skillDatas;
 
     public List<SkillData> GetSkills() { return mySkills; }
 
-    public List<SkillData> SkillSlotDatas;
-    public SkillSlot[] SkillSlots;
+    public GameObject AddedskillPanel;
 
     public SkillData mySkill;
     public List<SkillData> mySkills = new List<SkillData>();
@@ -40,10 +42,27 @@ public class SkillManager : Singleton<SkillManager>
     public bool CombineMenuOpen = false;
     public bool ReinforceOpen = false;
 
+    private void Awake()
+    {
+        Inst = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        myCombineMenu.SetActive(false);
+        if (myCombineMenu != null)
+        {
+            myCombineMenu.SetActive(false);
+        }
+        if (DataManager.Inst.skills.Count > 0 && mySkills.Count == 0)
+        {
+            for(int i = 0; i < DataManager.Inst.skills.Count;)
+            {
+                mySkill = DataManager.Inst.skills[i];
+                AddSkill();
+                i++;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -56,10 +75,6 @@ public class SkillManager : Singleton<SkillManager>
             myCombineMenu.SetActive(false);
             CombineMenuOpen = false;
         }
-        SkillSlotDatas[0] = SkillSlots[0].mySkillData;
-        SkillSlotDatas[1] = SkillSlots[1].mySkillData;
-        SkillSlotDatas[2] = SkillSlots[2].mySkillData;
-        SkillSlotDatas[3] = SkillSlots[3].mySkillData;
     }
 
    public void LoadToSkill(SkillData skilldata)
@@ -107,12 +122,16 @@ public class SkillManager : Singleton<SkillManager>
     {
         for(int i = 0; i < Contents.Length; i++)
         {
-            GameObject AddedskillPanel = Instantiate(SkillPrefab, Contents[i].transform);
+            AddedskillPanel = Instantiate(SkillPrefab, Contents[i].transform);
             SkillM Addedskill = AddedskillPanel.GetComponentInChildren<SkillM>();
             Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
             Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
             Addedskill.GetComponent<SkillM>().myStat.orgData = mySkill;
         }
         mySkills.Add(mySkill);
+        if(!DataManager.Inst.skills.Contains(mySkill))
+        {
+            DataManager.Inst.skills.Add(mySkill);
+        }
     }
 }

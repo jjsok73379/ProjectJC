@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Sword : MonoBehaviour
 {
     public Sprite myImage;
-    public Transform myAttackPoint;
     public string SwordName; // 검의 이름
 
     public int damage; // 검의 공격력

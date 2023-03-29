@@ -19,6 +19,11 @@ public class Title : MonoBehaviour
         LoadManager.LoadScene(saveData.SceneNum);
     }
 
+    public void ClickSetting()
+    {
+        OpenManager.Inst.TryOpenSoundWindow();
+    }
+
     public void ClickExit()
     {
         Application.Quit();

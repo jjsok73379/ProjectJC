@@ -25,7 +25,7 @@ public class Monster : BattleSystem
     [SerializeField]
     int MaxMoney; 
     [SerializeField]
-    GameObject SwordPrefab;
+    GameObject[] SwordPrefab;
     [SerializeField]
     GameObject HP_PotionPrefab;
     [SerializeField]
@@ -34,12 +34,21 @@ public class Monster : BattleSystem
     GameObject BookPrefab;
     [SerializeField]
     GameObject myMinimapIcon;
+    public AudioSource myAttackSound;
+    [SerializeField]
+    bool IsBoss = false;
+    [SerializeField]
+    BossDragon theBossDragon;
+    [SerializeField]
+    GameObject SkillEff;
     public int GiveExp;
     public Transform myHeadTop;
-    Transform Player;
     HpBar myUI = null;
+    float orgMoveSpeed;
     float SlowMoveSpeed = 0.5f;
     float StunMoveSpeed = 0.0f;
+    [SerializeField]
+    float orgRadius;
     Color orgColor = Color.white;
 
     public GameObject AIPer = null;
@@ -51,6 +60,7 @@ public class Monster : BattleSystem
     }
     Vector3 startPos = Vector3.zero;
     Vector3[] DropPos = new Vector3[4];
+
     public enum STATE
     {
         Create, Idle, Roaming, Battle, Dead
@@ -76,7 +86,14 @@ public class Monster : BattleSystem
                 MoveToPosition(pos,() => ChangeState(STATE.Idle));
                 break;
             case STATE.Battle:
-                AttackTarget(myTarget);
+                if (!IsBoss)
+                {
+                    AttackTarget(myTarget, myAttackSound);
+                }
+                else
+                {
+                    theBossDragon.StartCoroutine(theBossDragon.Think());
+                }
                 break;
             case STATE.Dead:
                 AIPer.SetActive(false);
@@ -123,7 +140,9 @@ public class Monster : BattleSystem
         myUI = obj.GetComponent<HpBar>();
         myUI.myTarget = myHeadTop;
         myStat.changeHp = (float v) => myUI.myBar.value = v;
+        orgRadius = AIPer.GetComponent<SphereCollider>().radius;
 
+        orgMoveSpeed = myStat.MoveSpeed;
         orgColor = GetComponentInChildren<Renderer>().material.color;
 
         startPos = transform.position;
@@ -141,6 +160,10 @@ public class Monster : BattleSystem
     void Update()
     {
         StateProcess();
+        if (myState != STATE.Battle && myState != STATE.Dead)
+        {
+            StartCoroutine(RecoveryHP());
+        }
         for(int i = 0; i < debuffList.Count;)
         {
             Debuff temp = debuffList[i];
@@ -161,7 +184,30 @@ public class Monster : BattleSystem
             }
             debuffList[i] = temp;
             ++i;
+            if (debuffList.Count != 0)
+            {
+                if (debuffList[i].type == Debuff.Type.Stun)
+                {
+                    myStat.MoveSpeed *= StunMoveSpeed;
+                }
+                else if (debuffList[i].type == Debuff.Type.Slow)
+                {
+                    myStat.MoveSpeed *= SlowMoveSpeed;
+                }
+                else
+                {
+                    myStat.MoveSpeed = orgMoveSpeed;
+                }
+            }
         }
+    }
+
+    public void SkillAttackTarget()
+    {
+        GameObject skill = Instantiate(SkillEff, AttackPoint.position, Quaternion.identity);
+        skill.GetComponent<DemonProjectile>().SkillDamage = myStat.AP;
+        skill.GetComponent<DemonProjectile>().myTarget = myTarget;
+        skill.GetComponent<DemonProjectile>().OnFire();
     }
 
     public void AddDebuff(Debuff.Type type, float value, float keep)
@@ -223,7 +269,7 @@ public class Monster : BattleSystem
         {
             ChangeState(STATE.Dead);
             ObjectManager.Inst.DropCoinToPosition(transform.position, rewardMoney);
-            DropItem(new Vector3(transform.position.x + DropPos[1].x, 2.5f, transform.position.z + DropPos[1].z), 0, 22, SwordPrefab);
+            DropItem(new Vector3(transform.position.x + DropPos[1].x, 2.5f, transform.position.z + DropPos[1].z), 0, 22, SwordPrefab[UnityEngine.Random.Range(0,SwordPrefab.Length)]);
             DropItem(new Vector3(transform.position.x + DropPos[2].x, 2.5f, transform.position.z + DropPos[2].z), 15, 90, HP_PotionPrefab);
             DropItem(new Vector3(transform.position.x + DropPos[3].x, 2.5f, transform.position.z + DropPos[3].z), 15, 90, MP_PotionPrefab);
             DropItem(new Vector3(transform.position.x + DropPos[0].x, 2.0f, transform.position.z + DropPos[0].z), 0, 25, BookPrefab);
@@ -239,7 +285,7 @@ public class Monster : BattleSystem
     {
         AIPer.GetComponent<SphereCollider>().radius *= 3;
         yield return new WaitForSeconds(t);
-        AIPer.GetComponent<SphereCollider>().radius = 7;
+        AIPer.GetComponent<SphereCollider>().radius = orgRadius;
     }
 
     IEnumerator DamagingColor(Color color, float t)
@@ -247,6 +293,21 @@ public class Monster : BattleSystem
         GetComponentInChildren<Renderer>().material.color = color;
         yield return new WaitForSeconds(t);
         GetComponentInChildren<Renderer>().material.color = orgColor;
+    }
+
+    IEnumerator RecoveryHP()
+    {
+        yield return new WaitForSeconds(2.0f);
+        while(myStat.HP >= myStat.maxHp)
+        {
+            yield return null;
+            myStat.HP += 0.5f * Time.deltaTime;
+            if(myStat.HP > myStat.maxHp)
+            {
+                myStat.HP = myStat.maxHp;
+            }
+        }
+        yield return null;
     }
 
     void DropItem(Vector3 pos, int ranmin, int ranmax, GameObject itemprefab)
@@ -274,7 +335,10 @@ public class Monster : BattleSystem
     IEnumerator DisApearing(float d, float t)
     {
         yield return new WaitForSeconds(t);
-        Destroy(myUI.gameObject);
+        if(myUI != null)
+        {
+            Destroy(myUI.gameObject);
+        }
         Destroy(myMinimapIcon);
         float dist = d;
         while (dist > 0.0f)

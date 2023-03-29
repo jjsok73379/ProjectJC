@@ -1,3 +1,4 @@
+using CombineRPG;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ public class QuestGoal
             if (monster == Target)
             {
                 currentAmount++;
-                QuestManager.Inst.theQuestPost.QuestCount.text = "( " + QuestManager.Inst.theRPGPlayer.quest.goal.currentAmount.ToString() + " / " + QuestManager.Inst.theRPGPlayer.quest.goal.requiredAmount.ToString() + " )";
+                ActionController.Inst.GetComponent<RPGPlayer>().theQuestPost.QuestCount.text = "( " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.currentAmount.ToString() + " / " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.requiredAmount.ToString() + " )";
             }
         }
     }
@@ -44,7 +45,7 @@ public class QuestGoal
             if(item == Target)
             {
                 currentAmount++;
-                QuestManager.Inst.theQuestPost.QuestCount.text = "( " + QuestManager.Inst.theRPGPlayer.quest.goal.currentAmount.ToString() + " / " + QuestManager.Inst.theRPGPlayer.quest.goal.requiredAmount.ToString() + " )";
+                ActionController.Inst.GetComponent<RPGPlayer>().theQuestPost.QuestCount.text = "( " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.currentAmount.ToString() + " / " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.requiredAmount.ToString() + " )";
             }
         }
     }
@@ -53,7 +54,7 @@ public class QuestGoal
     {
         if (goalType == GoalType.Etc)
         {
-            QuestManager.Inst.theQuestPost.QuestChk.isOn = true;
+            ActionController.Inst.GetComponent<RPGPlayer>().theQuestPost.QuestChk.isOn = true;
             donechk = true;
         }
     }

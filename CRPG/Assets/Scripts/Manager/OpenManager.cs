@@ -1,20 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
-public class OpenManager : Singleton<OpenManager>
+public class OpenManager : MonoBehaviour
 {
+    public static OpenManager Inst;
+
     public static bool inventoryActivated = false; // 인벤토리 활성화 여부. true가 되면 카메라 움직임과 다른 입력을 막을 것이다.
     public static bool CharacterInfoActivated = false;
     public static bool CombineActivated = false;
     public static bool QuestActivated = false;
     public static bool MenuActivated = false;
     public static bool SettingActivated = false;
-    public static bool SaveLoadActivated = false;
+    public static bool SoundActivated = false;
     public bool SkillActivated = false;
 
     [SerializeField]
     GameObject CharacterInfo;
+    [SerializeField]
+    BossZone theBossZone;
+    [SerializeField]
+    PlayableDirector thePlayableDirector;
+    [SerializeField]
+    BossDragon theBossDragon;
 
     public GameObject CombineWindow;
     public GameObject SkillMenu;
@@ -22,191 +32,181 @@ public class OpenManager : Singleton<OpenManager>
     public GameObject go_Inventory;
     public GameObject go_Menu;
     public GameObject go_Setting;
+    public GameObject go_Sound;
 
-    bool isActivating = false;
+    bool IsActive = false;
+
+    private void Awake()
+    {
+        Inst = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        CharacterInfo.SetActive(false);
-        SkillMenu.SetActive(false);
-        CombineWindow.SetActive(false);
-        go_Quest.SetActive(false);
-        go_Inventory.SetActive(false);
-        go_Menu.SetActive(false);
-        go_Setting.SetActive(false);
+        if(SceneManager.GetActiveScene().name != "Title")
+        {
+            CharacterInfo.SetActive(false);
+            SkillMenu.SetActive(false);
+            CombineWindow.SetActive(false);
+            go_Quest.SetActive(false);
+            go_Inventory.SetActive(false);
+            go_Menu.SetActive(false);
+            go_Setting.SetActive(false);
+        }
+        go_Sound.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        TryOpenInventory();
-        TryOpenCharacterInfo();
-        TryOpenSkill();
-        TryOpenCombine();
-        TryOpenQuestUI();
-        TryOpenSettingMenu();
-    }
-
-    public void OpenMenu()
-    {
-        MenuActivated = !MenuActivated;
-        go_Menu.SetActive(MenuActivated);
-    }
-
-    public void TryOpenInventory()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (!inventoryActivated && !CharacterInfoActivated && !CombineActivated && !MenuActivated && !SkillActivated)
         {
-            inventoryActivated = !inventoryActivated;
-            go_Inventory.SetActive(inventoryActivated);
-        }
-
-        if (inventoryActivated)
-        {
-            isActivating = true;
-            if (Input.GetKeyDown(KeyCode.Escape))
+            IsActive = false;
+            if (QuestManager.Inst != null)
             {
-                inventoryActivated = false;
-                go_Inventory.SetActive(false);
+                if (QuestActivated)
+                {
+                    IsActive = true;
+                }
+                else
+                {
+                    IsActive = false;
+                }
             }
         }
-        else 
+        else
         {
-            for (int i = 0; i < InventoryManager.Inst.allSlots.Length; i++)
+            IsActive = true;
+        }
+        if(go_Inventory != null)
+        {
+            if (Input.GetKeyDown(KeyCode.I))
             {
-                if (!InventoryManager.Inst.allSlots[i].isQuickSlot)
+                SoundManager.Inst.OpenWindowSound.Play();
+                TryOpenInventory();
+            }
+            if (inventoryActivated)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    if (!inventoryActivated)
+                    SoundManager.Inst.OpenWindowSound.Play();
+                    inventoryActivated = false;
+                    go_Inventory.SetActive(false);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < InventoryManager.Inst.allSlots.Length; i++)
+                {
+                    if (!InventoryManager.Inst.allSlots[i].isQuickSlot)
                     {
-                        ItemEffectDatabase.Inst.HideToolTip();
+                        if (!inventoryActivated)
+                        {
+                            ItemEffectDatabase.Inst.HideToolTip();
+                        }
                     }
                 }
             }
         }
-        if (!go_Inventory.activeSelf)
-        {
-            isActivating = false;
-        }
-    }
 
-
-    public void TryOpenCharacterInfo()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
+        if(CharacterInfo != null)
         {
-            CharacterInfoActivated = !CharacterInfoActivated;
-            CharacterInfo.SetActive(CharacterInfoActivated);
-        }
-        if (CharacterInfoActivated)
-        {
-            isActivating = true;
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                CharacterInfoActivated = false;
-                CharacterInfo.SetActive(false);
+                SoundManager.Inst.OpenWindowSound.Play();
+                TryOpenCharacterInfo();
+            }
+            if (CharacterInfoActivated)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    SoundManager.Inst.OpenWindowSound.Play();
+                    CharacterInfoActivated = false;
+                    CharacterInfo.SetActive(false);
+                }
             }
         }
-        if (!CharacterInfo.activeSelf)
-        {
-            isActivating = false;
-        }
-    }
 
-    public void TryOpenSkill()
-    {
-
-        if (Input.GetKeyDown(KeyCode.K))
+        if(SkillMenu != null)
         {
-            SkillActivated = !SkillActivated;
-            SkillMenu.SetActive(SkillActivated);
-        }
-
-        if (SkillActivated)
-        {
-            isActivating = true;
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.K))
             {
-                SkillActivated = false;
-                SkillMenu.SetActive(false);
+                SoundManager.Inst.OpenWindowSound.Play();
+                TryOpenSkill();
+            }
+            if (SkillActivated)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    SoundManager.Inst.OpenWindowSound.Play();
+                    SkillActivated = false;
+                    SkillMenu.SetActive(false);
+                }
+            }
+            else
+            {
+                SkillManager.Inst.ReinforceOpen = false;
+                SkillManager.Inst.ReinforceWindow.SetActive(false);
             }
         }
-        else
-        { 
-            SkillManager.Inst.ReinforceOpen = false;
-            SkillManager.Inst.ReinforceWindow.SetActive(false);
-        }
-        if (!SkillMenu.activeSelf)
-        {
-            isActivating = false;
-        }
-    }
-    
-    public void TryOpenCombine()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            CombineActivated = !CombineActivated;
-            CombineWindow.SetActive(CombineActivated);
-        }
 
-        if (CombineActivated)
+        if(CombineWindow != null)
         {
-            isActivating = true;
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.C))
             {
-                CombineActivated = false;
-                CombineWindow.SetActive(false);
+                SoundManager.Inst.OpenWindowSound.Play();
+                TryOpenCombine();
+            }
+            if (CombineActivated)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    SoundManager.Inst.OpenWindowSound.Play();
+                    CombineActivated = false;
+                    CombineWindow.SetActive(false);
+                }
+            }
+            else
+            {
+                SkillManager.Inst.myCombinedSkillText.SetActive(true);
             }
         }
-        else
-        {
-            SkillManager.Inst.myCombinedSkillText.SetActive(true);
-        }
-        if(!CombineWindow.activeSelf)
-        {
-            isActivating = false;
-        }
-    }
 
-    public void TryOpenQuestUI()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if(go_Quest != null)
         {
-            QuestActivated = !QuestActivated;
-            go_Quest.SetActive(QuestActivated);
-        }
-
-        if (QuestActivated)
-        {
-            isActivating = true;
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                QuestActivated = false;
-                go_Quest.SetActive(false);
+                SoundManager.Inst.OpenWindowSound.Play();
+                TryOpenQuestUI();
+            }
+            if (QuestActivated)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    SoundManager.Inst.OpenWindowSound.Play();
+                    QuestActivated = false;
+                    go_Quest.SetActive(false);
+                }
+            }
+            else
+            {
+                if (QuestManager.Inst.objQ2 != null)
+                {
+                    QuestManager.Inst.objQ2.GetComponent<QuestInfo>().myInfo.SetActive(false);
+                }
             }
         }
-        else
-        {
-            if (QuestManager.Inst.objQ2 != null)
-            {
-                QuestManager.Inst.objQ2.GetComponent<QuestInfo>().myInfo.SetActive(false);
-            }
-        }
-        if(!go_Quest.activeSelf)
-        {
-            isActivating = false;
-        }
-    }
 
-    public  void TryOpenSettingMenu()
-    {
-        if (!isActivating)
+        if(go_Setting != null)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (!IsActive)
             {
-                SettingActivated = !SettingActivated;
-                go_Setting.SetActive(SettingActivated);
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    SoundManager.Inst.OpenWindowSound.Play();
+                    TryOpenSettingMenu();
+                }
             }
             if (SettingActivated)
             {
@@ -217,5 +217,69 @@ public class OpenManager : Singleton<OpenManager>
                 Time.timeScale = 1;
             }
         }
+
+        if (theBossZone != null && thePlayableDirector != null && theBossDragon != null)
+        {
+            if (theBossZone.IsEnter)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    thePlayableDirector.Stop();
+                    theBossDragon.gameObject.transform.position = new Vector3(34.8f, 2.1f, 75.3f);
+                    theBossDragon.myHPSlider.gameObject.SetActive(true);
+                    theBossZone.IsEnter = false;
+                    theBossDragon.StartCoroutine(theBossDragon.Think());
+                }
+            }
+        }
+    }
+
+    public void OpenMenu()
+    {
+        MenuActivated = !MenuActivated;
+        go_Menu.SetActive(MenuActivated);
+    }
+
+    public void TryOpenInventory()
+    {
+        inventoryActivated = !inventoryActivated;
+        go_Inventory.SetActive(inventoryActivated);
+    }
+
+
+    public void TryOpenCharacterInfo()
+    {
+        CharacterInfoActivated = !CharacterInfoActivated;
+        CharacterInfo.SetActive(CharacterInfoActivated);
+    }
+
+    public void TryOpenSkill()
+    {
+        SkillActivated = !SkillActivated;
+        SkillMenu.SetActive(SkillActivated);
+    }
+
+    public void TryOpenCombine()
+    {
+        CombineActivated = !CombineActivated;
+        CombineWindow.SetActive(CombineActivated);
+    }
+
+    public void TryOpenQuestUI()
+    {
+        QuestActivated = !QuestActivated;
+        go_Quest.SetActive(QuestActivated);
+    }
+
+    public void TryOpenSettingMenu()
+    {
+        SettingActivated = !SettingActivated;
+        go_Setting.SetActive(SettingActivated);
+    }
+
+    public void TryOpenSoundWindow()
+    {
+        SoundActivated = !SoundActivated;
+        go_Sound.SetActive(SoundActivated);
     }
 }

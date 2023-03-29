@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoadManager : Singleton<LoadManager>
+public class LoadManager : MonoBehaviour
 {
+    public static LoadManager Inst;
     public static int nextScene;
     public Slider slider;
     [SerializeField]
@@ -14,6 +15,11 @@ public class LoadManager : Singleton<LoadManager>
     GameObject Loading;
 
     SaveAndLoad theSaveAndLoad;
+
+    private void Awake()
+    {
+        Inst = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -56,8 +62,9 @@ public class LoadManager : Singleton<LoadManager>
             else
             {
                 slider.value = Mathf.Lerp(slider.value, 1.0f, timer);
-                if (slider.value == 1.0f)
+                if (slider.value >= 0.99f)
                 {
+                    CursorManager.Inst.SetActiveCursorType(CursorManager.CursorType.Arrow);
                     Loading.SetActive(false);
                     TouchToScreen.SetActive(true);
                     if (Input.GetMouseButtonDown(0))

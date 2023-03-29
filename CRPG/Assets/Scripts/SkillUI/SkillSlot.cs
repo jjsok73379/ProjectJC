@@ -13,8 +13,6 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
     public Image myImage;
     [SerializeField]
     Image[] skillImages;
-    [SerializeField]
-    SkillManager theSkillManager;
     Sprite[] orgImages = new Sprite[2];
     public SkillData mySkillData;
     public float orgCool;
@@ -37,6 +35,12 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
         {
             mySkillDamage = mySkillData.SkillDamage(Level);
             mySkillRange = mySkillData.GetAttackRange();
+            for (int i = 0; i < skillImages.Length; i++)
+            {
+                orgCool = mySkillData.CoolTime;
+                skillImages[i].sprite = mySkillData.myImage;
+                //자식들 이미지에 mySkillData의 이미지를 넣음
+            }
         }
     }
 
@@ -44,6 +48,7 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
+            DataManager.Inst.SkillSlotDatas.Remove(mySkillData);
             mySkillData = null;
             myImage.fillAmount = 1;
             orgCool = 0;
@@ -56,21 +61,24 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        Transform DropPos = eventData.pointerDrag.transform;
+        if (!DropPos.GetComponent<SkillM>()) return;
         Level = eventData.pointerDrag.GetComponent<SkillM>().myStat.Level;
         GameObject icon = eventData.pointerDrag.GetComponent<SkillM>().selectedSkill;
         SkillData Data = icon.GetComponent<SelectedSkill>().myData;
-        if (SkillManager.Inst.SkillSlotDatas.Contains(Data)) return;
+        if (DataManager.Inst.SkillSlotDatas.Contains(Data)) return;
+        else
+        {
+            DataManager.Inst.SkillSlotDatas.Add(Data);
+        }
         mySkillData = Data;
         for (int i = 0; i < skillImages.Length; i++)
         {
             if (mySkillData != null)
             {
-                for (int j = 0; j < SkillManager.Inst.SkillSlots.Length; j++)
-                {
-                    orgCool = mySkillData.CoolTime;
-                    skillImages[i].sprite = mySkillData.myImage;
-                    //자식들 이미지에 mySkillData의 이미지를 넣음
-                }
+                orgCool = mySkillData.CoolTime;
+                skillImages[i].sprite = mySkillData.myImage;
+                //자식들 이미지에 mySkillData의 이미지를 넣음
             }
         }
     }

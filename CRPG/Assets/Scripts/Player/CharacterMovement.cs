@@ -1,3 +1,4 @@
+using CombineRPG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,10 +10,10 @@ public class CharacterMovement : CharacterProperty
     Coroutine moveCo = null;
     Coroutine rotCo = null;
     Coroutine comboattackCo = null;
-    protected void AttackTarget(Transform target)
+    protected void AttackTarget(Transform target, AudioSource audio)
     {
         StopAllCoroutines();
-        comboattackCo = StartCoroutine(AttckingTarget(target, myStat.AttackRange, myStat.AttackDelay));
+        comboattackCo = StartCoroutine(AttckingTarget(target, myStat.AttackRange, myStat.AttackDelay, audio));
     }
 
     protected void MoveToPosition(Vector3 pos, UnityAction done = null, bool Rot = true)
@@ -89,7 +90,7 @@ public class CharacterMovement : CharacterProperty
         done?.Invoke();
     }
 
-    IEnumerator AttckingTarget(Transform target, float AttackRange, float AttackDelay)
+    IEnumerator AttckingTarget(Transform target, float AttackRange, float AttackDelay, AudioSource audio)
     {
         float playTime = 0.0f;
         float delta = 0.0f;
@@ -117,6 +118,7 @@ public class CharacterMovement : CharacterProperty
                 {
                     //АјАн
                     playTime = 0.0f;
+                    audio.Play();
                     myAnim.SetTrigger("Attack");
                 }
             }

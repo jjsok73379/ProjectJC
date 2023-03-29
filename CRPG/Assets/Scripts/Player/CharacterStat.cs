@@ -62,6 +62,7 @@ public struct CharacterStat
     public float MoveSpeed
     {
         get => moveSpeed;
+        set => moveSpeed = value;
     }
     public float RotSpeed
     {

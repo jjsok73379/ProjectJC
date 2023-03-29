@@ -29,15 +29,9 @@ public class ItemEffectDatabase : MonoBehaviour
     [SerializeField]
     RPGPlayer thePlayer;
     [SerializeField]
-    WeaponManager theWeaponManager;
-    [SerializeField]
-    SkillManager theSkillManager;
-    [SerializeField]
     SlotToolTip theSlotToolTip;
     [SerializeField]
     QuickSlotController theQuickSlotController;
-    [SerializeField]
-    InventoryManager theInventoryManager;
     [SerializeField]
     StoreToolTip theStoreToolTip;
     [SerializeField]
@@ -50,27 +44,29 @@ public class ItemEffectDatabase : MonoBehaviour
 
     public void SellItem(Item _item)
     {
+        SoundManager.Inst.SellSound.Play();
         GameManager.Inst.Goldvalue += _item.SellPrice;
     }
 
     public void UseItem(Item _item)
     {
+        SoundManager.Inst.UseItemSound.Play();
         if (_item.itemType == Item.ItemType.Equipment)
         {
-            StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(_item.itemName));
-            for (int i = 0; i < theInventoryManager.allSlots.Length; i++)
+            WeaponManager.Inst.WeaponChange(_item.itemName);
+            for (int i = 0; i < InventoryManager.Inst.allSlots.Length; i++)
             {
-                if (theInventoryManager.allSlots[i].item != null)
+                if (InventoryManager.Inst.allSlots[i].item != null)
                 {
-                    if (theInventoryManager.allSlots[i].item.itemType == Item.ItemType.Equipment)
+                    if (InventoryManager.Inst.allSlots[i].item.itemType == Item.ItemType.Equipment)
                     {
-                        if (theInventoryManager.allSlots[i].item.itemName == _item.itemName)
+                        if (InventoryManager.Inst.allSlots[i].item.itemName == _item.itemName)
                         {
-                            theInventoryManager.allSlots[i].isEquipped = true;
+                            InventoryManager.Inst.allSlots[i].isEquipped = true;
                         }
                         else
                         {
-                            theInventoryManager.allSlots[i].isEquipped = false;
+                            InventoryManager.Inst.allSlots[i].isEquipped = false;
                         }
                     }
                 }
@@ -148,31 +144,31 @@ public class ItemEffectDatabase : MonoBehaviour
                     switch (SkillBookitemEffects[i].itemName)
                     {
                         case "½ºÅ³ºÏ : ±âº» ±¸":
-                            theSkillManager.mySkill = SkillBookitemEffects[0].Eff;
+                            SkillManager.Inst.mySkill = SkillBookitemEffects[0].Eff;
                             break;
                         case "½ºÅ³ºÏ : ±âº» Æø¹ß":
-                            theSkillManager.mySkill = SkillBookitemEffects[1].Eff;
+                            SkillManager.Inst.mySkill = SkillBookitemEffects[1].Eff;
                             break;
                         case "½ºÅ³ºÏ : ±âº» ºñ":
-                            theSkillManager.mySkill = SkillBookitemEffects[2].Eff;
+                            SkillManager.Inst.mySkill = SkillBookitemEffects[2].Eff;
                             break;
                         case "½ºÅ³ºÏ : È­¿°":
-                            theSkillManager.mySkill = SkillBookitemEffects[3].Eff;
+                            SkillManager.Inst.mySkill = SkillBookitemEffects[3].Eff;
                             break;
                         case "½ºÅ³ºÏ : ¾óÀ½":
-                            theSkillManager.mySkill = SkillBookitemEffects[4].Eff;
+                            SkillManager.Inst.mySkill = SkillBookitemEffects[4].Eff;
                             break;
                         case "½ºÅ³ºÏ : ¹ø°³":
-                            theSkillManager.mySkill = SkillBookitemEffects[5].Eff;
+                            SkillManager.Inst.mySkill = SkillBookitemEffects[5].Eff;
                             break;
                     }
-                    if (theSkillManager.mySkills.Contains(theSkillManager.mySkill))
+                    if (SkillManager.Inst.mySkills.Contains(SkillManager.Inst.mySkill))
                     {
                         return;
                     }
                     else
                     {
-                        theSkillManager.AddSkill();
+                        SkillManager.Inst.AddSkill();
                     }
                 }
             }
@@ -213,11 +209,11 @@ public class ItemEffectDatabase : MonoBehaviour
 
     public bool GetIsFull()
     {
-        return theInventoryManager.GetIsFull();
+        return InventoryManager.Inst.GetIsFull();
     }
 
     public void SetIsFull(bool _flag)
     {
-        theInventoryManager.SetIsFull(_flag);
+        InventoryManager.Inst.SetIsFull(_flag);
     }
 }

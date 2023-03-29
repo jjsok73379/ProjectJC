@@ -17,9 +17,4 @@ public class PickupItem : MonoBehaviour
             item = GetComponent<PickupRandomItem>().RandomItem[Random.Range(0, GetComponent<PickupRandomItem>().RandomItem.Length)];
         }
     }
-
-    private void Update()
-    {
-        
-    }
 }

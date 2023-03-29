@@ -254,7 +254,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myImage: {fileID: 1958696248, guid: 0c8391968139e1345b7a7734385763f3, type: 3}
-  myAttackPoint: {fileID: 8748987454684853617}
   SwordName: "\uAE30\uBCF8\uAC80"
   damage: 5
 --- !u!33 &8727270537955701942

@@ -1,4 +1,5 @@
 using CombineRPG;
+using Mono.Cecil.Cil;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -35,12 +36,6 @@ public class QuestInfo : MonoBehaviour
         ForgiveBtn.onClick.AddListener(QuestManager.Inst.ForgiveQuest);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void BeforeAccept()
     {
         AcceptBtn.gameObject.SetActive(true);
@@ -58,33 +53,46 @@ public class QuestInfo : MonoBehaviour
         RefuseBtn.gameObject.SetActive(false);
         CompleteBtn.gameObject.SetActive(true);
         ForgiveBtn.gameObject.SetActive(true); 
-        QuestManager.Inst.QuestionMark.SetActive(false);
-        QuestManager.Inst.UnfinishQuestionMark.SetActive(true);
-        QuestManager.Inst.ExclamationMark.SetActive(false);
+        if(QuestManager.Inst != null)
+        {
+            QuestManager.Inst.QuestionMark.SetActive(false);
+            QuestManager.Inst.UnfinishQuestionMark.SetActive(true);
+            QuestManager.Inst.ExclamationMark.SetActive(false);
+        }
     }
 
     public void OpenInfo()
     {
+        SoundManager.Inst.ButtonSound.Play();
         myInfo.SetActive(true);
     }
 
     public void ClickRefuse()
     {
+        SoundManager.Inst.ButtonSound.Play();
         myInfo.SetActive(false);
     }
 
     public void CompleteQuest()
     {
-        if (theRPGPlayer.quest != null)
+        if (theRPGPlayer.quest.isActive)
         {
             if (theRPGPlayer.quest.goal.IsReached() || theRPGPlayer.quest.goal.IsDone())
             {
+                SoundManager.Inst.CompleteQuestSound.Play();
                 theRPGPlayer.myStat.EXP += theRPGPlayer.quest.experienceReward;
                 GameManager.Inst.Goldvalue += theRPGPlayer.quest.goldReward;
-                Destroy(QuestManager.Inst.objQ);
-                Destroy(QuestManager.Inst.objQ2);
-                QuestManager.Inst.theQuestPost.gameObject.SetActive(false);
-                QuestManager.Inst.theQuestPost.NoQuest();
+                if(QuestManager.Inst != null)
+                {
+                    Destroy(QuestManager.Inst.objQ);
+                    Destroy(QuestManager.Inst.objQ2);
+                }
+                else
+                {
+                    Destroy(theRPGPlayer.questobj);
+                }
+                theRPGPlayer.theQuestPost.gameObject.SetActive(false);
+                theRPGPlayer.theQuestPost.NoQuest();
                 theRPGPlayer.quest.Complete();
                 theRPGPlayer.quest = null;
             }
@@ -97,6 +105,7 @@ public class QuestInfo : MonoBehaviour
 
     public void CloseBtn()
     {
+        SoundManager.Inst.ButtonSound.Play();
         myInfo.SetActive(false);
     }
 }

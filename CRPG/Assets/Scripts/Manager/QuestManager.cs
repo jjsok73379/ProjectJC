@@ -20,7 +20,6 @@ public class QuestManager : MonoBehaviour
     public GameObject QuestionMark;
     public GameObject UnfinishQuestionMark;
     public GameObject ExclamationMark;
-    public QuestPost theQuestPost;
     public GameObject objQ;
     public GameObject objQ2;
     public int i = 0;
@@ -32,9 +31,17 @@ public class QuestManager : MonoBehaviour
 
     private void Start()
     {
-        theQuestPost.gameObject.SetActive(false);
-        theQuestPost.QuestChk.isOn = false;
-        theQuestPost.NoQuest();
+        if (DataManager.Inst.IsFinishQuest)
+        {
+            QuestionMark.SetActive(true);
+            UnfinishQuestionMark.SetActive(false);
+            ExclamationMark.SetActive(false);
+            DataManager.Inst.IsFinishQuest = false;
+        }
+        i = theRPGPlayer.i;
+        theRPGPlayer.theQuestPost.gameObject.SetActive(false);
+        theRPGPlayer.theQuestPost.QuestChk.isOn = false;
+        theRPGPlayer.theQuestPost.NoQuest();
         OpenQuestWindow();
     }
 
@@ -65,8 +72,8 @@ public class QuestManager : MonoBehaviour
         objQ2.GetComponent<QuestInfo>().descriptionText.text = quest[i].description;
         objQ2.GetComponent<QuestInfo>().EXP_text.text = quest[i].experienceReward.ToString();
         objQ2.GetComponent<QuestInfo>().goldText.text = quest[i].goldReward.ToString();
-        theQuestPost.gameObject.SetActive(true);
-        theQuestPost.HaveQuest();
+        theRPGPlayer.theQuestPost.gameObject.SetActive(true);
+        theRPGPlayer.theQuestPost.HaveQuest();
         objQ2.GetComponent<QuestInfo>().AfterAccept();
         objQ.GetComponent<QuestInfo>().AfterAccept();
     }

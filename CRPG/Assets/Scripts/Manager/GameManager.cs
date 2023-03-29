@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : MonoBehaviour
 {
+    public static GameManager Inst;
+
     public Transform HpBars;
     public int Goldvalue;
     int MaxGold;
@@ -27,8 +28,14 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    private void Awake()
+    {
+        Inst = this;
+    }
+
     private void Start()
     {
+        Scene scene = SceneManager.GetActiveScene();
         MaxGold = 999999999;
     }
 
@@ -36,11 +43,17 @@ public class GameManager : Singleton<GameManager>
     {
         if (Goldvalue == 0)
         {
-            ZeroGold.text = Goldvalue.ToString();
+            if(ZeroGold != null)
+            {
+                ZeroGold.text = Goldvalue.ToString();
+            }
         }
         else
         {
-            GoldComma.text = GetThousandCommaText(Goldvalue).ToString();
+            if(GoldComma != null)
+            {
+                GoldComma.text = GetThousandCommaText(Goldvalue).ToString();
+            }
         }
     }
 

@@ -6,6 +6,7 @@ public class IceRain : NonTargetSkill
 {
     protected override void OnHit()
     {
+        SoundManager.Inst.IceRainSound.Play();
         Collider[] myEnemys = Physics.OverlapSphere(new Vector3(transform.position.x, transform.position.y - disy, transform.position.z), 8f);
         foreach (Collider col in myEnemys)
         {

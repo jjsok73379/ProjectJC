@@ -85,25 +85,14 @@ public class QuickSlotController : MonoBehaviour
     private void UseSlot(int _num)
     {
         selectedSlot = _num;
-        Execute();
         EatItem();
     }
 
-    private void Execute()
-    {
-        CoolTimeReset();
-
-        if (quickSlots[selectedSlot].item != null)
-        {
-            if (quickSlots[selectedSlot].item.itemType == Item.ItemType.Equipment)
-                StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(quickSlots[selectedSlot].item.itemName));
-        }
-    }
     public void IsActivatedQuickSlot(int _num)
     {
         if (selectedSlot == _num)
         {
-            Execute();
+            EatItem();
             return;
         }
         if (DragSlot.Inst != null)
@@ -112,12 +101,13 @@ public class QuickSlotController : MonoBehaviour
             {
                 if (DragSlot.Inst.dragSlot.GetQuickSlotNumber() == selectedSlot)
                 {
-                    Execute();
+                    EatItem();
                     return;
                 }
             }
         }
     }
+
     public void EatItem()
     {
         CoolTimeReset();

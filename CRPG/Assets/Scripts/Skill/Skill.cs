@@ -7,15 +7,8 @@ using UnityEngine;
 public abstract class Skill : MonoBehaviour
 {
     [SerializeField]
-    protected RPGPlayer theRPGPlayer;
-    [SerializeField]
     protected LayerMask enemyMask;
     public float SkillDamage;
-
-    private void Start()
-    {
-        theRPGPlayer = ActionController.Inst.GetComponent<RPGPlayer>();
-    }
 
     public void OnFire()
     {

@@ -21,21 +21,30 @@ namespace CombineRPG
         ActionController theActionController;
         GameObject bombSkill;
         [SerializeField]
-        Camera myCam;
-        [SerializeField]
         GameObject Holder;
+        public QuestPost theQuestPost;
         public Sword mySword;
         [SerializeField]
         CharacterInfo theCharacterInfo;
         [SerializeField]
         ParticleSystem LevelUpEff;
         [SerializeField]
+        ParticleSystem ReviveEff;
+        [SerializeField]
+        Transform AttackPoint;
+        [SerializeField]
         GameObject DeadWindow;
         [SerializeField]
-        SkillManager theSkillManager;
+        GameObject mousePoint;
+        [SerializeField]
+        SkillSlot[] SkillSlots = new SkillSlot[4];
+        Coroutine mouseClick = null;
         public Transform mySkillPoint;
         public GameObject NonTargetingRegion;
         public PlayerUI myUI;
+        public GameObject questobj;
+        public int i = 0;
+        
         public enum STATE
         {
             Create, Play, Death
@@ -47,7 +56,6 @@ namespace CombineRPG
         public LayerMask pickMask = default;
         public LayerMask enemyMask = default;
         public Quest quest;
-        public float orgRange;
         public float orgDamage;
         Coroutine SkillChk;
 
@@ -60,9 +68,30 @@ namespace CombineRPG
                 case STATE.Create:
                     break;
                 case STATE.Play:
+                    for(int i = 0; i < DataManager.Inst.SkillSlotDatas.Count;)
+                    {
+                        if (DataManager.Inst.SkillSlotDatas.Count > 0 && SkillSlots[i].mySkillData == null)
+                        {
+                            SkillSlots[i].mySkillData = DataManager.Inst.SkillSlotDatas[i];
+                        }
+                        i++;
+                    }
+                    if (quest.isActive)
+                    {
+                        questobj = Instantiate(Resources.Load("Prefabs/Quest/QuestContent"), OpenManager.Inst.go_Quest.transform.GetChild(1)) as GameObject;
+                        questobj.GetComponent<QuestInfo>().descriptionText.text = quest.description;
+                        questobj.GetComponent<QuestInfo>().EXP_text.text = quest.experienceReward.ToString();
+                        questobj.GetComponent<QuestInfo>().goldText.text = quest.goldReward.ToString();
+                        questobj.GetComponent<QuestInfo>().AfterAccept();
+                        if (!theQuestPost.gameObject.activeSelf)
+                        {
+                            theQuestPost.gameObject.SetActive(true);
+                            theQuestPost.HaveQuest();
+                        }
+                    }
                     NonTargetingRegion.SetActive(false);
                     DeadWindow.SetActive(false);
-                    orgRange = myStat.AttackRange;
+                    mousePoint.SetActive(false);
                     orgDamage = myStat.AP;
                     myStat.changeHp = (float v) => myUI.myHpBar.value = v;
                     myStat.changeMp = (float v) => myUI.myMpBar.value = v;
@@ -99,16 +128,30 @@ namespace CombineRPG
                     {
                         StartCoroutine(SkillEnd());
                     }
-                    if (quest.isActive)
+                    if (SkillPrepare)
                     {
-                        if (quest.goal.IsReached() || quest.goal.IsDone())
+                        CursorManager.Inst.SetActiveCursorType(CursorManager.CursorType.Magic);
+                    }
+                    else
+                    {
+                        CursorManager.Inst.SetActiveCursorType(CursorManager.CursorType.Arrow);
+                    }
+                    if (QuestManager.Inst != null)
+                    {
+                        if (quest.isActive)
                         {
-                            QuestManager.Inst.QuestionMark.SetActive(true);
-                            QuestManager.Inst.UnfinishQuestionMark.SetActive(false);
-                            QuestManager.Inst.ExclamationMark.SetActive(false);
+                            if (quest.goal.IsReached() || quest.goal.IsDone())
+                            {
+                                QuestManager.Inst.QuestionMark.SetActive(true);
+                                QuestManager.Inst.UnfinishQuestionMark.SetActive(false);
+                                QuestManager.Inst.ExclamationMark.SetActive(false);
+                            }
                         }
                     }
-                    else return;
+                    else
+                    {
+                        DataManager.Inst.IsFinishQuest = true;
+                    }
                     break;
                 case STATE.Death:
                     break;
@@ -136,7 +179,21 @@ namespace CombineRPG
         // Update is called once per frame
         void Update()
         {
-            StateProcess(); 
+            StateProcess();
+        }
+
+        IEnumerator mousepointer(Vector3 pos)
+        {
+            SoundManager.Inst.MoveClickSound.Play();
+            float i = 0.0f;
+            mousePoint.SetActive(true);
+            mousePoint.transform.position = pos;
+            while (i < 1.0f)
+            {
+                i += 0.1f;
+                yield return new WaitForSeconds(0.1f);
+                mousePoint.SetActive(false);
+            }
         }
 
         public void WeaponStat()
@@ -162,8 +219,9 @@ namespace CombineRPG
                 }
                 else
                 {
+                    SoundManager.Inst.LVUpSound.Play();
                     Level++;
-                    LevelUpEff.Play(true);
+                    LevelUpEff.Play();
                     remainExp = myStat.EXP - myStat.maxExp;
                     myStat.maxHp += 100;
                     myStat.maxMp += 100;
@@ -228,17 +286,17 @@ namespace CombineRPG
                     myTarget = hit.transform;
                     if (SkillPrepare)
                     {
-                        if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Ball)
+                        if (SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Ball)
                         {
                             if (myTarget != null)
                             {
                                 CoolTIme_end(0);
                                 transform.LookAt(myTarget.transform.position);
-                                if (myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
+                                if (myStat.MP >= SkillSlots[selectnum].mySkillData.Mana)
                                 {
-                                    myStat.MP -= theSkillManager.SkillSlots[selectnum].mySkillData.Mana;
+                                    myStat.MP -= SkillSlots[selectnum].mySkillData.Mana;
                                     myAnim.SetTrigger("Ball");
-                                    GameObject Projectile = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, mySkillPoint.position, mySkillPoint.rotation);
+                                    GameObject Projectile = Instantiate(SkillSlots[selectnum].mySkillData.mySkill, mySkillPoint.position, mySkillPoint.rotation);
                                     Projectile.GetComponent<Projectile>().myTarget = myTarget.GetComponent<Monster>();
                                     Projectile.GetComponent<Skill>().SkillDamage = myStat.AP;
                                     Projectile.GetComponent<Skill>().OnFire();
@@ -249,14 +307,14 @@ namespace CombineRPG
                                 }
                             }
                         }
-                        else if(theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Bomb)
+                        else if(SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.Bomb)
                         {
                             CoolTIme_end(1);
                             if (myTarget != null)
                             {
-                                if(myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
+                                if(myStat.MP >= SkillSlots[selectnum].mySkillData.Mana)
                                 {
-                                    myStat.MP -= theSkillManager.SkillSlots[selectnum].mySkillData.Mana;
+                                    myStat.MP -= SkillSlots[selectnum].mySkillData.Mana;
                                     myAnim.SetTrigger("Bomb");
                                 }
                             }
@@ -267,14 +325,14 @@ namespace CombineRPG
                 {
                     if (SkillPrepare)
                     {
-                        if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
+                        if (SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
                         {
                             CoolTIme_end(2);
-                            if (myStat.MP >= theSkillManager.SkillSlots[selectnum].mySkillData.Mana)
+                            if (myStat.MP >= SkillSlots[selectnum].mySkillData.Mana)
                             {
-                                myStat.MP -= theSkillManager.SkillSlots[selectnum].mySkillData.Mana;
+                                myStat.MP -= SkillSlots[selectnum].mySkillData.Mana;
                                 myAnim.SetTrigger("NonTargetingSkill");
-                                GameObject NonTargeting = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, NonTargetingRegion.transform.position, Quaternion.Euler(-270, 0, 0));
+                                GameObject NonTargeting = Instantiate(SkillSlots[selectnum].mySkillData.mySkill, NonTargetingRegion.transform.position, Quaternion.Euler(-270, 0, 0));
                                 NonTargeting.GetComponent<Skill>().SkillDamage = myStat.AP;
                                 NonTargeting.GetComponent<Skill>().OnFire();
                             }
@@ -286,6 +344,12 @@ namespace CombineRPG
                     }
                     else
                     {
+                        if (mouseClick != null)
+                        {
+                            StopCoroutine(mouseClick);
+                            mouseClick = null;
+                        }
+                        mouseClick = StartCoroutine(mousepointer(hit.point));
                         MoveToPositionByNav(hit.point);
                     }
                 }
@@ -294,14 +358,20 @@ namespace CombineRPG
 
         public void BombSkill()
         {
-            bombSkill = Instantiate(theSkillManager.SkillSlots[selectnum].mySkillData.mySkill, myTarget.position, Quaternion.identity);
+            bombSkill = Instantiate(SkillSlots[selectnum].mySkillData.mySkill, myTarget.position, Quaternion.identity);
             if (bombSkill.name == "IceBomb(Clone)")
             {
+                SoundManager.Inst.IceSkillSound.Play();
                 myTarget.GetComponent<Monster>().AddDebuff(Debuff.Type.Slow, 0.5f, 1.0f);
             }
             else if (bombSkill.name == "ThunderBomb(Clone)")
             {
+                SoundManager.Inst.ThunderSkillSound.Play();
                 myTarget.GetComponent<Monster>().AddDebuff(Debuff.Type.Stun, 0.3f, 0.4f);
+            }
+            else
+            {
+                SoundManager.Inst.BasicSkillSound.Play();
             }
             myTarget.GetComponent<Monster>().OnDamage(myStat.AP);
         }
@@ -312,6 +382,7 @@ namespace CombineRPG
             {
                 if (!SkillPrepare)
                 {
+                    SoundManager.Inst.SwordAttackSound.Play();
                     myAnim.SetTrigger("ComboAttack");
                 }
             }
@@ -326,7 +397,7 @@ namespace CombineRPG
 
         public void ComboAttackTarget()
         {
-            Collider[] list = Physics.OverlapSphere(mySword.myAttackPoint.position, 1f, enemyMask);
+            Collider[] list = Physics.OverlapSphere(AttackPoint.position, 1f, enemyMask);
 
             if (list.Length > 0)
             {
@@ -363,16 +434,15 @@ namespace CombineRPG
                 StopCoroutine(act[i]);
                 act[i] = null;
             }
-            act[i] = theSkillManager.SkillSlots[selectnum].StartCoroutine(theSkillManager.SkillSlots[selectnum].Cooling());
+            act[i] = SkillSlots[selectnum].StartCoroutine(SkillSlots[selectnum].Cooling());
         }
 
         IEnumerator SkillEnd()
         {
-            myStat.AttackRange = orgRange;
             myStat.AP = orgDamage;
             myAnim.SetBool("Skill", false);
             Destroy(bombSkill);
-            if (theSkillManager.SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
+            if (SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
             {
                 NonTargetingRegion.SetActive(false);
             }
@@ -420,9 +490,10 @@ namespace CombineRPG
             {
                 GameManager.Inst.Goldvalue -= 2000;
                 myAnim.SetTrigger("Revive");
-                ChangeState(STATE.Play);
+                ReviveEff.Play();
                 myStat.HP = myStat.maxHp;
                 myStat.MP = myStat.maxMp;
+                ChangeState(STATE.Play);
             }
             else
             {
@@ -432,36 +503,36 @@ namespace CombineRPG
 
         public void GoVillage()
         {
-            myStat.HP = 1;
-            myStat.MP = 1;
-            if (myStat.EXP != 0)
+            DataManager.Inst.theRPGPlayer.myStat.HP = 1;
+            DataManager.Inst.theRPGPlayer.myStat.MP = 1;
+            if (DataManager.Inst.theRPGPlayer.myStat.EXP != 0)
             {
-                if (myStat.EXP < 20)
+                if (DataManager.Inst.theRPGPlayer.myStat.EXP < 20)
                 {
-                    myStat.EXP = 0;
+                    DataManager.Inst.theRPGPlayer.myStat.EXP = 0;
                 }
                 else
                 {
-                    myStat.EXP -= 20;
+                    DataManager.Inst.theRPGPlayer.myStat.EXP -= 20;
                 }
             }
             else
             {
-                myStat.EXP = 0;
+                DataManager.Inst.theRPGPlayer.myStat.EXP = 0;
             }
             LoadManager.LoadScene(1);
         }
 
         void UseSkill(KeyCode alpha, int num)
         {
-            if (theSkillManager.SkillSlots[num].mySkillData == null) return;
-            if (theSkillManager.SkillSlots[num].IsCooling) return;
+            if (SkillSlots[num].mySkillData == null) return;
+            if (SkillSlots[num].IsCooling) return;
             if (Input.GetKeyDown(alpha))
             {
                 SkillPrepare = true;
-                myStat.AttackRange = theSkillManager.SkillSlots[num].mySkillRange;
-                myStat.AP = theSkillManager.SkillSlots[num].mySkillDamage + myStat.AP;
-                if (theSkillManager.SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
+                myStat.AttackRange = SkillSlots[num].mySkillRange;
+                myStat.AP = SkillSlots[num].mySkillDamage + myStat.AP;
+                if (SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
                 {
                     NonTargetingRegion.SetActive(true);
                 }
@@ -471,10 +542,9 @@ namespace CombineRPG
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
                 SkillPrepare = false;
-                myStat.AttackRange = orgRange;
                 myStat.AP = orgDamage;
                 myAnim.SetBool("Skill", false);
-                if (theSkillManager.SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
+                if (SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
                 {
                     NonTargetingRegion.SetActive(false);
                 }

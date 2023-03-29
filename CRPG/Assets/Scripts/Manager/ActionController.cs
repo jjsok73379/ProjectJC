@@ -1,6 +1,5 @@
 using CombineRPG;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +7,10 @@ using UnityEngine.SceneManagement;
 public class ActionController : MonoBehaviour
 {
     public static ActionController Inst;
+
+    [SerializeField]
+    GameObject SceneStart;
+
     [SerializeField]
     float range; // 아이템 습득이 가능한 최대 거리
 
@@ -17,6 +20,7 @@ public class ActionController : MonoBehaviour
     bool pickupActivated = false; // 아이템 습득 가능할시 True
     bool talkActivated = false;
     bool portalActivated = false;
+    bool cautionActivated = false;
 
     RaycastHit hitInfo; // 충돌체 정보 저장
 
@@ -24,20 +28,21 @@ public class ActionController : MonoBehaviour
     LayerMask ItemMask; // 특정 레이어를 가진 오브젝트에 대해서만 습득할 수 있어야 한다.
     [SerializeField]
     LayerMask PortalMask;
+    [SerializeField]
+    LayerMask BossZoneMask;
     public LayerMask Store_NpcMask;
     public LayerMask Recovery_NpcMask;
     public LayerMask Quest_NpcMask;
 
     [SerializeField]
     TMP_Text actionText; // 행동을 보여 줄 텍스트
+    public GameObject BossText;
     public GameObject Store_NPC_Text;
     public GameObject Recovery_NPC_Text;
     public GameObject Quest_NPC_Text;
 
     string NPC_Name;
 
-    //string Recovery_NPC_Typing = "많이 다치셨네요. 치료를 받으로 오셨나요?";
-    //string UnRecovery_NPC_Typing = "다치신 곳이 없어요. 치료를 받을 수 없습니다.";
     public TMP_Text itemText; // 아이템이 꽉 찼다는 경고 메세지를 보여줄 텍스트
 
     InventoryManager theInventory;
@@ -51,16 +56,33 @@ public class ActionController : MonoBehaviour
     private void Start()
     {
         theRPGPlayer = GetComponent<RPGPlayer>();
-        theInventory = InventoryManager.Inst;
-        Store_NPC_Text.SetActive(false);
-        Recovery_NPC_Text.SetActive(false);
-        Quest_NPC_Text.SetActive(false);
+        theInventory = InventoryManager.Inst; 
+        if (SceneStart != null)
+        {
+            StartCoroutine(SceneStartCo());
+        }
+        if (Store_NPC_Text != null)
+        {
+            Store_NPC_Text.SetActive(false);
+        }
+        if(Recovery_NPC_Text != null)
+        {
+            Recovery_NPC_Text.SetActive(false);
+        }
+        if(Quest_NPC_Text != null)
+        {
+            Quest_NPC_Text.SetActive(false);
+        }
+        if(BossText != null )
+        {
+            BossText.SetActive(false);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!pickupActivated && !talkActivated && !portalActivated)
+        if (!pickupActivated && !talkActivated && !portalActivated && !cautionActivated)
         {
             actionText.gameObject.SetActive(false);
         }
@@ -68,6 +90,7 @@ public class ActionController : MonoBehaviour
         TryAction();
         NPC_Communication();
         CheckPortal();
+        CheckBossZone();
     }
 
     void TryAction()
@@ -79,10 +102,28 @@ public class ActionController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
+            SoundManager.Inst.ButtonSound.Play();
             NPC_Communication();
             CanTalk();
             CheckPortal();
             CanUsePortal();
+            CheckBossZone();
+            CanEnterBossZone();
+        }
+    }
+
+    void CheckBossZone()
+    {
+        if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, BossZoneMask))
+        {
+            if (hitInfo.transform.CompareTag("BossZone") && !BossText.activeSelf)
+            {
+                BossZoneAppear();
+            }
+        }
+        else
+        {
+            BossZoneDisappear();
         }
     }
 
@@ -194,6 +235,18 @@ public class ActionController : MonoBehaviour
         pickupActivated = false;
     }
 
+    void BossZoneAppear()
+    {
+        cautionActivated = true;
+        actionText.gameObject.SetActive(true);
+        actionText.text = "보스존에 입장하시려면 (F)키를 누르세요.";
+    }
+
+    void BossZoneDisappear()
+    {
+        cautionActivated = false;
+    }
+
     void CanPickUp()
     {
         if (pickupActivated)
@@ -208,6 +261,18 @@ public class ActionController : MonoBehaviour
                 }
                 Destroy(hitInfo.transform.gameObject);
                 ItemInfoDisappear();
+            }
+        }
+    }
+
+    void CanEnterBossZone()
+    {
+        if (cautionActivated)
+        {
+            if (hitInfo.transform != null)
+            {
+                BossText.SetActive(true);
+                BossZoneDisappear();
             }
         }
     }
@@ -242,16 +307,75 @@ public class ActionController : MonoBehaviour
     {
         if (portalActivated)
         {
-            LoadManager.LoadScene(2);
-            if (SceneManager.GetActiveScene().name == "Forest")
+            DataManager.Inst.MaxHP = theRPGPlayer.myStat.maxHp;
+            DataManager.Inst.HP = theRPGPlayer.myStat.HP;
+            DataManager.Inst.MaxMP = theRPGPlayer.myStat.maxMp;
+            DataManager.Inst.MP = theRPGPlayer.myStat.MP;
+            DataManager.Inst.MaxEXP = theRPGPlayer.myStat.maxExp;
+            DataManager.Inst.EXP = theRPGPlayer.myStat.EXP;
+            DataManager.Inst.LV = theRPGPlayer.Level;
+            DataManager.Inst.AP = theRPGPlayer.myStat.AP;
+            DataManager.Inst.sword = theRPGPlayer.mySword;
+            DataManager.Inst.quest = theRPGPlayer.quest;
+            DataManager.Inst.Gold = GameManager.Inst.Goldvalue;
+            DataManager.Inst.items.Clear();
+            DataManager.Inst.itemsCount.Clear();
+            for (int i = 0; i < InventoryManager.Inst.allSlots.Length; i++)
             {
-                theRPGPlayer.transform.position = new Vector3(350.0f, 2.0f, 301.0f);
+                DataManager.Inst.items.Add(InventoryManager.Inst.allSlots[i].item);
+                DataManager.Inst.itemsCount.Add(InventoryManager.Inst.allSlots[i].itemCount);
+                InventoryManager.Inst.allSlots[i].item = null;
+                InventoryManager.Inst.allSlots[i].itemCount = 0;
+            }
+
+            Destroy(SkillManager.Inst.AddedskillPanel);
+
+            if(QuestManager.Inst != null)
+            {
+                Destroy(QuestManager.Inst.objQ2);
+                DataManager.Inst.questi = QuestManager.Inst.i;
+            }
+            else
+            {
+                Destroy(theRPGPlayer.questobj);
+                DataManager.Inst.questi = theRPGPlayer.i;
+            }
+
+            if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, PortalMask))
+            {
+                if (hitInfo.transform.name == "ForestPortal")
+                {
+                    LoadManager.LoadScene(2);
+                }
+                else if (hitInfo.transform.name == "VillagePortal")
+                {
+                    LoadManager.LoadScene(1);
+                }
+                else if (hitInfo.transform.name == "BosePortal")
+                {
+                    LoadManager.LoadScene(3);
+                }
             }
         }
     }
 
+    public void GoTitle()
+    {
+        LoadManager.LoadScene(0);
+    }
+
+    IEnumerator SceneStartCo()
+    {
+        SceneStart.SetActive(true);
+        SceneStart.GetComponentInChildren<TMP_Text>().text = SceneManager.GetActiveScene().name;
+
+        yield return new WaitForSeconds(1.0f);
+        SceneStart.SetActive(false);
+    }
+
     public IEnumerator WhenIventoryIsFull()
     {
+        SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "아이템이 꽉 찼습니다.";
 
@@ -261,6 +385,7 @@ public class ActionController : MonoBehaviour
 
     public IEnumerator WhenNoItem()
     {
+        SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "사용할 수 있는 아이템이 없습니다.";
 
@@ -270,6 +395,7 @@ public class ActionController : MonoBehaviour
 
     public IEnumerator WhenCannotSell()
     {
+        SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "해당 아이템을 장착하고 있어서\n판매할 수 없습니다.";
 
@@ -279,6 +405,7 @@ public class ActionController : MonoBehaviour
 
     public IEnumerator WhenNotCompleted()
     {
+        SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "퀘스트 조건을\n충족시키지 못하였습니다.";
 
@@ -288,6 +415,7 @@ public class ActionController : MonoBehaviour
 
     public IEnumerator WhenLessCount()
     {
+        SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "아이템 수량이 부족합니다.";
 
@@ -297,6 +425,7 @@ public class ActionController : MonoBehaviour
 
     public IEnumerator WhenDontHave()
     {
+        SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "아이템을 가지고 있지 않습니다.";
 
@@ -306,14 +435,17 @@ public class ActionController : MonoBehaviour
 
     public IEnumerator WhenNoMoney()
     {
+        SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "돈이 부족합니다.";
 
         yield return new WaitForSeconds(1.0f);
         itemText.gameObject.SetActive(false);
     }
+
     public IEnumerator WhenNoMana()
     {
+        SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "마나가 부족합니다.";
 

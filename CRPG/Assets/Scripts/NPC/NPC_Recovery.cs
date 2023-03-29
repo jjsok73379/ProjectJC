@@ -46,11 +46,6 @@ public class NPC_Recovery : NPC
         }
     }
 
-    public override void AcceptBtn()
-    {
-        ChangeState(STATE.Accept);
-    }
-
     public void RecoveryBtn()
     {
         GameManager.Inst.Goldvalue -= RecoveryPrice;

@@ -6,6 +6,7 @@ public class IceProjectile : Projectile
 {
     protected override void OnHit()
     {
+        SoundManager.Inst.IceSkillSound.Play();
         Instantiate(myEff, transform.position, Quaternion.identity);
         myTarget.AddDebuff(Debuff.Type.Slow, 0.5f, 2.0f);
     }

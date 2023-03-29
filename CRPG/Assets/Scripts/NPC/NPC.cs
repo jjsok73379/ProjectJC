@@ -31,22 +31,12 @@ public class NPC : MonoBehaviour
     }
     [SerializeField]
     protected TMP_Text Communication;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     protected IEnumerator Typing(string Typing)
     {
         for (int i = 0; i <= Typing.Length; ++i)
         {
+            SoundManager.Inst.TypingSound.Play();
             Communication.text = Typing.Substring(0, i);
             yield return new WaitForSecondsRealtime(0.1f);
         }
@@ -54,7 +44,7 @@ public class NPC : MonoBehaviour
 
     public virtual void AcceptBtn()
     {
-
+        ChangeState(STATE.Accept);
     }
 
     public void RefuseBtn()

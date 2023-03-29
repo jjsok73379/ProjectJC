@@ -9,7 +9,10 @@ public class SwordController : MonoBehaviour
 
     private void Start()
     {
-        WeaponManager.currentWeapon = currentSword.GetComponent<Transform>();
+        if (currentSword != null)
+        {
+            WeaponManager.currentWeapon = currentSword.GetComponent<Transform>();
+        }
     }
 
     public void SwordChange(Sword _sword)

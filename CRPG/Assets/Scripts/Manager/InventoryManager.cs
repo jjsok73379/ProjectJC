@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-public class InventoryManager : Singleton<InventoryManager>
+public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager Inst;
+
     [SerializeField]
     Item[] items;
 
@@ -14,15 +17,11 @@ public class InventoryManager : Singleton<InventoryManager>
     [SerializeField]
     GameObject go_QuickSlotParent;
 
-    [SerializeField]
-    Item FirstItem;
-    [SerializeField] 
-    Item SecondItem;
     public int itemMaxCount = 99; // 아이템의 최대 개수
 
     public InvenSlot[] allSlots;
-    InvenSlot[] invenSlots;
-    InvenSlot[] quickSlots;
+    public InvenSlot[] invenSlots;
+    public InvenSlot[] quickSlots;
     bool isNotPut;
     int tempcount;
     int sumcount;
@@ -34,19 +33,35 @@ public class InventoryManager : Singleton<InventoryManager>
     [SerializeField]
     ItemEffectDatabase theItemEffectDatabase;
 
+    private void Awake()
+    {
+        Inst = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         invenSlots = go_SlotsParent.GetComponentsInChildren<InvenSlot>();
         quickSlots = go_QuickSlotParent.GetComponentsInChildren<InvenSlot>();
-        invenSlots[0].AddItem(FirstItem);
-        invenSlots[1].AddItem(SecondItem);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        for (int i = 0; i < DataManager.Inst.items.Count;)
+        {
+            if (DataManager.Inst.items[i] != null && allSlots[i].item == null)
+            {
+                allSlots[i].AddItem(DataManager.Inst.items[i]);
+                if (DataManager.Inst.items[i].itemType == Item.ItemType.Equipment)
+                {
+                    if (DataManager.Inst.items[i].itemName == DataManager.Inst.sword.SwordName)
+                    {
+                        allSlots[i].isEquipped = true;
+                    }
+                }
+                else
+                {
+                    allSlots[i].SetSlotCount(DataManager.Inst.itemsCount[i]);
+                }
+            }
+            i++;
+        }
     }
 
     public void LoadToSlot(int _arrayNum, string _itemName, int _itemNum)

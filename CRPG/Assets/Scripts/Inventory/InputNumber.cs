@@ -26,9 +26,6 @@ public class InputNumber : MonoBehaviour
     [SerializeField]
     GameObject go_Base;
 
-    [SerializeField]
-    ActionController thePlayer;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +55,7 @@ public class InputNumber : MonoBehaviour
 
     public void Cancel()
     {
+        SoundManager.Inst.ButtonSound.Play();
         activated = false;
         DragSlot.Inst.SetColor(0);
         go_Base.SetActive(false);
@@ -66,6 +64,7 @@ public class InputNumber : MonoBehaviour
 
     public void OK()
     {
+        SoundManager.Inst.ButtonSound.Play();
         int num;
         if (text_Input.text != "")
         {
@@ -99,7 +98,7 @@ public class InputNumber : MonoBehaviour
             {
                 DropItemData = DragSlot.Inst.dragSlot.item;
                 Instantiate(DragSlot.Inst.dragSlot.item.itemPrefab,
-                    thePlayer.transform.position + thePlayer.transform.forward,
+                    ActionController.Inst.transform.position + ActionController.Inst.transform.forward,
                     Quaternion.identity);
             }
             DragSlot.Inst.dragSlot.SetSlotCount(-1);

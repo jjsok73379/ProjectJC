@@ -150,20 +150,28 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         {
             if (item != null)
             {
-                if (theNPC_Store.IsStoreOpen)
+                if (theNPC_Store != null)
                 {
-                    if (item.itemType != Item.ItemType.Equipment)
+                    if (theNPC_Store.IsStoreOpen)
                     {
-                        SetSlotCount(-1);
-                        theItemEffectDatabase.SellItem(item);
-                    }
-                    else
-                    {
-                        if (theRPGPlayer.mySword != null)
+                        if (item.itemType != Item.ItemType.Equipment)
                         {
-                            if (isEquipped)
+                            SetSlotCount(-1);
+                            theItemEffectDatabase.SellItem(item);
+                        }
+                        else
+                        {
+                            if (theRPGPlayer.mySword != null)
                             {
-                                StartCoroutine(theActionController.WhenCannotSell());
+                                if (isEquipped)
+                                {
+                                    StartCoroutine(theActionController.WhenCannotSell());
+                                }
+                                else
+                                {
+                                    theItemEffectDatabase.SellItem(item);
+                                    ClearSlot();
+                                }
                             }
                             else
                             {
@@ -171,34 +179,26 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
                                 ClearSlot();
                             }
                         }
-                        else
-                        {
-                            theItemEffectDatabase.SellItem(item);
-                            ClearSlot();
-                        }
                     }
                 }
-                else
+                if (!isQuickSlot)
                 {
-                    if (!isQuickSlot)
-                    {
-                        theItemEffectDatabase.UseItem(item);
-                        theItemEffectDatabase.HideToolTip();
+                    theItemEffectDatabase.UseItem(item);
+                    theItemEffectDatabase.HideToolTip();
 
-                        if (item.itemType != Item.ItemType.Equipment)
-                        {
-                            SetSlotCount(-1);
-                        }
+                    if (item.itemType != Item.ItemType.Equipment)
+                    {
+                        SetSlotCount(-1);
                     }
-                    else if (!theItemEffectDatabase.GetIsCoolTime())
-                    {
-                        theItemEffectDatabase.UseItem(item);
-                        theItemEffectDatabase.HideToolTip();
+                }
+                else if (!theItemEffectDatabase.GetIsCoolTime())
+                {
+                    theItemEffectDatabase.UseItem(item);
+                    theItemEffectDatabase.HideToolTip();
 
-                        if (item.itemType != Item.ItemType.Equipment)
-                        {
-                            SetSlotCount(-1);
-                        }
+                    if (item.itemType != Item.ItemType.Equipment)
+                    {
+                        SetSlotCount(-1);
                     }
                 }
             }
@@ -231,6 +231,7 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     {
         if (item != null)
         {
+            SoundManager.Inst.ButtonSound.Play();
             DragSlot.Inst.dragSlot = this;
             DragSlot.Inst.DragSetImage(itemImage);
             DragSlot.Inst.transform.position = eventData.position;
@@ -271,6 +272,9 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
 
     public void OnDrop(PointerEventData eventData)
     {
+        Transform DropPos = eventData.pointerDrag.transform;
+        if (!DropPos.GetComponent<DragSlot>()) return;
+        SoundManager.Inst.ButtonSound.Play();
         if (DragSlot.Inst.dragSlot != null)
         {
             ChangeSlot();
@@ -287,7 +291,6 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
                 }
             }
         }
-        else return;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -90,7 +90,7 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
     public void OnBeginDrag(PointerEventData eventData)
     {
         Vector3 pos = Input.mousePosition;
-        selectedSkill = Instantiate(Resources.Load("Prefabs/SelectedSkill"), pos, Quaternion.identity, transform.parent.parent.parent.parent) as GameObject;
+        selectedSkill = Instantiate(Resources.Load("Prefabs/SelectedSkill"), pos, Quaternion.identity, transform.parent.parent.parent.parent.parent.parent) as GameObject;
         selectedSkill.GetComponent<SelectedSkill>().myData = myStat.orgData;
         dragOffset = (Vector2)selectedSkill.transform.localPosition - eventData.position;
     }

@@ -1,3 +1,4 @@
+using CombineRPG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,8 @@ public class WeaponManager : MonoBehaviour
 
     [SerializeField]
     SwordController theSwordController;
+    [SerializeField]
+    RPGPlayer theRPGPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -39,23 +42,13 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (theRPGPlayer.mySword != null && currentWeapon == null)
+        {
+            WeaponChange(theRPGPlayer.mySword.SwordName);
+        }
     }
 
-    public IEnumerator ChangeWeaponCoroutine(string _name)
-    {
-        isChangeWeapon = true;
-
-        yield return new WaitForSeconds(changeweaponDelayTime);
-
-        WeaponChange(_name);
-
-        yield return new WaitForSeconds(changeweaponEndDelayTime);
-
-        isChangeWeapon = false;
-    }
-
-    void WeaponChange(string _name)
+    public void WeaponChange(string _name)
     {
         theSwordController.SwordChange(swordDictionary[_name]);
     }

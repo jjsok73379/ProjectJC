@@ -1,3 +1,4 @@
+using CombineRPG;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,8 +18,15 @@ public class Quest
     public void Complete()
     {
         isActive = false;
-        QuestManager.Inst.theQuestPost.QuestChk.isOn = false;
-        QuestManager.Inst.i++;
-        QuestManager.Inst.OpenQuestWindow();
+        ActionController.Inst.GetComponent<RPGPlayer>().theQuestPost.QuestChk.isOn = false;
+        if(QuestManager.Inst != null)
+        {
+            QuestManager.Inst.i++;
+            QuestManager.Inst.OpenQuestWindow();
+        }
+        else
+        {
+            ActionController.Inst.GetComponent<RPGPlayer>().i++;
+        }
     }
 }

@@ -45,16 +45,4 @@ public class ObjectManager : Singleton<ObjectManager>
         reusedItem.GetComponent<Coin>().SetCoinValue(coinValue);
         reusedItem.transform.position = new Vector3(pos.x, reusedItem.transform.position.y, pos.z);
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

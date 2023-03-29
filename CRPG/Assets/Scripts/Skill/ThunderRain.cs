@@ -6,6 +6,7 @@ public class ThunderRain : NonTargetSkill
 {
     protected override void OnHit()
     {
+        SoundManager.Inst.ThunderRainSound.Play();
         Collider[] myEnemys = Physics.OverlapSphere(new Vector3(transform.position.x, transform.position.y - disy, transform.position.z), 5f);
         foreach (Collider col in myEnemys)
         {

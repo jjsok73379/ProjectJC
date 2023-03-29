@@ -36,9 +36,4 @@ public class NPC_Store : NPC
                 break;
         }
     }
-
-    public override void AcceptBtn()
-    {
-        ChangeState(STATE.Accept);
-    }
 }

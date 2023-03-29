@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8351723198306859046}
   m_Father: {fileID: 0}
@@ -49,7 +50,7 @@ MonoBehaviour:
   _regionTransform: {fileID: 8351723198306859046}
   _offset: {x: 0, y: 0}
   _radius: 1
-  _fillProgress: 0.7
+  _fillProgress: 1
   _circleBaseColor: {r: 1, g: 0.3254717, b: 0.3254717, a: 1}
   _circleFillColor: {r: 0.43867922, g: 1, b: 1, a: 1}
   _centerDotColor: {r: 1, g: 1, b: 1, a: 1}
@@ -79,6 +80,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8351723198531747806}
   - {fileID: 8351723198455943962}
@@ -112,6 +114,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8351723198306859046}
   m_RootOrder: 1
@@ -131,7 +134,7 @@ Projector:
   m_AspectRatio: 1
   m_Orthographic: 1
   m_OrthographicSize: 0.25
-  m_Material: {fileID: 2100000, guid: f8827b50e93894147b531eb833d3be9b, type: 2}
+  m_Material: {fileID: 0}
   m_IgnoreLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -162,6 +165,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8351723198306859046}
   m_RootOrder: 0
@@ -181,7 +185,7 @@ Projector:
   m_AspectRatio: 1
   m_Orthographic: 1
   m_OrthographicSize: 1
-  m_Material: {fileID: 2100000, guid: 78c667ddb5095ac4887c6a34e1713bb5, type: 2}
+  m_Material: {fileID: 0}
   m_IgnoreLayers:
     serializedVersion: 2
     m_Bits: 0

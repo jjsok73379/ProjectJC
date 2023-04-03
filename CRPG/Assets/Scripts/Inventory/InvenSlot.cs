@@ -248,48 +248,39 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // 인벤토리와 퀵슬롯 영역을 벗어난 곳에서 드래그를 끝냈다면
-        if (!((DragSlot.Inst.transform.localPosition.x > baseRect.rect.xMin
-            && DragSlot.Inst.transform.localPosition.x < baseRect.rect.xMax
-            && DragSlot.Inst.transform.localPosition.y > baseRect.rect.yMin
-            && DragSlot.Inst.transform.localPosition.y < baseRect.rect.yMax)
-            ||
-            (DragSlot.Inst.transform.localPosition.x + baseRect.transform.localPosition.x > quickSlotBaseRect.rect.xMin + quickSlotBaseRect.transform.localPosition.x
-            && DragSlot.Inst.transform.localPosition.x + baseRect.transform.localPosition.x < quickSlotBaseRect.rect.xMax + quickSlotBaseRect.transform.localPosition.x
-            && DragSlot.Inst.transform.localPosition.y + baseRect.transform.localPosition.y > quickSlotBaseRect.rect.yMin + quickSlotBaseRect.transform.localPosition.y
-            && DragSlot.Inst.transform.localPosition.y + baseRect.transform.localPosition.y < quickSlotBaseRect.rect.yMax + quickSlotBaseRect.transform.localPosition.y)))
+        if(DragSlot.Inst.dragSlot != null)
         {
-            if (DragSlot.Inst.dragSlot != null)
-                theInputNumber.Call();
-        }
-        // 인벤토리 혹은 퀵슬롯 영역에서 드래그가 끝났다면
-        else
-        {
-            DragSlot.Inst.SetColor(0);
-            DragSlot.Inst.dragSlot = null;
+            // 인벤토리와 퀵슬롯 영역을 벗어난 곳에서 드래그를 끝냈다면
+            if (!((DragSlot.Inst.transform.localPosition.x > baseRect.rect.xMin
+                && DragSlot.Inst.transform.localPosition.x < baseRect.rect.xMax
+                && DragSlot.Inst.transform.localPosition.y > baseRect.rect.yMin
+                && DragSlot.Inst.transform.localPosition.y < baseRect.rect.yMax)
+                ||
+                (DragSlot.Inst.transform.localPosition.x + baseRect.transform.localPosition.x > quickSlotBaseRect.rect.xMin + quickSlotBaseRect.transform.localPosition.x
+                && DragSlot.Inst.transform.localPosition.x + baseRect.transform.localPosition.x < quickSlotBaseRect.rect.xMax + quickSlotBaseRect.transform.localPosition.x
+                && DragSlot.Inst.transform.localPosition.y + baseRect.transform.localPosition.y > quickSlotBaseRect.rect.yMin + quickSlotBaseRect.transform.localPosition.y
+                && DragSlot.Inst.transform.localPosition.y + baseRect.transform.localPosition.y < quickSlotBaseRect.rect.yMax + quickSlotBaseRect.transform.localPosition.y)))
+            {
+                if (DragSlot.Inst.dragSlot != null)
+                    theInputNumber.Call();
+            }
+            // 인벤토리 혹은 퀵슬롯 영역에서 드래그가 끝났다면
+            else
+            {
+                DragSlot.Inst.SetColor(0);
+                DragSlot.Inst.dragSlot = null;
+            }
         }
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         Transform DropPos = eventData.pointerDrag.transform;
-        if (!DropPos.GetComponent<DragSlot>()) return;
+        if (!DropPos.GetComponent<InvenSlot>()) return;
         SoundManager.Inst.ButtonSound.Play();
         if (DragSlot.Inst.dragSlot != null)
         {
             ChangeSlot();
-
-            if (isQuickSlot)
-            {
-                theItemEffectDatabase.IsActivatedquickSlot(quickSlotNumber);
-            }
-            else
-            {
-                if (DragSlot.Inst.dragSlot.isQuickSlot)
-                {
-                    theItemEffectDatabase.IsActivatedquickSlot(DragSlot.Inst.dragSlot.quickSlotNumber);
-                }
-            }
         }
     }
 
@@ -299,11 +290,11 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         {
             if (!isQuickSlot)
             {
-                theItemEffectDatabase.ShowToolTip(item, transform.position, SellPrice);
+                theItemEffectDatabase.ShowToolTip(item, transform.position - new Vector3(250.0f, -50.0f, 0), SellPrice);
             }
             else
             {
-                Vector3 quickslotPos = new Vector3(transform.position.x, transform.position.y + 500.0f, transform.position.z);
+                Vector3 quickslotPos = new Vector3(transform.position.x - 250.0f, transform.position.y + 350.0f, transform.position.z);
                 theItemEffectDatabase.ShowToolTip(item, quickslotPos, SellPrice);
             }
         }

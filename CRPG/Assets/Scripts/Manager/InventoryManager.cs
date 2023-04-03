@@ -20,8 +20,8 @@ public class InventoryManager : MonoBehaviour
     public int itemMaxCount = 99; // 아이템의 최대 개수
 
     public InvenSlot[] allSlots;
-    public InvenSlot[] invenSlots;
-    public InvenSlot[] quickSlots;
+    InvenSlot[] invenSlots;
+    InvenSlot[] quickSlots;
     bool isNotPut;
     int tempcount;
     int sumcount;
@@ -50,14 +50,17 @@ public class InventoryManager : MonoBehaviour
                 allSlots[i].AddItem(DataManager.Inst.items[i]);
                 if (DataManager.Inst.items[i].itemType == Item.ItemType.Equipment)
                 {
-                    if (DataManager.Inst.items[i].itemName == DataManager.Inst.sword.SwordName)
+                    if (DataManager.Inst.sword != null)
                     {
-                        allSlots[i].isEquipped = true;
+                        if (DataManager.Inst.items[i].itemName == DataManager.Inst.sword.SwordName)
+                        {
+                            allSlots[i].isEquipped = true;
+                        }
                     }
                 }
                 else
                 {
-                    allSlots[i].SetSlotCount(DataManager.Inst.itemsCount[i]);
+                    allSlots[i].SetSlotCount(DataManager.Inst.itemsCount[i] - 1);
                 }
             }
             i++;
@@ -71,6 +74,16 @@ public class InventoryManager : MonoBehaviour
             if (items[i].itemName == _itemName)
             {
                 allSlots[_arrayNum].AddItem(items[i], _itemNum);
+                if (items[i].itemType == Item.ItemType.Equipment)
+                {
+                    if (SaveAndLoad.Inst.saveData.mySword != null)
+                    {
+                        if (items[i].itemName == SaveAndLoad.Inst.saveData.mySword.SwordName)
+                        {
+                            allSlots[_arrayNum].isEquipped = true;
+                        }
+                    }
+                }
             }
         }
     }
@@ -89,7 +102,6 @@ public class InventoryManager : MonoBehaviour
         {
             PutSlot(invenSlots, _item, _count);
             isFull = true;
-            StartCoroutine(theActionController.WhenIventoryIsFull());
         }
     }
 
@@ -116,9 +128,9 @@ public class InventoryManager : MonoBehaviour
                         if (!_slots[i].isFullSlot)
                         {
                             sumcount = _slots[i].itemCount + _count;
-                            tempcount = sumcount - itemMaxCount;
                             if (sumcount >= itemMaxCount)
                             {
+                                tempcount = sumcount - itemMaxCount;
                                 _count = itemMaxCount;
                                 _slots[i].SetSlotCount(_count);
                                 isFull = true;
@@ -127,6 +139,10 @@ public class InventoryManager : MonoBehaviour
                                     if (_slots[i + 1] == null) return;
                                     _slots[i + 1].AddItem(_item, tempcount);
                                 }
+                            }
+                            else
+                            {
+                                _slots[i].SetSlotCount(sumcount - 1);
                             }
                             isNotPut = false;
                             return;

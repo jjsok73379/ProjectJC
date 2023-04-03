@@ -14,7 +14,6 @@ public class LoadManager : MonoBehaviour
     [SerializeField]
     GameObject Loading;
 
-    SaveAndLoad theSaveAndLoad;
 
     private void Awake()
     {
@@ -37,8 +36,6 @@ public class LoadManager : MonoBehaviour
 
     IEnumerator LoadCoroutine()
     {
-        yield return null;
-
         AsyncOperation operation;
         operation = SceneManager.LoadSceneAsync(nextScene);
         operation.allowSceneActivation = false;
@@ -74,9 +71,5 @@ public class LoadManager : MonoBehaviour
                 }
             }
         }
-
-        theSaveAndLoad = FindObjectOfType<SaveAndLoad>();
-        theSaveAndLoad.LoadData();
-        gameObject.SetActive(false);
     }
 }

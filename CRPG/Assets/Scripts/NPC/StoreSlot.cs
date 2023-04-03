@@ -63,7 +63,7 @@ public class StoreSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        theItemEffectDatabase.ShowStoreToolTip(myData, transform.position, price);
+        theItemEffectDatabase.ShowStoreToolTip(myData, transform.position - new Vector3(250.0f, - 50.0f, 0), price);
     }
 
     public void OnPointerExit(PointerEventData eventData)

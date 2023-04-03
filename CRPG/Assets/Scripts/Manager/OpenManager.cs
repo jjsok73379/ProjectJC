@@ -34,7 +34,7 @@ public class OpenManager : MonoBehaviour
     public GameObject go_Setting;
     public GameObject go_Sound;
 
-    bool IsActive = false;
+    public bool IsActive = false;
 
     private void Awake()
     {
@@ -228,7 +228,6 @@ public class OpenManager : MonoBehaviour
                     theBossDragon.gameObject.transform.position = new Vector3(34.8f, 2.1f, 75.3f);
                     theBossDragon.myHPSlider.gameObject.SetActive(true);
                     theBossZone.IsEnter = false;
-                    theBossDragon.StartCoroutine(theBossDragon.Think());
                 }
             }
         }

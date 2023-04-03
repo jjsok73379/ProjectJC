@@ -97,6 +97,7 @@ public class ActionController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            SoundManager.Inst.ButtonSound.Play();
             CheckItem();
             CanPickUp();
         }
@@ -213,9 +214,12 @@ public class ActionController : MonoBehaviour
 
     void TalkWithNPC(string npcName)
     {
-        talkActivated = true;
-        actionText.gameObject.SetActive(true);
-        actionText.text = npcName + "와(과) 대화하려면 (F)키를 누르세요";
+        if (!Store_NPC_Text.activeSelf && !Recovery_NPC_Text.activeSelf && !Quest_NPC_Text.activeSelf)
+        {
+            talkActivated = true;
+            actionText.gameObject.SetActive(true);
+            actionText.text = npcName + "와(과) 대화하려면 (F)키를 누르세요";
+        }
     }
 
     void NobodyCanTalk() 
@@ -253,7 +257,6 @@ public class ActionController : MonoBehaviour
         {
             if (hitInfo.transform != null)
             {
-                Debug.Log(hitInfo.transform.GetComponent<PickupItem>().item.itemName + " 획득했습니다. "); // 인벤토리 넣기
                 theInventory.AcquireItem(hitInfo.transform.GetComponent<PickupItem>().item);
                 if (theRPGPlayer.quest.isActive)
                 {
@@ -351,7 +354,7 @@ public class ActionController : MonoBehaviour
                 {
                     LoadManager.LoadScene(1);
                 }
-                else if (hitInfo.transform.name == "BosePortal")
+                else if (hitInfo.transform.name == "BossPortal")
                 {
                     LoadManager.LoadScene(3);
                 }
@@ -362,6 +365,23 @@ public class ActionController : MonoBehaviour
     public void GoTitle()
     {
         LoadManager.LoadScene(0);
+        DataManager.Inst.items.Clear();
+        DataManager.Inst.itemsCount.Clear();
+        for (int i = 0; i < InventoryManager.Inst.allSlots.Length; i++)
+        {
+            InventoryManager.Inst.allSlots[i].item = null;
+            InventoryManager.Inst.allSlots[i].itemCount = 0;
+        }
+        Destroy(SkillManager.Inst.AddedskillPanel);
+        if (QuestManager.Inst != null)
+        {
+            Destroy(QuestManager.Inst.objQ2);
+        }
+        else
+        {
+            Destroy(theRPGPlayer.questobj);
+        }
+        DataManager.Inst.skills.Clear();
     }
 
     IEnumerator SceneStartCo()
@@ -448,6 +468,16 @@ public class ActionController : MonoBehaviour
         SoundManager.Inst.CannotSound.Play();
         itemText.gameObject.SetActive(true);
         itemText.text = "마나가 부족합니다.";
+
+        yield return new WaitForSeconds(1.0f);
+        itemText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator AlreadyHave()
+    {
+        SoundManager.Inst.CannotSound.Play();
+        itemText.gameObject.SetActive(true);
+        itemText.text = "이미 등록된 스킬입니다.";
 
         yield return new WaitForSeconds(1.0f);
         itemText.gameObject.SetActive(false);

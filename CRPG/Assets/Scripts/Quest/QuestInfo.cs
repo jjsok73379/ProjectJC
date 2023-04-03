@@ -91,10 +91,10 @@ public class QuestInfo : MonoBehaviour
                 {
                     Destroy(theRPGPlayer.questobj);
                 }
-                theRPGPlayer.theQuestPost.gameObject.SetActive(false);
-                theRPGPlayer.theQuestPost.NoQuest();
+                DataManager.Inst.IsQuesting = false;
                 theRPGPlayer.quest.Complete();
                 theRPGPlayer.quest = null;
+                DontDestroyUI.Inst.QuestPost.SetActive(false);
             }
             else
             {

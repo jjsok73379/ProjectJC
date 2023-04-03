@@ -8,8 +8,6 @@ public class SlotToolTip : StoreToolTip
 {
     [SerializeField]
     TMP_Text ItemHowtoUsed;
-    [SerializeField]
-    NPC_Store theNPC_Store;
 
     public override void ShowToolTip(Item _item,Vector3 _pos, int Pricenum)
     {
@@ -44,11 +42,5 @@ public class SlotToolTip : StoreToolTip
     void Start()
     {
         HideToolTip();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

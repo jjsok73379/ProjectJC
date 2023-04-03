@@ -12,10 +12,4 @@ public class SelectedSkill : MonoBehaviour
     {
         GetComponent<Image>().sprite = myData.myImage;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

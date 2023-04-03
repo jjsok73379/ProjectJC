@@ -7,32 +7,45 @@ using UnityEngine.UI;
 
 public class QuestPost : MonoBehaviour
 {
+    public static QuestPost Inst;
+
     [SerializeField]
     TMP_Text QuestName;
     public Toggle QuestChk;
     public TMP_Text QuestCount;
-    [SerializeField]
-    RPGPlayer theRPGPlayer;
 
-    public void HaveQuest()
+    private void Awake()
     {
-        QuestName.gameObject.SetActive(true);
-        QuestName.text = theRPGPlayer.quest.title;
-        if (theRPGPlayer.quest.goal.goalType == GoalType.Etc)
+        Inst = this;
+    }
+
+    private void Update()
+    {
+        if(ActionController.Inst != null)
         {
-            QuestChk.gameObject.SetActive(true);
-        }
-        else if (theRPGPlayer.quest.goal.goalType != GoalType.Etc)
-        {
-            QuestCount.gameObject.SetActive(true);
-            QuestCount.text = "( " + theRPGPlayer.quest.goal.currentAmount.ToString() + " / " + theRPGPlayer.quest.goal.requiredAmount.ToString() + " )";
+            if (ActionController.Inst.GetComponent<RPGPlayer>().quest != null)
+            {
+                if (DataManager.Inst.IsQuesting)
+                {
+                    HaveQuest();
+                }
+            }
         }
     }
 
-    public void NoQuest()
+    public void HaveQuest()
     {
-        QuestName.gameObject.SetActive(false);
-        QuestChk.gameObject.SetActive(false);
-        QuestCount.gameObject.SetActive(false);
+        QuestName.text = ActionController.Inst.GetComponent<RPGPlayer>().quest.title;
+        if (ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.goalType == GoalType.Etc)
+        {
+            QuestChk.gameObject.SetActive(true);
+            QuestCount.gameObject.SetActive(false);
+        }
+        else if (ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.goalType != GoalType.Etc)
+        {
+            QuestCount.gameObject.SetActive(true);
+            QuestChk.gameObject.SetActive(false);
+            QuestCount.text = "( " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.currentAmount.ToString() + " / " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.requiredAmount.ToString() + " )";
+        }
     }
 }

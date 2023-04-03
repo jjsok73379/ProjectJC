@@ -22,7 +22,6 @@ namespace CombineRPG
         GameObject bombSkill;
         [SerializeField]
         GameObject Holder;
-        public QuestPost theQuestPost;
         public Sword mySword;
         [SerializeField]
         CharacterInfo theCharacterInfo;
@@ -50,7 +49,7 @@ namespace CombineRPG
             Create, Play, Death
         }
         public int Level = 1;
-        int MaxLevel = 99;
+        public int MaxLevel = 99;
         float remainExp;
         public STATE myState = STATE.Create;
         public LayerMask pickMask = default;
@@ -68,9 +67,9 @@ namespace CombineRPG
                 case STATE.Create:
                     break;
                 case STATE.Play:
-                    for(int i = 0; i < DataManager.Inst.SkillSlotDatas.Count;)
+                    for(int i = 0; i < DataManager.Inst.SkillSlotDatas.Length;)
                     {
-                        if (DataManager.Inst.SkillSlotDatas.Count > 0 && SkillSlots[i].mySkillData == null)
+                        if (DataManager.Inst.SkillSlotDatas.Length > 0 && SkillSlots[i].mySkillData == null)
                         {
                             SkillSlots[i].mySkillData = DataManager.Inst.SkillSlotDatas[i];
                         }
@@ -79,15 +78,14 @@ namespace CombineRPG
                     if (quest.isActive)
                     {
                         questobj = Instantiate(Resources.Load("Prefabs/Quest/QuestContent"), OpenManager.Inst.go_Quest.transform.GetChild(1)) as GameObject;
+                        for (int j = 0; j < questobj.GetComponent<QuestInfo>().titleText.Length; j++)
+                        {
+                            questobj.GetComponent<QuestInfo>().titleText[j].text = quest.title;
+                        }
                         questobj.GetComponent<QuestInfo>().descriptionText.text = quest.description;
                         questobj.GetComponent<QuestInfo>().EXP_text.text = quest.experienceReward.ToString();
                         questobj.GetComponent<QuestInfo>().goldText.text = quest.goldReward.ToString();
                         questobj.GetComponent<QuestInfo>().AfterAccept();
-                        if (!theQuestPost.gameObject.activeSelf)
-                        {
-                            theQuestPost.gameObject.SetActive(true);
-                            theQuestPost.HaveQuest();
-                        }
                     }
                     NonTargetingRegion.SetActive(false);
                     DeadWindow.SetActive(false);
@@ -100,6 +98,7 @@ namespace CombineRPG
                     break;
                 case STATE.Death:
                     StopAllCoroutines();
+                    myStat.HP = 0;
                     myAnim.SetTrigger("Dead");
                     foreach (IBattle ib in myAttackers)
                     {
@@ -138,13 +137,17 @@ namespace CombineRPG
                     }
                     if (QuestManager.Inst != null)
                     {
-                        if (quest.isActive)
+                        if (quest != null)
                         {
-                            if (quest.goal.IsReached() || quest.goal.IsDone())
+                            if (quest.isActive)
                             {
-                                QuestManager.Inst.QuestionMark.SetActive(true);
-                                QuestManager.Inst.UnfinishQuestionMark.SetActive(false);
-                                QuestManager.Inst.ExclamationMark.SetActive(false);
+                                DataManager.Inst.IsQuesting = true;
+                                if (quest.goal.IsReached() || quest.goal.IsDone())
+                                {
+                                    QuestManager.Inst.QuestionMark.SetActive(true);
+                                    QuestManager.Inst.UnfinishQuestionMark.SetActive(false);
+                                    QuestManager.Inst.ExclamationMark.SetActive(false);
+                                }
                             }
                         }
                     }
@@ -161,6 +164,7 @@ namespace CombineRPG
         // Start is called before the first frame update
         void Start()
         {
+            myUI = DontDestroyUI.Inst.GetComponentInChildren<PlayerUI>();
             theActionController = GetComponent<ActionController>();
             ChangeState(STATE.Play);
         }
@@ -170,7 +174,7 @@ namespace CombineRPG
             myUI.myLevelText.text = "·¹º§ " + Level.ToString();
             myUI.HP_Text.text = myStat.HP.ToString() + " / " + myStat.maxHp.ToString();
             myUI.MP_Text.text = myStat.MP.ToString() + " / " + myStat.maxMp.ToString();
-            myUI.EXP_Text.text = (myStat.EXP / myStat.maxExp * 100).ToString() + " %";
+            myUI.EXP_Text.text = (myStat.EXP / myStat.maxExp * 100).ToString("0.0") + " %";
             theCharacterInfo.HPText.text = myStat.HP.ToString() + " / " + myStat.maxHp.ToString();
             theCharacterInfo.MPText.text = myStat.MP.ToString() + " / " + myStat.maxMp.ToString();
             theCharacterInfo.APText.text = myStat.AP.ToString();
@@ -200,7 +204,7 @@ namespace CombineRPG
         {
             if (mySword != null)
             {
-                myStat.AP = myStat.AP + mySword.damage;
+                myStat.AP = 5 + mySword.damage;
                 orgDamage = myStat.AP;
             }
             else
@@ -257,18 +261,6 @@ namespace CombineRPG
             if (tr == myTarget)
             {
                 StopAllCoroutines();
-                if (quest.isActive)
-                {
-                    quest.goal.EnemyKilled(myTarget.gameObject);
-                }
-                if (Level == MaxLevel)
-                {
-                    Mathf.Clamp(myStat.EXP, 0, myStat.maxExp - 1);
-                }
-                else
-                {
-                    myStat.EXP += myTarget.GetComponent<Monster>().GiveExp;
-                }
             }
         }
 
@@ -330,7 +322,9 @@ namespace CombineRPG
                             CoolTIme_end(2);
                             if (myStat.MP >= SkillSlots[selectnum].mySkillData.Mana)
                             {
+                                OpenManager.Inst.IsActive = false;
                                 myStat.MP -= SkillSlots[selectnum].mySkillData.Mana;
+                                NonTargetingRegion.SetActive(false);
                                 myAnim.SetTrigger("NonTargetingSkill");
                                 GameObject NonTargeting = Instantiate(SkillSlots[selectnum].mySkillData.mySkill, NonTargetingRegion.transform.position, Quaternion.Euler(-270, 0, 0));
                                 NonTargeting.GetComponent<Skill>().SkillDamage = myStat.AP;
@@ -442,10 +436,6 @@ namespace CombineRPG
             myStat.AP = orgDamage;
             myAnim.SetBool("Skill", false);
             Destroy(bombSkill);
-            if (SkillSlots[selectnum].mySkillData.myType == SkillData.SkillType.NonTargeting)
-            {
-                NonTargetingRegion.SetActive(false);
-            }
             SkillPrepare = false;
             yield return null;
         }
@@ -486,6 +476,7 @@ namespace CombineRPG
 
         public void Revive()
         {
+            DeadWindow.SetActive(false);
             if (GameManager.Inst.Goldvalue >= 2000)
             {
                 GameManager.Inst.Goldvalue -= 2000;
@@ -503,6 +494,7 @@ namespace CombineRPG
 
         public void GoVillage()
         {
+            DeadWindow.SetActive(false);
             DataManager.Inst.theRPGPlayer.myStat.HP = 1;
             DataManager.Inst.theRPGPlayer.myStat.MP = 1;
             if (DataManager.Inst.theRPGPlayer.myStat.EXP != 0)
@@ -539,7 +531,7 @@ namespace CombineRPG
                 selectnum = num;
                 myAnim.SetBool("Skill", true);
             }
-            else if (Input.GetKeyDown(KeyCode.Escape))
+            else if (Input.GetMouseButtonDown(1))
             {
                 SkillPrepare = false;
                 myStat.AP = orgDamage;

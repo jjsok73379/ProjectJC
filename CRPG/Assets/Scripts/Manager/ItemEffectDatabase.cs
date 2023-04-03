@@ -1,6 +1,7 @@
 using CombineRPG;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -139,7 +140,7 @@ public class ItemEffectDatabase : MonoBehaviour
         {
             for(int i = 0; i < SkillBookitemEffects.Length; i++)
             {
-                if (SkillBookitemEffects[i].itemName== _item.itemName)
+                if (SkillBookitemEffects[i].itemName == _item.itemName)
                 {
                     switch (SkillBookitemEffects[i].itemName)
                     {
@@ -164,7 +165,7 @@ public class ItemEffectDatabase : MonoBehaviour
                     }
                     if (SkillManager.Inst.mySkills.Contains(SkillManager.Inst.mySkill))
                     {
-                        return;
+                        StartCoroutine(ActionController.Inst.AlreadyHave());
                     }
                     else
                     {

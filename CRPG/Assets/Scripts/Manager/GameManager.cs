@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class GameManager : MonoBehaviour
     int MaxGold;
     public TMP_Text GoldComma;
     public TMP_Text ZeroGold;
+    public Button SaveBtn;
+    public Button LoadBtn;
 
     public struct USERGOLD
     {
@@ -35,8 +38,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Scene scene = SceneManager.GetActiveScene();
         MaxGold = 999999999;
+        SaveBtn.onClick.AddListener(SaveAndLoad.Inst.SaveData);
+        LoadBtn.onClick.AddListener(SaveAndLoad.Inst.LoadData);
     }
 
     private void Update()
@@ -72,5 +76,10 @@ public class GameManager : MonoBehaviour
     public string GetThousandCommaText(int data)
     {
         return string.Format("{0:#,###}", data);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

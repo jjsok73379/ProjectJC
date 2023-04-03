@@ -20,14 +20,10 @@ public class CombineSkill : MonoBehaviour,IDropHandler
         orgImage = myImage.sprite;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void OnDrop(PointerEventData eventData)
     {
+        Transform DropPos = eventData.pointerDrag.transform;
+        if (!DropPos.GetComponent<SkillM>()) return;
         GameObject icon = eventData.pointerDrag.GetComponent<SkillM>().selectedSkill;
         SkillData Data = icon.GetComponent<SelectedSkill>().myData;
         if (!SkillManager.Inst.BasicSkills.Contains(Data)) return;

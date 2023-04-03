@@ -39,23 +39,37 @@ public class QuestManager : MonoBehaviour
             DataManager.Inst.IsFinishQuest = false;
         }
         i = theRPGPlayer.i;
-        theRPGPlayer.theQuestPost.gameObject.SetActive(false);
-        theRPGPlayer.theQuestPost.QuestChk.isOn = false;
-        theRPGPlayer.theQuestPost.NoQuest();
         OpenQuestWindow();
     }
 
     public void OpenQuestWindow()
     {
-        objQ = Instantiate(QuestPrefab, QuestContent.transform);
-        for(int j=0;j< objQ.GetComponent<QuestInfo>().titleText.Length; j++)
+        if (i > 5)
         {
-            objQ.GetComponent<QuestInfo>().titleText[j].text = quest[i].title;
+            QuestionMark.SetActive(false);
+            UnfinishQuestionMark.SetActive(false);
+            ExclamationMark.SetActive(false);
         }
-        objQ.GetComponent<QuestInfo>().descriptionText.text = quest[i].description;
-        objQ.GetComponent<QuestInfo>().EXP_text.text = quest[i].experienceReward.ToString();
-        objQ.GetComponent<QuestInfo>().goldText.text = quest[i].goldReward.ToString();
-        objQ.GetComponent<QuestInfo>().BeforeAccept();
+        else
+        {
+            QuestPost.Inst.QuestChk.isOn = false;
+            objQ = Instantiate(QuestPrefab, QuestContent.transform);
+            for (int j = 0; j < objQ.GetComponent<QuestInfo>().titleText.Length; j++)
+            {
+                objQ.GetComponent<QuestInfo>().titleText[j].text = quest[i].title;
+            }
+            objQ.GetComponent<QuestInfo>().descriptionText.text = quest[i].description;
+            objQ.GetComponent<QuestInfo>().EXP_text.text = quest[i].experienceReward.ToString();
+            objQ.GetComponent<QuestInfo>().goldText.text = quest[i].goldReward.ToString();
+            if (!DataManager.Inst.IsQuesting)
+            {
+                objQ.GetComponent<QuestInfo>().BeforeAccept();
+            }
+            else
+            {
+                objQ.GetComponent<QuestInfo>().AfterAccept();
+            }
+        }
     }
 
     public void AcceptQuest()
@@ -72,10 +86,9 @@ public class QuestManager : MonoBehaviour
         objQ2.GetComponent<QuestInfo>().descriptionText.text = quest[i].description;
         objQ2.GetComponent<QuestInfo>().EXP_text.text = quest[i].experienceReward.ToString();
         objQ2.GetComponent<QuestInfo>().goldText.text = quest[i].goldReward.ToString();
-        theRPGPlayer.theQuestPost.gameObject.SetActive(true);
-        theRPGPlayer.theQuestPost.HaveQuest();
         objQ2.GetComponent<QuestInfo>().AfterAccept();
         objQ.GetComponent<QuestInfo>().AfterAccept();
+        DontDestroyUI.Inst.QuestPost.SetActive(true);
     }
 
     public void ForgiveQuest()

@@ -1,3 +1,4 @@
+using CombineRPG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,9 +6,15 @@ using UnityEngine;
 public class PickupItem : MonoBehaviour
 {
     public Item item;
+    [SerializeField]
+    bool IsEquipItem;
 
     private void Start()
     {
+        if (!IsEquipItem)
+        {
+            Destroy(gameObject, 10.0f);
+        }
         if (InputNumber.Inst.IsDrop)
         {
             item = InputNumber.Inst.DropItemData;

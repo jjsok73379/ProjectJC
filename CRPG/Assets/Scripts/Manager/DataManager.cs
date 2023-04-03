@@ -30,7 +30,8 @@ public class DataManager : MonoBehaviour
     public Quest quest;
 
     public List<SkillData> skills;
-    public List<SkillData> SkillSlotDatas;
+    public SkillData[] SkillSlotDatas = new SkillData[4];
+    public List<int> skillLevel;
 
     public List<Item> items;
     public List<int> itemsCount;
@@ -38,6 +39,10 @@ public class DataManager : MonoBehaviour
     public int questi;
 
     public bool IsFinishQuest = false;
+
+    public bool IsLoad = false;
+
+    public bool IsQuesting = false;
 
     private void Awake()
     {
@@ -53,8 +58,9 @@ public class DataManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InventoryManager.Inst.invenSlots[0].AddItem(FirstItem);
-        InventoryManager.Inst.invenSlots[1].AddItem(SecondItem);
+        items[5] = FirstItem;
+        items[6] = SecondItem;
+        itemsCount[6] = 1;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -67,33 +73,29 @@ public class DataManager : MonoBehaviour
 
         if (theRPGPlayer != null)
         {
-            theRPGPlayer.myStat.maxHp = MaxHP;
-            theRPGPlayer.myStat.HP = HP;
-            theRPGPlayer.myStat.maxMp = MaxMP;
-            theRPGPlayer.myStat.MP = MP;
-            theRPGPlayer.myStat.maxExp = MaxEXP;
-            theRPGPlayer.myStat.EXP = EXP;
-            theRPGPlayer.Level = LV;
-            theRPGPlayer.myStat.AP = AP;
-            theRPGPlayer.mySword = sword;
-            theRPGPlayer.quest = quest;
-        }
-
-        if(QuestManager.Inst != null)
-        {
-            QuestManager.Inst.i = questi;
-        }
-        else
-        {
-            if (questi != 0)
+            if (IsLoad)
             {
-                theRPGPlayer.i = questi;
+                SaveAndLoad.Inst.LoadData();
+                IsLoad = false;
+            }
+            else
+            {
+                theRPGPlayer.myStat.maxHp = MaxHP;
+                theRPGPlayer.myStat.HP = HP;
+                theRPGPlayer.myStat.maxMp = MaxMP;
+                theRPGPlayer.myStat.MP = MP;
+                theRPGPlayer.myStat.maxExp = MaxEXP;
+                theRPGPlayer.myStat.EXP = EXP;
+                theRPGPlayer.Level = LV;
+                theRPGPlayer.myStat.AP = AP;
+                theRPGPlayer.mySword = sword;
+                theRPGPlayer.quest = quest;
+                GameManager.Inst.Goldvalue = Gold;
             }
         }
-
-        if (GameManager.Inst != null)
+        if (questi != 0)
         {
-            GameManager.Inst.Goldvalue = Gold;
+            theRPGPlayer.i = questi;
         }
     }
 }

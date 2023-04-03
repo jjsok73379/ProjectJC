@@ -10,6 +10,7 @@ using UnityEngine.UI;
 
 public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
 {
+    public int mySlotNum;
     public Image myImage;
     [SerializeField]
     Image[] skillImages;
@@ -48,7 +49,7 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            DataManager.Inst.SkillSlotDatas.Remove(mySkillData);
+            DataManager.Inst.SkillSlotDatas[mySlotNum - 1] = null;
             mySkillData = null;
             myImage.fillAmount = 1;
             orgCool = 0;
@@ -69,7 +70,11 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
         if (DataManager.Inst.SkillSlotDatas.Contains(Data)) return;
         else
         {
-            DataManager.Inst.SkillSlotDatas.Add(Data);
+            if (mySkillData != null)
+            {
+                DataManager.Inst.SkillSlotDatas[mySlotNum - 1] = null;
+            }
+            DataManager.Inst.SkillSlotDatas[mySlotNum - 1] = Data;
         }
         mySkillData = Data;
         for (int i = 0; i < skillImages.Length; i++)
@@ -85,7 +90,6 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
 
     public IEnumerator Cooling()
     {
-        Debug.Log("ÄðÅ¸ÀÓ½ÃÀÛ");
         if (mySkillData != null)
         {
             IsCooling = true;

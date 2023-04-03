@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Data;
+using CombineRPG;
 
 public class SkillManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class SkillManager : MonoBehaviour
     public List<SkillData> GetSkills() { return mySkills; }
 
     public GameObject AddedskillPanel;
+    public RPGPlayer theRPGPlayer;
 
     public SkillData mySkill;
     public List<SkillData> mySkills = new List<SkillData>();
@@ -68,7 +70,7 @@ public class SkillManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CombineMenuOpen)
+        if (!OpenManager.CombineActivated)
         {
             CombineSkillSlot.myText.SetActive(true);
             CombineMaterialSlot.myText.SetActive(true);
@@ -79,12 +81,14 @@ public class SkillManager : MonoBehaviour
 
    public void LoadToSkill(SkillData skilldata)
     {
-        for (int i = 0; i < mySkills.Count; i++)
+        for (int i = 0; i < skillDatas.Length;)
         {
             if (skillDatas[i] == skilldata)
             {
-                mySkills.Add(skillDatas[i]);
+                mySkill = skillDatas[i];
+                AddSkill();
             }
+            i++;
         }
     }
 
@@ -107,6 +111,13 @@ public class SkillManager : MonoBehaviour
         {
             if (CombinedSkills[i].Materials[0] == CombineSkillSlot.mySkillData && CombinedSkills[i].Materials[1] == CombineMaterialSlot.mySkillData)
             {
+                if(theRPGPlayer.quest != null)
+                {
+                    if (theRPGPlayer.quest.isActive)
+                    {
+                        theRPGPlayer.quest.goal.IsDoAction();
+                    }
+                }
                 myCombinedSkill.GetComponent<CombinedSkill>().mySkillData = CombinedSkills[i];
                 myCombinedSkill.GetComponent<Image>().sprite = CombinedSkills[i].myImage;
                 myCombinedSkillText.SetActive(false);
@@ -124,9 +135,12 @@ public class SkillManager : MonoBehaviour
         {
             AddedskillPanel = Instantiate(SkillPrefab, Contents[i].transform);
             SkillM Addedskill = AddedskillPanel.GetComponentInChildren<SkillM>();
+            Addedskill.myStat.orgData = mySkill;
             Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
-            Addedskill.GetComponentInChildren<TMP_Text>().text = mySkill.MyInfo;
-            Addedskill.GetComponent<SkillM>().myStat.orgData = mySkill;
+            for (int j = 0; j < Addedskill.myInfo.Length; j++)
+            {
+                Addedskill.myInfo[j].text = mySkill.MyInfo;
+            }
         }
         mySkills.Add(mySkill);
         if(!DataManager.Inst.skills.Contains(mySkill))

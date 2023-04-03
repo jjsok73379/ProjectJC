@@ -8,6 +8,16 @@ public class AnimEvent : MonoBehaviour
     public UnityEvent Skill = default;
     public UnityEvent Attack = default;
     public UnityEvent<bool> ComboCheck = default;
+    public ParticleSystem BossBreath;
+
+    public void FlameStart()
+    {
+        BossBreath.Play();
+    }
+    public void FlameEnd()
+    {
+        BossBreath.Stop();
+    }
 
     public void OnAttack()
     {

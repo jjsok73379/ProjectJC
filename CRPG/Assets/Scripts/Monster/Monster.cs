@@ -50,6 +50,8 @@ public class Monster : BattleSystem
     [SerializeField]
     float orgRadius;
     Color orgColor = Color.white;
+    public GameObject hudDamageText;
+    public Transform hudPos;
 
     public GameObject AIPer = null;
     [field:SerializeField]
@@ -263,6 +265,9 @@ public class Monster : BattleSystem
 
     public override void OnDamage(float dmg)
     {
+        GameObject hudText = Instantiate(hudDamageText);
+        hudText.transform.position = hudPos.position;
+        hudText.GetComponent<DamageText>().damage = (int)dmg;
         myStat.HP -= dmg;
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {

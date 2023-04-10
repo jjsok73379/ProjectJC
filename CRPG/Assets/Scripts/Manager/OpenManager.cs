@@ -245,7 +245,6 @@ public class OpenManager : MonoBehaviour
         go_Inventory.SetActive(inventoryActivated);
     }
 
-
     public void TryOpenCharacterInfo()
     {
         CharacterInfoActivated = !CharacterInfoActivated;

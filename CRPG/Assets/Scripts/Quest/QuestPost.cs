@@ -30,6 +30,14 @@ public class QuestPost : MonoBehaviour
                     HaveQuest();
                 }
             }
+            if (ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.donechk)
+            {
+                QuestChk.isOn = true;
+            }
+            else
+            {
+                QuestChk.isOn = false;
+            }
         }
     }
 

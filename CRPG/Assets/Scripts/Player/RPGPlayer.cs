@@ -97,7 +97,6 @@ namespace CombineRPG
                     WeaponStat();
                     break;
                 case STATE.Death:
-                    StopAllCoroutines();
                     myStat.HP = 0;
                     myAnim.SetTrigger("Dead");
                     foreach (IBattle ib in myAttackers)
@@ -204,12 +203,12 @@ namespace CombineRPG
         {
             if (mySword != null)
             {
-                myStat.AP = 5 + mySword.damage;
+                myStat.AP = Level * 5 + mySword.damage;
                 orgDamage = myStat.AP;
             }
             else
             {
-                myStat.AP = 5;
+                myStat.AP = Level * 5;
             }
         }
 

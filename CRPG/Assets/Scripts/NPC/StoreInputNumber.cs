@@ -16,13 +16,7 @@ public class StoreInputNumber : MonoBehaviour
     int maxnum = 99;
 
     public StoreSlot selectedSlot;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
         if (activated)
@@ -35,22 +29,6 @@ public class StoreInputNumber : MonoBehaviour
         text_Input.text = num.ToString();
         theBuyWindow.Text_Buy(selectedSlot.myData.itemName, selectedSlot.Price * num);
     }
-
-    /*bool CheckNumber(string _argString)
-    {
-        char[] _tempCharArray = _argString.ToCharArray();
-        bool isNumber = true;
-
-        for (int i = 0; i < _tempCharArray.Length; i++)
-        {
-            if (_tempCharArray[i] >= 48 && _tempCharArray[i] <= 57)
-            {
-                continue;
-            }
-            isNumber = false;
-        }
-        return isNumber;
-    }*/
 
     void BuyItem(int _num)
     {
@@ -75,22 +53,6 @@ public class StoreInputNumber : MonoBehaviour
     {
         if (text_Input.text != "")
         {
-            /*if (CheckNumber(text_Input.text))
-            {
-                num = int.Parse(text_Input.text);
-                if (num >= maxnum)
-                {
-                    num = maxnum;
-                    if (num * selectedSlot.Price > GameManager.Inst.Goldvalue)
-                    {
-                        num = GameManager.Inst.Goldvalue / selectedSlot.Price;
-                        if (0 >= GameManager.Inst.Goldvalue)
-                        {
-                            num = 0;
-                        }
-                    }
-                }
-            }*/
             if (GameManager.Inst.Goldvalue < selectedSlot.Price) return;
             BuyItem(num);
             transform.parent.gameObject.SetActive(false);

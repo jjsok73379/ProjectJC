@@ -46,7 +46,6 @@ public class QuestGoal
 
     public void IsDoAction()
     {
-        QuestPost.Inst.QuestChk.isOn = true;
         donechk = true;
     }
 }

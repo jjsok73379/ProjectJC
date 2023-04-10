@@ -115,6 +115,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2588452720217314391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 93994471448652566}
+  m_Layer: 7
+  m_Name: Hud
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &93994471448652566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2588452720217314391}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 1.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3891923349452803438}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3891923349452443840
 GameObject:
   m_ObjectHideFlags: 0
@@ -2403,6 +2434,7 @@ Transform:
   - {fileID: 2088612299534481205}
   - {fileID: 4864024009302114634}
   - {fileID: 8819085219719659852}
+  - {fileID: 93994471448652566}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2439,12 +2471,15 @@ MonoBehaviour:
   MP_PotionPrefab: {fileID: 1021588353636906, guid: 4a543d9d64a97a14ba54f62908d078a9, type: 3}
   BookPrefab: {fileID: 4433255413829591616, guid: a8ffe7396f8a9c340a69fd6779ea843e, type: 3}
   myMinimapIcon: {fileID: 2355023920558490786}
+  myAttackSound: {fileID: 0}
   IsBoss: 0
   theBossDragon: {fileID: 0}
   SkillEff: {fileID: 1079946990457772, guid: 204639ced0f4e8140bf8f4d5642a0cb4, type: 3}
   GiveExp: 5000
   myHeadTop: {fileID: 8819085219719659852}
   orgRadius: 7
+  hudDamageText: {fileID: 8006180987510588911, guid: 2744d56a1f12f2f45bc71a908c68fd13, type: 3}
+  hudPos: {fileID: 93994471448652566}
   AIPer: {fileID: 7191233624290870442}
   <AttackPoint>k__BackingField: {fileID: 2088612299534481205}
   myState: 0
@@ -2481,6 +2516,7 @@ MonoBehaviour:
   ComboCheck:
     m_PersistentCalls:
       m_Calls: []
+  BossBreath: {fileID: 0}
 --- !u!95 &3891923349461803650
 Animator:
   serializedVersion: 5

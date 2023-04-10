@@ -131,6 +131,7 @@ Transform:
   - {fileID: 3029817855787248958}
   - {fileID: 7109654256827257498}
   - {fileID: 7109654256615998943}
+  - {fileID: 6517150059996661975}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 135, z: 0}
@@ -169,16 +170,18 @@ MonoBehaviour:
   MP_PotionPrefab: {fileID: 1280056767771472, guid: 2bb4477b81339ba4190d70fa7acae46c, type: 3}
   BookPrefab: {fileID: 4433255413829591616, guid: a8ffe7396f8a9c340a69fd6779ea843e, type: 3}
   myMinimapIcon: {fileID: 7109654256827257497}
+  myAttackSound: {fileID: 0}
   IsBoss: 1
   theBossDragon: {fileID: 3029817855786880364}
   SkillEff: {fileID: 0}
   GiveExp: 1000
   myHeadTop: {fileID: 7109654255894587061}
   orgRadius: 15
+  hudDamageText: {fileID: 0}
+  hudPos: {fileID: 0}
   AIPer: {fileID: 7109654256615998942}
   <AttackPoint>k__BackingField: {fileID: 7109654255817407197}
   myState: 0
-  myBreath: {fileID: 6785260291561034297}
   myHPSlider: {fileID: 0}
   HPText: {fileID: 0}
   myZone: {fileID: 0}
@@ -199,22 +202,6 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 256
-  MeteorPos:
-  - {x: -7.3, y: 1, z: 7.9}
-  - {x: 1.7, y: 1, z: 11.6}
-  - {x: 9.1, y: 1, z: 1}
-  - {x: 13.3, y: 1, z: -19.3}
-  - {x: -1.9, y: 1, z: -9.6}
-  - {x: -11.7, y: 1, z: -6.1}
-  - {x: -4.4, y: 1, z: 10.3}
-  - {x: 10.9, y: 1, z: 6.9}
-  - {x: 5.4, y: 1, z: 1.6}
-  - {x: 1.5, y: 1, z: -3.4}
-  - {x: -4.3, y: 1, z: 2.6}
-  - {x: 13.8, y: 1, z: 9.7}
-  - {x: 27.6, y: 1, z: -15.8}
-  - {x: -8, y: 1, z: -6.1}
-  - {x: -0.9, y: 1, z: -9.3}
   BossClear: {fileID: 0}
 --- !u!95 &3029817855794243974
 Animator:
@@ -311,6 +298,7 @@ MonoBehaviour:
   ComboCheck:
     m_PersistentCalls:
       m_Calls: []
+  BossBreath: {fileID: 0}
 --- !u!1 &3029817855786880362
 GameObject:
   m_ObjectHideFlags: 0
@@ -4245,6 +4233,37 @@ Transform:
   m_Father: {fileID: 3029817855787203792}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -4.47855, y: -1.1188315, z: -11.3309145}
+--- !u!1 &4719576451403721215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6517150059996661975}
+  m_Layer: 7
+  m_Name: Hud
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6517150059996661975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4719576451403721215}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.8, z: 5.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3029817855787222022}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5758793420978005323
 GameObject:
   m_ObjectHideFlags: 0

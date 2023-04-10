@@ -52,7 +52,6 @@ public class QuestManager : MonoBehaviour
         }
         else
         {
-            QuestPost.Inst.QuestChk.isOn = false;
             objQ = Instantiate(QuestPrefab, QuestContent.transform);
             for (int j = 0; j < objQ.GetComponent<QuestInfo>().titleText.Length; j++)
             {

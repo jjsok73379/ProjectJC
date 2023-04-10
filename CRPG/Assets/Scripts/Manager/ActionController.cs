@@ -97,13 +97,11 @@ public class ActionController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            SoundManager.Inst.ButtonSound.Play();
             CheckItem();
             CanPickUp();
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
-            SoundManager.Inst.ButtonSound.Play();
             NPC_Communication();
             CanTalk();
             CheckPortal();
@@ -166,7 +164,6 @@ public class ActionController : MonoBehaviour
                 NPC_Name = "ÇÈ½Ã";
                 TalkWithNPC(NPC_Name);
             }
-
         }
         else if (Physics.CapsuleCast(transform.position, transform.position + new Vector3(1.0f, 3.0f, 1.0f), 1.0f, transform.forward, out hitInfo, range, Quest_NpcMask))
         {
@@ -257,6 +254,7 @@ public class ActionController : MonoBehaviour
         {
             if (hitInfo.transform != null)
             {
+                SoundManager.Inst.ButtonSound.Play();
                 theInventory.AcquireItem(hitInfo.transform.GetComponent<PickupItem>().item);
                 if (theRPGPlayer.quest.isActive)
                 {
@@ -286,6 +284,7 @@ public class ActionController : MonoBehaviour
         {
             if(hitInfo.transform != null)
             {
+                SoundManager.Inst.ButtonSound.Play();
                 if (IsStore)
                 {
                     Store_NPC_Text.SetActive(true);
@@ -310,6 +309,7 @@ public class ActionController : MonoBehaviour
     {
         if (portalActivated)
         {
+            SoundManager.Inst.ButtonSound.Play();
             DataManager.Inst.MaxHP = theRPGPlayer.myStat.maxHp;
             DataManager.Inst.HP = theRPGPlayer.myStat.HP;
             DataManager.Inst.MaxMP = theRPGPlayer.myStat.maxMp;

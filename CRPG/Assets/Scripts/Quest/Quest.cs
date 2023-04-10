@@ -18,7 +18,7 @@ public class Quest
     public void Complete()
     {
         isActive = false;
-        QuestPost.Inst.QuestChk.isOn = false;
+        goal.donechk = false;
         if(QuestManager.Inst != null)
         {
             QuestManager.Inst.i++;

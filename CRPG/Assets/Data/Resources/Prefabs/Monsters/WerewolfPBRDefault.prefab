@@ -609,6 +609,7 @@ Transform:
   - {fileID: 1624327319924750165}
   - {fileID: 4606913426168261357}
   - {fileID: 9103202606508008617}
+  - {fileID: 4963907823619213014}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -645,11 +646,15 @@ MonoBehaviour:
   MP_PotionPrefab: {fileID: 1891390126468666, guid: 57b7c772a11cd4641b157710bee9c360, type: 3}
   BookPrefab: {fileID: 4433255413829591616, guid: a8ffe7396f8a9c340a69fd6779ea843e, type: 3}
   myMinimapIcon: {fileID: 8385061707773238209}
+  myAttackSound: {fileID: 0}
   IsBoss: 0
   theBossDragon: {fileID: 0}
+  SkillEff: {fileID: 0}
   GiveExp: 1500
   myHeadTop: {fileID: 9103202606508008617}
   orgRadius: 9
+  hudDamageText: {fileID: 8006180987510588911, guid: 2744d56a1f12f2f45bc71a908c68fd13, type: 3}
+  hudPos: {fileID: 4963907823619213014}
   AIPer: {fileID: 6936854081946217172}
   <AttackPoint>k__BackingField: {fileID: 1624327319924750165}
   myState: 0
@@ -686,6 +691,7 @@ MonoBehaviour:
   ComboCheck:
     m_PersistentCalls:
       m_Calls: []
+  BossBreath: {fileID: 0}
 --- !u!95 &5785497811915092149
 Animator:
   serializedVersion: 5
@@ -2860,6 +2866,37 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 9
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &8329984047511067822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4963907823619213014}
+  m_Layer: 7
+  m_Name: Hud
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4963907823619213014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329984047511067822}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.15, z: 0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5785497811905240769}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8385061707773238209
 GameObject:
   m_ObjectHideFlags: 0

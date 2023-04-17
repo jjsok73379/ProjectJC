@@ -1,3 +1,4 @@
+using CombineRPG;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,6 +53,7 @@ public struct SkillStat
 public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler
 {
     public SkillStat myStat;
+
     public int MaterialCount
     {
         get => myStat.MaterialCount;
@@ -72,6 +74,13 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
     public void OnUpgrade()
     {
         myStat.Level++;
+        if (theActionController.GetComponent<RPGPlayer>().quest != null)
+        {
+            if (theActionController.GetComponent<RPGPlayer>().quest.isActive)
+            {
+                theActionController.GetComponent<RPGPlayer>().quest.goal.IsDoAction();
+            }
+        }
     }
 
     Vector2 dragOffset = Vector2.zero;
@@ -86,18 +95,19 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
     ActionController theActionController;
     [SerializeField]
     MaterialSlot[] materialSlots = new MaterialSlot[2];
+    public TMP_Text[] myInfo;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         Vector3 pos = Input.mousePosition;
         selectedSkill = Instantiate(Resources.Load("Prefabs/SelectedSkill"), pos, Quaternion.identity, transform.parent.parent.parent.parent.parent.parent) as GameObject;
         selectedSkill.GetComponent<SelectedSkill>().myData = myStat.orgData;
-        dragOffset = (Vector2)selectedSkill.transform.localPosition - eventData.position;
+        dragOffset = (Vector2)selectedSkill.transform.position - eventData.position;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        selectedSkill.transform.localPosition = eventData.position + dragOffset;
+        selectedSkill.transform.position = eventData.position + dragOffset;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -178,7 +188,6 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
                         {
                             if (myStat.MaterialCount == skillbook1 && myStat.MaterialCount == skillbook2)
                             {
-                                Debug.Log("강화성공");
                                 SkillManager.Inst.ReinforceWindow.SetActive(false);
                                 SkillManager.Inst.ReinforceOpen = false;
                                 OnUpgrade();
@@ -195,12 +204,10 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
                                             if (InventoryManager.Inst.allSlots[i].itemCount >= myStat.MaterialCount)
                                             {
                                                 InventoryManager.Inst.allSlots[i].SetSlotCount(-myStat.MaterialCount);
-                                                skillbook1++;
+                                                skillbook1 += myStat.MaterialCount;
                                             }
                                             else
                                             {
-                                                Debug.Log(myStat.MaterialCount);
-                                                Debug.Log(InventoryManager.Inst.allSlots[i].itemCount);
                                                 StartCoroutine(theActionController.WhenLessCount());
                                             }
                                         }
@@ -209,12 +216,10 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
                                             if (InventoryManager.Inst.allSlots[i].itemCount >= myStat.MaterialCount)
                                             {
                                                 InventoryManager.Inst.allSlots[i].SetSlotCount(-myStat.MaterialCount);
-                                                skillbook2++;
+                                                skillbook2 += myStat.MaterialCount;
                                             }
                                             else
                                             {
-                                                Debug.Log(myStat.MaterialCount);
-                                                Debug.Log(InventoryManager.Inst.allSlots[i].itemCount);
                                                 StartCoroutine(theActionController.WhenLessCount());
                                             }
                                         }
@@ -223,14 +228,6 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
                                             StartCoroutine(theActionController.WhenDontHave());
                                         }
                                     }
-                                    else
-                                    {
-                                        StartCoroutine(theActionController.WhenDontHave());
-                                    }
-                                }
-                                else
-                                {
-                                    StartCoroutine(theActionController.WhenDontHave());
                                 }
                             }
                         }

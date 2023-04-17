@@ -38,10 +38,4 @@ public class StoreToolTip : MonoBehaviour
     {
         HideToolTip();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

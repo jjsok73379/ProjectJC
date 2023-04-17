@@ -1,13 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Title : MonoBehaviour
 {
-    public string SceneName = "LoadingScene";
-    SaveData saveData;
+    [SerializeField]
+    Button LoadBtn;
+    [SerializeField]
+    Color UnActive;
+    [SerializeField]
+    GameObject NoTouch;
+
+    private void Start()
+    {
+        if (SaveAndLoad.Inst.IsSaved)
+        {
+            NoTouch.SetActive(false);
+            LoadBtn.interactable = true;
+            LoadBtn.gameObject.GetComponent<Image>().color = Color.white;
+        }
+        else
+        {
+            NoTouch.SetActive(true);
+            LoadBtn.interactable = false;
+            LoadBtn.gameObject.GetComponent<Image>().color = UnActive;
+        }
+    }
 
     public void ClickStart()
     {
@@ -16,7 +35,8 @@ public class Title : MonoBehaviour
 
     public void ClickLoad()
     {
-        LoadManager.LoadScene(saveData.SceneNum);
+        DataManager.Inst.IsLoad = true;
+        LoadManager.LoadScene(SaveAndLoad.Inst.saveData.SceneNum);
     }
 
     public void ClickSetting()

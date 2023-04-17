@@ -28,35 +28,25 @@ public class QuestGoal
 
     public void EnemyKilled(GameObject monster)
     {
-        if (goalType == GoalType.Kill)
+        if (monster.name == Target.name + "(Clone)" || monster.name == Target.name)
         {
-            if (monster == Target)
-            {
-                currentAmount++;
-                ActionController.Inst.GetComponent<RPGPlayer>().theQuestPost.QuestCount.text = "( " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.currentAmount.ToString() + " / " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.requiredAmount.ToString() + " )";
-            }
+            currentAmount++;
+            QuestPost.Inst.QuestCount.text = "( " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.currentAmount.ToString() + " / " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.requiredAmount.ToString() + " )";
         }
     }
 
     public void ItemCollected(GameObject item)
     {
-        if (goalType == GoalType.Gathering)
+        if (item == Target)
         {
-            if(item == Target)
-            {
-                currentAmount++;
-                ActionController.Inst.GetComponent<RPGPlayer>().theQuestPost.QuestCount.text = "( " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.currentAmount.ToString() + " / " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.requiredAmount.ToString() + " )";
-            }
+            currentAmount++;
+            QuestPost.Inst.QuestCount.text = "( " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.currentAmount.ToString() + " / " + ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.requiredAmount.ToString() + " )";
         }
     }
 
     public void IsDoAction()
     {
-        if (goalType == GoalType.Etc)
-        {
-            ActionController.Inst.GetComponent<RPGPlayer>().theQuestPost.QuestChk.isOn = true;
-            donechk = true;
-        }
+        donechk = true;
     }
 }
 

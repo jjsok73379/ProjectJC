@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716514641991029750}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3.5, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -207,6 +207,37 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 6
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7560274056241489516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5566828209218519690}
+  m_Layer: 7
+  m_Name: Hud
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5566828209218519690
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7560274056241489516}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8548725443831747411}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8539195371897238134
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,6 +742,7 @@ Transform:
   - {fileID: 2997103791706772415}
   - {fileID: 8678845486711120422}
   - {fileID: 5012729888201219695}
+  - {fileID: 5566828209218519690}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -748,11 +780,15 @@ MonoBehaviour:
   MP_PotionPrefab: {fileID: 1021588353636906, guid: 4a543d9d64a97a14ba54f62908d078a9, type: 3}
   BookPrefab: {fileID: 4433255413829591616, guid: a8ffe7396f8a9c340a69fd6779ea843e, type: 3}
   myMinimapIcon: {fileID: 1716514641991029750}
+  myAttackSound: {fileID: 0}
   IsBoss: 0
   theBossDragon: {fileID: 0}
+  SkillEff: {fileID: 0}
   GiveExp: 3000
   myHeadTop: {fileID: 5012729888201219695}
   orgRadius: 6
+  hudDamageText: {fileID: 8006180987510588911, guid: 2744d56a1f12f2f45bc71a908c68fd13, type: 3}
+  hudPos: {fileID: 5566828209218519690}
   AIPer: {fileID: 5275476677931123770}
   <AttackPoint>k__BackingField: {fileID: 2997103791706772415}
   myState: 0
@@ -789,6 +825,7 @@ MonoBehaviour:
   ComboCheck:
     m_PersistentCalls:
       m_Calls: []
+  BossBreath: {fileID: 0}
 --- !u!95 &8548725443824041179
 Animator:
   serializedVersion: 5

@@ -1,16 +1,11 @@
-using CombineRPG;
 using DTT.AreaOfEffectRegions;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BossDragon : Monster
 {
-    [SerializeField]
-    ParticleSystem myBreath;
     public Slider myHPSlider;
     [SerializeField]
     TMP_Text HPText;
@@ -23,8 +18,6 @@ public class BossDragon : Monster
     [SerializeField]
     LayerMask enemyMask;
     [SerializeField]
-    Vector3[] MeteorPos;
-    [SerializeField]
     ParticleSystem BossClear;
     float orgDamage;
     Collider[] myEnemys;
@@ -33,7 +26,7 @@ public class BossDragon : Monster
     // Start is called before the first frame update
     void Start()
     {
-        myBreath.gameObject.SetActive(false);
+        IsBoss = true;
         myHPSlider.gameObject.SetActive(false);
         myHPSlider.value = 1;
         myStat.changeHp = (float v) => myHPSlider.value = v;
@@ -48,18 +41,7 @@ public class BossDragon : Monster
     // Update is called once per frame
     void Update()
     {
-        HPText.text = myStat.maxHp + " / " + myStat.HP;
-        if (myBreath.gameObject.activeSelf)
-        {
-            if (myAnim.GetBool("IsFlame"))
-            {
-                myBreath.Play();
-            }
-            else
-            {
-                myBreath.Stop();
-            }
-        }
+        HPText.text = myStat.HP + " / " + myStat.maxHp;
         if (myZone.IsEnter)
         {
             StartCoroutine(CheckEnter());
@@ -67,10 +49,6 @@ public class BossDragon : Monster
         if (myState == STATE.Dead)
         {
             StartCoroutine(CheckBossDead());
-        }
-        if (myState == STATE.Battle)
-        {
-            transform.LookAt(myTarget.transform);
         }
     }
 
@@ -83,7 +61,6 @@ public class BossDragon : Monster
 
     IEnumerator CheckBossDead()
     {
-        StopAllCoroutines(); 
         for (int i = 0; i < Regions.Length; i++)
         {
             Regions[i].gameObject.SetActive(false);
@@ -95,21 +72,21 @@ public class BossDragon : Monster
 
     public IEnumerator Think()
     {
-        StopAllCoroutines();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
 
-        if (myStat.HP > 70000)
+        if (myStat.HP > 7000)
         {
             ranAction = Random.Range(0, 2);
         }
-        else if (myStat.HP < 70000 && myStat.HP > 30000)
+        else if (myStat.HP < 7000 && myStat.HP > 3000)
         {
             ranAction = Random.Range(1, 4);
         }
-        else if (myStat.HP < 30000)
+        else if (myStat.HP < 3000)
         {
             ranAction = Random.Range(2, 5);
         }
+
         switch (ranAction)
         {
             case 0:
@@ -134,18 +111,46 @@ public class BossDragon : Monster
         }
     }
 
+    IEnumerator MoveToPos(float AttackRange)
+    {
+        transform.LookAt(myTarget);
+        //ÀÌµ¿
+        Vector3 pos = Vector3.zero;
+        Vector3 dir = Vector3.zero;
+        dir.Normalize();
+        while (Vector3.Distance(pos, transform.position) > AttackRange)
+        {
+            myAnim.SetBool("IsMoving", true);
+            float delta = Time.fixedDeltaTime * myStat.MoveSpeed;
+            if (myTarget != null)
+            {
+                pos = myTarget.position;
+            }
+            dir = pos - transform.position;
+            if (delta > dir.magnitude)
+            {
+                delta = dir.magnitude;
+            }
+            dir.Normalize();
+            transform.Translate(dir * delta, Space.World);
+            yield return new WaitForFixedUpdate();
+        }
+        myAnim.SetBool("IsMoving", false);
+    }
+
     IEnumerator BasicAttack()
     {
-        AttackTarget(myTarget, myAttackSound);
-        yield return new WaitForSeconds(3.0f);
-
+        yield return StartCoroutine(MoveToPos(12.0f));
+        myAttackSound.Play();
+        myAnim.SetTrigger("Attack");
+        yield return new WaitForSecondsRealtime(0.5f);
         StartCoroutine(Think());
     }
 
     IEnumerator ClawAttack()
     {
+        yield return StartCoroutine(MoveToPos(17.0f));
         Regions[0].SetActive(true);
-        Regions[0].transform.position = transform.position + new Vector3(5.0f, 1.0f, -5.0f);
         while (Regions[0].GetComponent<LineRegion>().FillProgress <= 0.99f)
         {
             yield return null;
@@ -155,7 +160,7 @@ public class BossDragon : Monster
         Regions[0].SetActive(false);
         Regions[0].GetComponent<LineRegion>().FillProgress = 0;
         myAnim.SetTrigger("ClawAttack");
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSecondsRealtime(3.0f);
         myStat.AP = orgDamage;
 
         StartCoroutine(Think());
@@ -177,8 +182,8 @@ public class BossDragon : Monster
 
     IEnumerator FlameAttack()
     {
+        yield return StartCoroutine(MoveToPos(20.0f));
         Regions[1].SetActive(true);
-        Regions[1].transform.position = transform.position + new Vector3(5.0f, 1.0f, -5.0f);
         while (Regions[1].GetComponent<ArcRegion>().FillProgress <= 0.99)
         {
             yield return null;
@@ -187,10 +192,9 @@ public class BossDragon : Monster
         myStat.AP = 400f;
         Regions[1].SetActive(false);
         Regions[1].GetComponent<ArcRegion>().FillProgress = 0;
-        myBreath.gameObject.SetActive(true);
         UseFlame();
         myAnim.SetTrigger("FlameAttack");
-        yield return new WaitForSeconds(6.0f);
+        yield return new WaitForSecondsRealtime(4.0f);
         myStat.AP = orgDamage;
 
         StartCoroutine(Think());
@@ -198,33 +202,31 @@ public class BossDragon : Monster
 
     IEnumerator MeteorAttack()
     {
+        yield return StartCoroutine(MoveToPos(20.0f));
         myStat.AP = 350f;
         myAnim.SetTrigger("MeteorAttack");
-        int ranNum = Random.Range(0, MeteorPos.Length);
-        for (int i = 2; i < Regions.Length; i++)
+        for (int i = 2; i < Regions.Length;)
         {
+            Vector3 pos = Vector3.zero;
             Regions[i].SetActive(true);
-            Regions[i].transform.position = transform.position + MeteorPos[ranNum];
+            pos.x = Random.Range(-15.0f, 15.0f);
+            pos.z = Random.Range(-15.0f, 15.0f);
+            pos = transform.position + pos;
+            Regions[i].transform.position = pos;
             while (Regions[i].GetComponent<CircleRegion>().FillProgress <= 0.99)
             {
                 yield return null;
-                Regions[i].GetComponent<CircleRegion>().FillProgress += 0.1f * Time.deltaTime;
+                Regions[i].GetComponent<CircleRegion>().FillProgress += 0.7f * Time.deltaTime;
                 if (Regions[i].GetComponent<CircleRegion>().FillProgress > 0.9)
                 {
-                    SoundManager.Inst.BossSound[0].Play();
                     Regions[i].GetComponentInChildren<ParticleSystem>().Play();
                 }
             }
-            myEnemys = Physics.OverlapSphere(transform.position, 2, enemyMask);
-            foreach (Collider col in myEnemys)
-            {
-                col.GetComponent<IBattle>()?.OnDamage(myStat.AP);
-            }
             Regions[i].GetComponent<CircleRegion>().FillProgress = 0;
             Regions[i].SetActive(false);
-            yield return new WaitForSeconds(0.1f);
+            i++;
         }
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSecondsRealtime(5.0f);
         myStat.AP = orgDamage;
 
         StartCoroutine(Think());
@@ -232,12 +234,12 @@ public class BossDragon : Monster
 
     IEnumerator FlyingBreath()
     {
+        yield return StartCoroutine(MoveToPos(20.0f));
         myAnim.SetTrigger("FlyFlame");
         myStat.AP = 800f;
-        yield return new WaitForSeconds(5.0f);
-        myBreath.gameObject.SetActive(true);
+        yield return new WaitForSecondsRealtime(5.0f);
         UseFlame();
-        yield return new WaitForSeconds(11.0f);
+        yield return new WaitForSecondsRealtime(11.0f);
         myStat.AP = orgDamage;
 
         StartCoroutine(Think());

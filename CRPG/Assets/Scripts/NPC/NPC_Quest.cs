@@ -19,6 +19,7 @@ public class NPC_Quest : NPC
                 break;
             case STATE.Talk:
                 QuestWindow.SetActive(false);
+                QuestManager.Inst.objQ.GetComponent<QuestInfo>().myInfo.SetActive(false);
                 StartCoroutine(Typing(NPC_Typing));
                 break;
             case STATE.Accept:

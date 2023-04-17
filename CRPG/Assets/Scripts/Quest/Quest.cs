@@ -18,7 +18,7 @@ public class Quest
     public void Complete()
     {
         isActive = false;
-        ActionController.Inst.GetComponent<RPGPlayer>().theQuestPost.QuestChk.isOn = false;
+        goal.donechk = false;
         if(QuestManager.Inst != null)
         {
             QuestManager.Inst.i++;

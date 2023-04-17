@@ -314,6 +314,9 @@ MonoBehaviour:
   materialSlots:
   - {fileID: 0}
   - {fileID: 0}
+  myInfo:
+  - {fileID: 3934660430373442753}
+  - {fileID: 1607564224853988196}
 --- !u!222 &1607564225619312807
 CanvasRenderer:
   m_ObjectHideFlags: 0

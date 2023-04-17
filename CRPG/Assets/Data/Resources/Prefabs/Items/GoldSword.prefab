@@ -126,9 +126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myImage: {fileID: 1663540413, guid: 0c8391968139e1345b7a7734385763f3, type: 3}
-  myAttackPoint: {fileID: 20758532766960247}
   SwordName: "\uC219\uB828\uC790\uC6A9 \uAC80"
-  damage: 12
+  damage: 3000
 --- !u!33 &475492034342227015
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ public class Monster : BattleSystem
     GameObject myMinimapIcon;
     public AudioSource myAttackSound;
     [SerializeField]
-    bool IsBoss = false;
+    protected bool IsBoss = false;
     [SerializeField]
     BossDragon theBossDragon;
     [SerializeField]
@@ -50,6 +50,8 @@ public class Monster : BattleSystem
     [SerializeField]
     float orgRadius;
     Color orgColor = Color.white;
+    public GameObject hudDamageText;
+    public Transform hudPos;
 
     public GameObject AIPer = null;
     [field:SerializeField]
@@ -263,11 +265,25 @@ public class Monster : BattleSystem
 
     public override void OnDamage(float dmg)
     {
+        GameObject hudText = Instantiate(hudDamageText);
+        hudText.transform.position = hudPos.position;
+        hudText.GetComponent<DamageText>().damage = (int)dmg;
         myStat.HP -= dmg;
-        Debug.Log("À¸¾Ç");
         if (Mathf.Approximately(myStat.HP, 0.0f))
         {
             ChangeState(STATE.Dead);
+            if (ActionController.Inst.GetComponent<RPGPlayer>().quest.isActive)
+            {
+                ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.EnemyKilled(gameObject);
+            }
+            if (ActionController.Inst.GetComponent<RPGPlayer>().Level == ActionController.Inst.GetComponent<RPGPlayer>().MaxLevel)
+            {
+                Mathf.Clamp(ActionController.Inst.GetComponent<RPGPlayer>().myStat.EXP, 0, ActionController.Inst.GetComponent<RPGPlayer>().myStat.maxExp - 1);
+            }
+            else
+            {
+                ActionController.Inst.GetComponent<RPGPlayer>().myStat.EXP += GiveExp;
+            }
             ObjectManager.Inst.DropCoinToPosition(transform.position, rewardMoney);
             DropItem(new Vector3(transform.position.x + DropPos[1].x, 2.5f, transform.position.z + DropPos[1].z), 0, 22, SwordPrefab[UnityEngine.Random.Range(0,SwordPrefab.Length)]);
             DropItem(new Vector3(transform.position.x + DropPos[2].x, 2.5f, transform.position.z + DropPos[2].z), 15, 90, HP_PotionPrefab);
@@ -307,7 +323,6 @@ public class Monster : BattleSystem
                 myStat.HP = myStat.maxHp;
             }
         }
-        yield return null;
     }
 
     void DropItem(Vector3 pos, int ranmin, int ranmax, GameObject itemprefab)

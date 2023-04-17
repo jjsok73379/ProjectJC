@@ -204,7 +204,7 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
                                             if (InventoryManager.Inst.allSlots[i].itemCount >= myStat.MaterialCount)
                                             {
                                                 InventoryManager.Inst.allSlots[i].SetSlotCount(-myStat.MaterialCount);
-                                                skillbook1++;
+                                                skillbook1 += myStat.MaterialCount;
                                             }
                                             else
                                             {
@@ -216,7 +216,7 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
                                             if (InventoryManager.Inst.allSlots[i].itemCount >= myStat.MaterialCount)
                                             {
                                                 InventoryManager.Inst.allSlots[i].SetSlotCount(-myStat.MaterialCount);
-                                                skillbook2++;
+                                                skillbook2 += myStat.MaterialCount;
                                             }
                                             else
                                             {

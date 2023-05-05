@@ -274,7 +274,10 @@ public class Monster : BattleSystem
             ChangeState(STATE.Dead);
             if (ActionController.Inst.GetComponent<RPGPlayer>().quest.isActive)
             {
-                ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.EnemyKilled(gameObject);
+                if (ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.goalType == GoalType.Kill)
+                {
+                    ActionController.Inst.GetComponent<RPGPlayer>().quest.goal.EnemyKilled(gameObject);
+                }
             }
             if (ActionController.Inst.GetComponent<RPGPlayer>().Level == ActionController.Inst.GetComponent<RPGPlayer>().MaxLevel)
             {

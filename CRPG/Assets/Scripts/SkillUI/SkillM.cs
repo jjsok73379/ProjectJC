@@ -50,7 +50,7 @@ public struct SkillStat
         get => orgData.GetAttackRange();
     }
 }
-public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler
+public class SkillM : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public SkillStat myStat;
 
@@ -74,13 +74,7 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
     public void OnUpgrade()
     {
         myStat.Level++;
-        if (theActionController.GetComponent<RPGPlayer>().quest != null)
-        {
-            if (theActionController.GetComponent<RPGPlayer>().quest.isActive)
-            {
-                theActionController.GetComponent<RPGPlayer>().quest.goal.IsDoAction();
-            }
-        }
+        theActionController.GetComponent<RPGPlayer>().DoQuest(4);
     }
 
     Vector2 dragOffset = Vector2.zero;
@@ -164,6 +158,8 @@ public class SkillM : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandl
         SkillManager.Inst.ReinforceOpen = !SkillManager.Inst.ReinforceOpen;
         SkillManager.Inst.ReinforceWindow.SetActive(SkillManager.Inst.ReinforceOpen);
         SkillManager.Inst.ReinforceImage.sprite = myStat.orgData.myImage;
+        materialSlots[0].myData = myStat.orgData.Materials[0];
+        materialSlots[1].myData = myStat.orgData.Materials[1];
         for (int j = 0; j < materialSlots.Length; j++)
         {
             materialSlots[j].myCount.text = myStat.MaterialCount.ToString();

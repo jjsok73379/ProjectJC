@@ -97,6 +97,7 @@ namespace CombineRPG
                     WeaponStat();
                     break;
                 case STATE.Death:
+                    StopAllCoroutines();
                     myStat.HP = 0;
                     myAnim.SetTrigger("Dead");
                     foreach (IBattle ib in myAttackers)
@@ -294,6 +295,7 @@ namespace CombineRPG
                                 }
                                 else
                                 {
+                                    StartCoroutine(SkillEnd());
                                     StartCoroutine(theActionController.WhenNoMana());
                                 }
                             }
@@ -308,6 +310,11 @@ namespace CombineRPG
                                     myStat.MP -= SkillSlots[selectnum].mySkillData.Mana;
                                     myAnim.SetTrigger("Bomb");
                                 }
+                            }
+                            else
+                            {
+                                StartCoroutine(SkillEnd());
+                                StartCoroutine(theActionController.WhenNoMana());
                             }
                         }
                     }
@@ -325,12 +332,13 @@ namespace CombineRPG
                                 myStat.MP -= SkillSlots[selectnum].mySkillData.Mana;
                                 NonTargetingRegion.SetActive(false);
                                 myAnim.SetTrigger("NonTargetingSkill");
-                                GameObject NonTargeting = Instantiate(SkillSlots[selectnum].mySkillData.mySkill, NonTargetingRegion.transform.position, Quaternion.Euler(-270, 0, 0));
+                                GameObject NonTargeting = Instantiate(SkillSlots[selectnum].mySkillData.mySkill, NonTargetingRegion.transform.position, NonTargetingRegion.transform.rotation);
                                 NonTargeting.GetComponent<Skill>().SkillDamage = myStat.AP;
                                 NonTargeting.GetComponent<Skill>().OnFire();
                             }
                             else
                             {
+                                StartCoroutine(SkillEnd());
                                 StartCoroutine(theActionController.WhenNoMana());
                             }
                         }
@@ -538,6 +546,31 @@ namespace CombineRPG
                 if (SkillSlots[num].mySkillData.myType == SkillData.SkillType.NonTargeting)
                 {
                     NonTargetingRegion.SetActive(false);
+                }
+            }
+        }
+
+        public void DoQuest(int i)
+        {
+
+            if (quest != null)
+            {
+                if (quest.isActive)
+                {
+                    if (QuestManager.Inst != null)
+                    {
+                        if (QuestManager.Inst.i == i)
+                        {
+                            quest.goal.IsDoAction();
+                        }
+                    }
+                    else
+                    {
+                        if (this.i == i)
+                        {
+                            quest.goal.IsDoAction();
+                        }
+                    }
                 }
             }
         }

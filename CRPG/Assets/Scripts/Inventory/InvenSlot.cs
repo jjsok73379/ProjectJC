@@ -1,7 +1,9 @@
 using CombineRPG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -86,11 +88,8 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
 
         if (item.itemType != Item.ItemType.Equipment)
         {
-            if (!isFullSlot)
-            {
-                go_CountImage.SetActive(true);
-                text_Count.text = itemCount.ToString();
-            }
+            go_CountImage.SetActive(true);
+            text_Count.text = itemCount.ToString();
         }
         else
         {
@@ -181,24 +180,21 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
                         }
                     }
                 }
-                if (!isQuickSlot)
+                if (!isQuickSlot || !theItemEffectDatabase.GetIsCoolTime())
                 {
                     theItemEffectDatabase.UseItem(item);
                     theItemEffectDatabase.HideToolTip();
 
                     if (item.itemType != Item.ItemType.Equipment)
                     {
-                        SetSlotCount(-1);
-                    }
-                }
-                else if (!theItemEffectDatabase.GetIsCoolTime())
-                {
-                    theItemEffectDatabase.UseItem(item);
-                    theItemEffectDatabase.HideToolTip();
-
-                    if (item.itemType != Item.ItemType.Equipment)
-                    {
-                        SetSlotCount(-1);
+                        if (!theItemEffectDatabase.isAlreadyHave)
+                        {
+                            SetSlotCount(-1);
+                        }
+                        else
+                        {
+                            theItemEffectDatabase.isAlreadyHave = false;
+                        }
                     }
                 }
             }
@@ -209,20 +205,36 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     {
         Item _tempItem = item;
         int _tempItemCount = itemCount;
+        int temp = 0;
 
-        AddItem(DragSlot.Inst.dragSlot.item, DragSlot.Inst.dragSlot.itemCount);
-
-        if (_tempItem == DragSlot.Inst.dragSlot.item)
-        {
-            _tempItemCount += DragSlot.Inst.dragSlot.itemCount;
-        }
 
         if (_tempItem != null)
         {
-            DragSlot.Inst.dragSlot.AddItem(_tempItem, _tempItemCount);
+            if (_tempItem == DragSlot.Inst.dragSlot.item)
+            {
+                if (_tempItemCount + DragSlot.Inst.dragSlot.itemCount >= 99)
+                {
+                    temp = _tempItemCount + DragSlot.Inst.dragSlot.itemCount - 99;
+                    _tempItemCount = 99;
+                    DragSlot.Inst.dragSlot.AddItem(DragSlot.Inst.dragSlot.item, temp);
+                }
+                else
+                {
+                    _tempItemCount += DragSlot.Inst.dragSlot.itemCount;
+                    DragSlot.Inst.dragSlot.ClearSlot();
+                }
+                AddItem(_tempItem, _tempItemCount);
+            }
+            else
+            {
+                AddItem(DragSlot.Inst.dragSlot.item, DragSlot.Inst.dragSlot.itemCount);
+                DragSlot.Inst.dragSlot.AddItem(_tempItem, _tempItemCount);
+            }
+
         }
         else
         {
+            AddItem(DragSlot.Inst.dragSlot.item, DragSlot.Inst.dragSlot.itemCount);
             DragSlot.Inst.dragSlot.ClearSlot();
         }
     }

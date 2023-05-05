@@ -88,6 +88,13 @@ public class QuestManager : MonoBehaviour
         objQ2.GetComponent<QuestInfo>().AfterAccept();
         objQ.GetComponent<QuestInfo>().AfterAccept();
         DontDestroyUI.Inst.QuestPost.SetActive(true);
+        for (int i = 0; i < InventoryManager.Inst.allSlots.Length; i++)
+        {
+            if (this.i == 0 && InventoryManager.Inst.allSlots[i].isEquipped)
+            {
+                theRPGPlayer.DoQuest(0);
+            }
+        }
     }
 
     public void ForgiveQuest()

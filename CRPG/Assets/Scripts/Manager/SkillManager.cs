@@ -111,13 +111,7 @@ public class SkillManager : MonoBehaviour
         {
             if (CombinedSkills[i].Materials[0] == CombineSkillSlot.mySkillData && CombinedSkills[i].Materials[1] == CombineMaterialSlot.mySkillData)
             {
-                if(theRPGPlayer.quest != null)
-                {
-                    if (theRPGPlayer.quest.isActive)
-                    {
-                        theRPGPlayer.quest.goal.IsDoAction();
-                    }
-                }
+                theRPGPlayer.DoQuest(3);
                 myCombinedSkill.GetComponent<CombinedSkill>().mySkillData = CombinedSkills[i];
                 myCombinedSkill.GetComponent<Image>().sprite = CombinedSkills[i].myImage;
                 myCombinedSkillText.SetActive(false);

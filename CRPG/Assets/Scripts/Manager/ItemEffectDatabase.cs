@@ -22,6 +22,8 @@ public class ItemEffectDatabase : MonoBehaviour
 {
     public static ItemEffectDatabase Inst = null;
 
+    public bool isAlreadyHave = false;
+    
     [SerializeField]
     PotionItemEffect[] PotionitemEffects;
     [SerializeField]
@@ -72,6 +74,7 @@ public class ItemEffectDatabase : MonoBehaviour
                     }
                 }
             }
+            thePlayer.DoQuest(0);
             theCharacterInfo.SwordImage.sprite = _item.itemImage;
             thePlayer.mySword = _item.itemPrefab.GetComponent<Sword>();
             thePlayer.WeaponStat();
@@ -165,6 +168,7 @@ public class ItemEffectDatabase : MonoBehaviour
                     }
                     if (SkillManager.Inst.mySkills.Contains(SkillManager.Inst.mySkill))
                     {
+                        isAlreadyHave = true;
                         StartCoroutine(ActionController.Inst.AlreadyHave());
                     }
                     else
@@ -173,10 +177,7 @@ public class ItemEffectDatabase : MonoBehaviour
                     }
                 }
             }
-        }
-        if (thePlayer.quest.isActive)
-        {
-            thePlayer.quest.goal.IsDoAction();
+            thePlayer.DoQuest(1);
         }
     }
 

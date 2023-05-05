@@ -119,6 +119,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (Item.ItemType.Equipment != _item.itemType)
         {
+            sumcount = 0;
             for (int i = 0; i < _slots.Length; i++)
             {
                 if (_slots[i].item != null)
@@ -142,7 +143,7 @@ public class InventoryManager : MonoBehaviour
                             }
                             else
                             {
-                                _slots[i].SetSlotCount(sumcount - 1);
+                                _slots[i].SetSlotCount(_count);
                             }
                             isNotPut = false;
                             return;

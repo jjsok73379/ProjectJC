@@ -24,7 +24,8 @@ public class SkillManager : MonoBehaviour
     public List<SkillData> mySkills = new List<SkillData>();
     public SkillData[] BasicSkills = new SkillData[3];
     public SkillData[] Materials = new SkillData[3];
-    public List<SkillData> CombinedSkills;
+    public SkillData[] CombinedSkills;
+    SkillM Addedskill = null;
 
     public GameObject[] Contents;
 
@@ -107,7 +108,7 @@ public class SkillManager : MonoBehaviour
     public void CombineSkill()
     {
         if (CombineSkillSlot.mySkillData == null || CombineMaterialSlot.mySkillData == null) return;
-        for (int i = 0; i < CombinedSkills.Count; i++)
+        for (int i = 0; i < CombinedSkills.Length; i++)
         {
             if (CombinedSkills[i].Materials[0] == CombineSkillSlot.mySkillData && CombinedSkills[i].Materials[1] == CombineMaterialSlot.mySkillData)
             {
@@ -125,10 +126,10 @@ public class SkillManager : MonoBehaviour
 
     public void AddSkill()
     {
-        for(int i = 0; i < Contents.Length; i++)
+        for (int i = 0; i < Contents.Length; i++)
         {
             AddedskillPanel = Instantiate(SkillPrefab, Contents[i].transform);
-            SkillM Addedskill = AddedskillPanel.GetComponentInChildren<SkillM>();
+            Addedskill = AddedskillPanel.GetComponentInChildren<SkillM>();
             Addedskill.myStat.orgData = mySkill;
             Addedskill.GetComponent<Image>().sprite = mySkill.myImage;
             for (int j = 0; j < Addedskill.myInfo.Length; j++)

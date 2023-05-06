@@ -15,7 +15,9 @@ public class DataManager : MonoBehaviour
     [SerializeField]
     Item FirstItem;
     [SerializeField]
-    Item SecondItem;
+    Item SecondItem; 
+    [SerializeField]
+    Item ThirdItem;
 
     public float MaxHP;
     public float HP;
@@ -31,7 +33,6 @@ public class DataManager : MonoBehaviour
 
     public List<SkillData> skills;
     public SkillData[] SkillSlotDatas = new SkillData[4];
-    public List<int> skillLevel;
 
     public List<Item> items;
     public List<int> itemsCount;
@@ -59,8 +60,10 @@ public class DataManager : MonoBehaviour
     void Start()
     {
         items[5] = FirstItem;
-        items[6] = SecondItem;
-        itemsCount[6] = 1;
+        items[0] = SecondItem;
+        items[1] = ThirdItem;
+        itemsCount[0] = 2;
+        itemsCount[1] = 2;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 

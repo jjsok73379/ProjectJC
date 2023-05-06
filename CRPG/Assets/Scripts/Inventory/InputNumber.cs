@@ -76,10 +76,6 @@ public class InputNumber : MonoBehaviour
                 {
                     num = DragSlot.Inst.dragSlot.itemCount;
                 }
-                else
-                {
-                    num = 1;
-                }
             }
             else
             {
@@ -92,18 +88,18 @@ public class InputNumber : MonoBehaviour
     IEnumerator DropItemCoroutone(int _num)
     {
         IsDrop = true;
-        for (int i = 0; i < _num; i++)
+
+        if (DragSlot.Inst.dragSlot.item.itemPrefab != null)
         {
-            if (DragSlot.Inst.dragSlot.item.itemPrefab != null)
-            {
-                DropItemData = DragSlot.Inst.dragSlot.item;
-                Instantiate(DragSlot.Inst.dragSlot.item.itemPrefab,
-                    ActionController.Inst.transform.position + ActionController.Inst.transform.forward,
-                    Quaternion.identity);
-            }
-            DragSlot.Inst.dragSlot.SetSlotCount(-1);
-            yield return new WaitForSeconds(0.05f);
+            DropItemData = DragSlot.Inst.dragSlot.item;
+            DropItemData.DropCount = _num;
+            Instantiate(DragSlot.Inst.dragSlot.item.itemPrefab,
+                ActionController.Inst.transform.position + ActionController.Inst.transform.forward,
+                Quaternion.identity);
         }
+        DragSlot.Inst.dragSlot.SetSlotCount(-_num);
+
+        yield return new WaitForSeconds(0.05f);
 
         DragSlot.Inst.dragSlot = null;
         go_Base.SetActive(false);

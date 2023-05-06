@@ -162,10 +162,6 @@ public class Monster : BattleSystem
     void Update()
     {
         StateProcess();
-        if (myState != STATE.Battle && myState != STATE.Dead)
-        {
-            StartCoroutine(RecoveryHP());
-        }
         for(int i = 0; i < debuffList.Count;)
         {
             Debuff temp = debuffList[i];
@@ -260,6 +256,7 @@ public class Monster : BattleSystem
         StopAllCoroutines();
         myAnim.SetBool("IsMoving", false);
         myAnim.SetBool("BattleMode", false);
+        StartCoroutine(RecoveryHP());
         ChangeState(STATE.Idle);
     }
 

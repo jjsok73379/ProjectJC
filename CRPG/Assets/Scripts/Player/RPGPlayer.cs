@@ -43,7 +43,7 @@ namespace CombineRPG
         public PlayerUI myUI;
         public GameObject questobj;
         public int i = 0;
-        
+
         public enum STATE
         {
             Create, Play, Death
@@ -97,8 +97,8 @@ namespace CombineRPG
                     WeaponStat();
                     break;
                 case STATE.Death:
+                    myUI.HP_Text.text = "0 / 100";
                     StopAllCoroutines();
-                    myStat.HP = 0;
                     myAnim.SetTrigger("Dead");
                     foreach (IBattle ib in myAttackers)
                     {
@@ -243,6 +243,7 @@ namespace CombineRPG
             myStat.HP -= dmg;
             if (Mathf.Approximately(myStat.HP, 0.0f))
             {
+                myStat.HP = 0;
                 ChangeState(STATE.Death);
             }
             else
@@ -483,9 +484,9 @@ namespace CombineRPG
 
         public void Revive()
         {
-            DeadWindow.SetActive(false);
             if (GameManager.Inst.Goldvalue >= 2000)
             {
+                DeadWindow.SetActive(false);
                 GameManager.Inst.Goldvalue -= 2000;
                 myAnim.SetTrigger("Revive");
                 ReviveEff.Play();
@@ -502,23 +503,8 @@ namespace CombineRPG
         public void GoVillage()
         {
             DeadWindow.SetActive(false);
-            DataManager.Inst.theRPGPlayer.myStat.HP = 1;
-            DataManager.Inst.theRPGPlayer.myStat.MP = 1;
-            if (DataManager.Inst.theRPGPlayer.myStat.EXP != 0)
-            {
-                if (DataManager.Inst.theRPGPlayer.myStat.EXP < 20)
-                {
-                    DataManager.Inst.theRPGPlayer.myStat.EXP = 0;
-                }
-                else
-                {
-                    DataManager.Inst.theRPGPlayer.myStat.EXP -= 20;
-                }
-            }
-            else
-            {
-                DataManager.Inst.theRPGPlayer.myStat.EXP = 0;
-            }
+            DataManager.Inst.HP = 1;
+            ChangeState(STATE.Play);
             LoadManager.LoadScene(1);
         }
 

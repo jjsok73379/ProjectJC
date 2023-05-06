@@ -28,6 +28,11 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
         {
             orgImages[i] = skillImages[i].sprite;
         }
+        if (DataManager.Inst.SkillSlotDatas[mySlotNum - 1] != null)
+        {
+            mySkillData = DataManager.Inst.SkillSlotDatas[mySlotNum - 1];
+            Level = DataManager.Inst.slotDatasLevel[mySlotNum - 1];
+        }
     }
 
     private void Update()
@@ -35,7 +40,6 @@ public class SkillSlot : MonoBehaviour, IPointerClickHandler, IDropHandler
         if (mySkillData != null)
         {
             mySkillDamage = mySkillData.SkillDamage(Level);
-            mySkillRange = mySkillData.GetAttackRange();
             for (int i = 0; i < skillImages.Length; i++)
             {
                 orgCool = mySkillData.CoolTime;

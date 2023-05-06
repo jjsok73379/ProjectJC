@@ -33,6 +33,7 @@ public class DataManager : MonoBehaviour
 
     public List<SkillData> skills;
     public SkillData[] SkillSlotDatas = new SkillData[4];
+    public int[] slotDatasLevel = new int[4];
 
     public List<Item> items;
     public List<int> itemsCount;
@@ -61,9 +62,7 @@ public class DataManager : MonoBehaviour
     {
         items[5] = FirstItem;
         items[0] = SecondItem;
-        items[1] = ThirdItem;
-        itemsCount[0] = 2;
-        itemsCount[1] = 2;
+        itemsCount[0] = 1;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 

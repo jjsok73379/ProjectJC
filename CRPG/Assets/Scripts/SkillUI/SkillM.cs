@@ -49,10 +49,6 @@ public struct SkillStat
     {
         get => orgData.SkillDamage(Level);
     }
-    public float AttackRange
-    {
-        get => orgData.GetAttackRange();
-    }
 }
 public class SkillM : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {

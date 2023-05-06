@@ -333,6 +333,15 @@ public class ActionController : MonoBehaviour
 
             Destroy(SkillManager.Inst.AddedskillPanel);
 
+            for(int i = 0; i < DataManager.Inst.slotDatasLevel.Length;)
+            {
+                if (DataManager.Inst.SkillSlotDatas[i] != null)
+                {
+                    DataManager.Inst.slotDatasLevel[i] = DataManager.Inst.SkillSlotDatas[i].Level;
+                }
+                i++;
+            }
+
             if(QuestManager.Inst != null)
             {
                 Destroy(QuestManager.Inst.objQ2);

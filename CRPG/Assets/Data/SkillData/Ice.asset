@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillName: "\uC5BC\uC74C"
   myImage: {fileID: 21300000, guid: 2bccd332882fcd14b9e4c377e432c587, type: 3}
+  Level: 1
   myInfo: "\uC5BC\uC74C"
   AttackRange: 0
   _mana: 0
@@ -22,5 +23,4 @@ MonoBehaviour:
   MaterialCounts: 
   Materials: []
   mySkill: {fileID: 5112403345868107898, guid: 4456022948749554589f82191f8d27c7, type: 3}
-  mySkillRegion: {fileID: 0}
-  myType: 2
+  myType: 3

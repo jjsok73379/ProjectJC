@@ -53,9 +53,4 @@ public class SkillData : ScriptableObject
         get => myInfo;
         set => myInfo = value;
     }
-
-    public float GetAttackRange()
-    {
-        return AttackRange;
-    }
 }

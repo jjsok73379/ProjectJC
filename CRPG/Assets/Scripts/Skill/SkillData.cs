@@ -13,6 +13,7 @@ public class SkillData : ScriptableObject
 
     public string SkillName;
     public Sprite myImage = null;
+    public int Level;
     public string myInfo;
     [SerializeField] 
     float AttackRange;
@@ -34,7 +35,7 @@ public class SkillData : ScriptableObject
 
     public int GetMaterialCount(int lv)
     {
-        return MaterialCounts[lv];
+        return MaterialCounts[lv - 1];
     }
 
     public int GetMaxLevel()
@@ -44,7 +45,7 @@ public class SkillData : ScriptableObject
 
     public float SkillDamage(int lv)
     {
-        return skillDamage[lv];
+        return skillDamage[lv - 1];
     }
 
     public string MyInfo

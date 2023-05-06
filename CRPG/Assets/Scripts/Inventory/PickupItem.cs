@@ -18,9 +18,11 @@ public class PickupItem : MonoBehaviour
         if (InputNumber.Inst.IsDrop)
         {
             item = InputNumber.Inst.DropItemData;
+            item.IsDropitem = true;
         }
-        else if (GetComponent<PickupRandomItem>())
+        else
         {
+            item.IsDropitem = false;
             item = GetComponent<PickupRandomItem>().RandomItem[Random.Range(0, GetComponent<PickupRandomItem>().RandomItem.Length)];
         }
     }

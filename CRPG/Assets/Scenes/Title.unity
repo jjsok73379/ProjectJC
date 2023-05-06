@@ -4589,6 +4589,7 @@ MonoBehaviour:
   theRPGPlayer: {fileID: 0}
   FirstItem: {fileID: 11400000, guid: b77326d408d865c4bbed2341c1dee2eb, type: 2}
   SecondItem: {fileID: 11400000, guid: 9331567701311fa48b119c703da2f6e8, type: 2}
+  ThirdItem: {fileID: 11400000, guid: 488ef35c4b9c6794fad10e9175912147, type: 2}
   MaxHP: 100
   HP: 100
   MaxMP: 100
@@ -4617,7 +4618,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  skillLevel: 
   items:
   - {fileID: 0}
   - {fileID: 0}

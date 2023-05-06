@@ -207,6 +207,18 @@ public class InvenSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         int _tempItemCount = itemCount;
         int temp = 0;
 
+        if (DragSlot.Inst.dragSlot.name == gameObject.name) return;
+
+        if (DragSlot.Inst.dragSlot.isEquipped)
+        {
+            DragSlot.Inst.dragSlot.isEquipped = false;
+            isEquipped = true;
+        }
+        else if (isEquipped)
+        {
+            isEquipped = false;
+            DragSlot.Inst.dragSlot.isEquipped = true;
+        }
 
         if (_tempItem != null)
         {

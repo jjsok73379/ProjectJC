@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillName: "\uBE59\uACB0\uAD6C"
   myImage: {fileID: 21300000, guid: 5b581be6bcf7ab44f8bcd0abd50e0652, type: 3}
+  Level: 1
   myInfo: "\uC5BC\uC74C\uC73C\uB85C \uC774\uB8E8\uC5B4\uC9C4 \uAD6C"
   AttackRange: 20
   _mana: 20

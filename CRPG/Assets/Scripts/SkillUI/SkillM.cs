@@ -12,7 +12,11 @@ using UnityEngine.EventSystems;
 public struct SkillStat
 {
     public SkillData orgData;
-    public int Level;
+    public int Level
+    {
+        get => orgData.Level;
+        set => orgData.Level = value;
+    }
     public SkillData Material
     {
         get => orgData.Materials[2];
@@ -141,7 +145,7 @@ public class SkillM : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void ShowReinforceButton()
     {
-        for (int i = 0; i < SkillManager.Inst.CombinedSkills.Count; i++)
+        for (int i = 0; i < SkillManager.Inst.CombinedSkills.Length; i++)
         {
             if (SkillManager.Inst.CombinedSkills.Contains(myStat.orgData))
             {

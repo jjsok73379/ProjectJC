@@ -92,7 +92,14 @@ public class InventoryManager : MonoBehaviour
     {
         if (_item.itemType != Item.ItemType.Equipment)
         {
-            PutSlot(quickSlots, _item, _count);
+            if (_item.IsDropitem)
+            {
+                PutSlot(quickSlots, _item, _item.DropCount);
+            }
+            else
+            {
+                PutSlot(quickSlots, _item, _count);
+            }
         }
         else
         {

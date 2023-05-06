@@ -79,7 +79,7 @@ public class OpenManager : MonoBehaviour
         {
             IsActive = true;
         }
-        if(go_Inventory != null)
+        if (go_Inventory != null)
         {
             if (Input.GetKeyDown(KeyCode.I))
             {
@@ -101,10 +101,7 @@ public class OpenManager : MonoBehaviour
                 {
                     if (!InventoryManager.Inst.allSlots[i].isQuickSlot)
                     {
-                        if (!inventoryActivated)
-                        {
-                            ItemEffectDatabase.Inst.HideToolTip();
-                        }
+                        ItemEffectDatabase.Inst.HideToolTip();
                     }
                 }
             }
